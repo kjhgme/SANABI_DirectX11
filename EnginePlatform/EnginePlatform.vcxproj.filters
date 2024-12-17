@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="PreCompile.h" />
+    <ClInclude Include="EngineWindow.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="PreCompile.cpp" />
+    <ClCompile Include="EngineWindow.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Window">
+      <UniqueIdentifier>{76d0b96f-3234-496d-85a4-0036b778fb68}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
