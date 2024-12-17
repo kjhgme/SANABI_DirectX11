@@ -24,6 +24,9 @@
     <ClInclude Include="Level.h">
       <Filter>Object</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Object\Component\Contents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -46,6 +49,9 @@
     <ClCompile Include="Level.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Object\Component\Contents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
@@ -59,6 +65,9 @@
     </Filter>
     <Filter Include="Object\Component">
       <UniqueIdentifier>{254f039a-9e11-4fc6-8919-e232c5d1aa77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Contents">
+      <UniqueIdentifier>{da9f94f0-1c65-41b3-bf51-7d1e1b7167e2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

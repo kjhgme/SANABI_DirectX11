@@ -17,6 +17,7 @@ public:
 	void LevelChangeEnd();
 
 	void Tick(float _DeltaTime);
+	void Render(float _DeltaTime);
 
 	template<typename ActorType>
 	std::shared_ptr<ActorType> SpawnActor()
@@ -44,11 +45,14 @@ public:
 		return NewActor;
 	}
 
+	void ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<class URenderer> _Renderer);
+
 protected:
 
 private:
 	std::list<std::shared_ptr<class AActor>> BeginPlayList;
 	std::list<std::shared_ptr<class AActor>> AllActorList;
+	std::map<int, std::list<std::shared_ptr<class URenderer>>> Renderers;
 
 };
 

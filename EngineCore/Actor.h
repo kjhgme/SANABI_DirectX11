@@ -21,7 +21,7 @@ public:
 	virtual void LevelChangeEnd() {}
 
 	template<typename ComponentType>
-	void CreateDefaultSubObject()
+	inline std::shared_ptr<ComponentType> CreateDefaultSubObject()
 	{
 		static_assert(std::is_base_of_v<UActorComponent, ComponentType>, "ActorComponent is not inherited.");
 
@@ -51,7 +51,7 @@ public:
 		}
 		else if (std::is_base_of_v<UActorComponent, ComponentType>)
 		{
-
+			ActorComponentList.push_back(NewCom);
 		}
 		else
 		{
