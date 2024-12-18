@@ -1,6 +1,13 @@
 #pragma once
 #include "SceneComponent.h"
 
+struct EngineVertex
+{
+public:
+	FVector Pos;
+	FVector Color;
+};
+
 class URenderer : public USceneComponent
 {
 	friend class ULevel;
@@ -22,5 +29,9 @@ protected:
 private:
 	virtual void Render(float _DeltaTime);
 
+public:
+	ID3D11Buffer* VertexBuffer = nullptr;
+	void InputAssembler1Init();
+	void InputAssembler1Setting();
 };
 

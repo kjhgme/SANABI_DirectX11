@@ -6,6 +6,7 @@
 
 #include "Level.h"
 #include "IContentsCore.h"
+#include "EngineGraphicDevice.h"
 
 class UEngineCore
 {
@@ -27,6 +28,8 @@ public:
 	}
 
 	ENGINEAPI static void OpenLevel(std::string_view _Name);
+
+	ENGINEAPI static UEngineGraphicDevice Device;
 
 protected:
 

@@ -8,6 +8,7 @@
 #include "IContentsCore.h"
 
 UEngineWindow UEngineCore::MainWindow;
+UEngineGraphicDevice UEngineCore::Device;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
 
@@ -27,7 +28,7 @@ UEngineCore::~UEngineCore()
 void UEngineCore::WindowInit(HINSTANCE _Instance)
 {
 	UEngineWindow::EngineWindowInit(_Instance);
-	MainWindow.Open("MainWindow");
+	MainWindow.Open("SANABI");
 }
 
 void UEngineCore::LoadContents(std::string_view _DllName)
@@ -84,9 +85,10 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 		[]()
 		{
 			UEngineInitData Data;
+			Device.CreateDeviceAndContext();
 			Core->EngineStart(Data);
 			MainWindow.SetWindowPosAndScale(Data.WindowPos, Data.WindowSize);
-			
+			Device.CreateBackBuffer(MainWindow);
 		},
 		[]()
 		{
@@ -142,6 +144,11 @@ void UEngineCore::EngineFrame()
 
 void UEngineCore::EngineEnd()
 {
+	Device.Release();
+
+	CurLevel = nullptr;
+	NextLevel = nullptr;
 	LevelMap.clear();
+
 	UEngineDebug::EndConsole();
 }

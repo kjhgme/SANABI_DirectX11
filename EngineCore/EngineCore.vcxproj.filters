@@ -27,6 +27,9 @@
     <ClInclude Include="Renderer.h">
       <Filter>Object\Component\Contents</Filter>
     </ClInclude>
+    <ClInclude Include="EngineGraphicDevice.h">
+      <Filter>Graphic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -52,6 +55,9 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Object\Component\Contents</Filter>
     </ClCompile>
+    <ClCompile Include="EngineGraphicDevice.cpp">
+      <Filter>Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
@@ -68,6 +74,9 @@
     </Filter>
     <Filter Include="Object\Component\Contents">
       <UniqueIdentifier>{da9f94f0-1c65-41b3-bf51-7d1e1b7167e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic">
+      <UniqueIdentifier>{e8ee9a15-eda9-493b-8d12-52cfffb5fe4a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -37,20 +37,25 @@ public:
 
 	ENGINEAPI void SetWindowPosAndScale(FVector _Pos, FVector _Scale);
 
-	FVector GetMousePos();
+	ENGINEAPI FVector GetMousePos();
 
-	void ApplicationOff()
+	ENGINEAPI static void ApplicationOff()
 	{
 		LoopActive = false;
+	}
+
+	ENGINEAPI HWND GetWindowHandle() const
+	{
+		return WindowHandle;
 	}
 
 protected:
 
 private:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	static HINSTANCE hInstance;
-	static bool LoopActive;
-	static std::map<std::string, WNDCLASSEXA> WindowClasses;
+	ENGINEAPI static HINSTANCE hInstance;
+	ENGINEAPI static std::map<std::string, WNDCLASSEXA> WindowClasses;
+	inline static bool LoopActive = true;
 
 	FVector WindowSize;
 	HWND WindowHandle = nullptr;
