@@ -12,38 +12,45 @@ UEngineGraphicDevice::~UEngineGraphicDevice()
 
 void UEngineGraphicDevice::Release()
 {
-    if (nullptr != RTV)
-    {
-        RTV->Release();
-        RTV = nullptr;
-    }
+    MainAdapter = nullptr;
+    DXBackBufferTexture = nullptr;
+    SwapChain = nullptr;
+    Context = nullptr;
+    Device = nullptr;
+    RTV = nullptr;
 
-    if (nullptr != DXBackBufferTexture)
-    {
-        DXBackBufferTexture->Release();
-        DXBackBufferTexture = nullptr;
-    }
-
-    if (nullptr != SwapChain)
-    {
-        SwapChain->Release();
-        SwapChain = nullptr;
-    }
-
-    if (nullptr != Context)
-    {
-        Context->Release();
-        Context = nullptr;
-    }
-
-    if (nullptr != Device)
-    {
-        Device->Release();
-        Device = nullptr;
-    }
+    //if (nullptr != RTV)
+    //{
+    //    RTV->Release();
+    //    RTV = nullptr;
+    //}
+    //
+    //if (nullptr != DXBackBufferTexture)
+    //{
+    //    DXBackBufferTexture->Release();
+    //    DXBackBufferTexture = nullptr;
+    //}
+    //
+    //if (nullptr != SwapChain)
+    //{
+    //    SwapChain->Release();
+    //    SwapChain = nullptr;
+    //}
+    //
+    //if (nullptr != Context)
+    //{
+    //    Context->Release();
+    //    Context = nullptr;
+    //}
+    //
+    //if (nullptr != Device)
+    //{
+    //    Device->Release();
+    //    Device = nullptr;
+    //}
 }
 
-IDXGIAdapter* UEngineGraphicDevice::GetHighPerFormanceAdapter()
+IDXGIAdapter* UEngineGraphicDevice::GetHighPerformanceAdapter()
 {
     unsigned __int64 MaxVideoMemory = 0;
 
@@ -105,7 +112,7 @@ IDXGIAdapter* UEngineGraphicDevice::GetHighPerFormanceAdapter()
 void UEngineGraphicDevice::CreateDeviceAndContext()
 {
    
-    MainAdapter = GetHighPerFormanceAdapter();
+    MainAdapter = GetHighPerformanceAdapter();
 
     int iFlag = 0;
 
@@ -115,7 +122,7 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
     D3D_FEATURE_LEVEL ResultLevel;
 
     HRESULT Result = D3D11CreateDevice(
-        MainAdapter,
+        MainAdapter.Get(),
         D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_UNKNOWN,
         nullptr,
         iFlag,
@@ -185,8 +192,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 
     MainAdapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&pF));
 
-    pF->CreateSwapChain(Device, &ScInfo, &SwapChain);
-
+    pF->CreateSwapChain(Device.Get(), &ScInfo, &SwapChain);
     pF->Release();
     MainAdapter->Release();
 
@@ -195,19 +201,15 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
         MSGASSERT("스왑체인 제작에 실패했습니다.");
     }
 
-    DXBackBufferTexture = nullptr;
-    if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>
-        (&DXBackBufferTexture)))
+    if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(DXBackBufferTexture.GetAddressOf())))
     {
         MSGASSERT("백버퍼 텍스처를 얻어오는데 실패했습니다.");
     };
 
-    if (S_OK != Device->CreateRenderTargetView(DXBackBufferTexture, nullptr, &RTV))
+    if (S_OK != Device->CreateRenderTargetView(DXBackBufferTexture.Get(), nullptr, &RTV))
     {
         MSGASSERT("텍스처 수정권한 획득에 실패했습니다");
     }
-
-
 }
 
 void UEngineGraphicDevice::RenderStart()
@@ -216,7 +218,7 @@ void UEngineGraphicDevice::RenderStart()
 
     ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f);
 
-    Context->ClearRenderTargetView(RTV, ClearColor.Arr1D);
+    Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
 }
 
 void UEngineGraphicDevice::RenderEnd()

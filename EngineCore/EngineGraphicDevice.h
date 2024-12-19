@@ -1,4 +1,6 @@
 #pragma once
+#include <wrl.h>
+
 #include <d3d11_4.h>
 #include <d3dcompiler.h>
 #include <EnginePlatform/EngineWindow.h>
@@ -24,7 +26,7 @@ public:
 
 	void CreateBackBuffer(const UEngineWindow& _Window);
 
-	IDXGIAdapter* GetHighPerFormanceAdapter();
+	IDXGIAdapter* GetHighPerformanceAdapter();
 
 	void Release();
 
@@ -34,22 +36,27 @@ public:
 
 	ENGINEAPI ID3D11Device* GetDevice()
 	{
-		return Device;
+		return Device.Get();
 	}
 
 	ENGINEAPI ID3D11DeviceContext* GetContext()
 	{
-		return Context;
+		return Context.Get();
+	}
+
+	ENGINEAPI ID3D11RenderTargetView* GetRTV()
+	{
+		return RTV.Get();
 	}
 
 protected:
 
 private:
-	ID3D11Device* Device = nullptr;
-	ID3D11DeviceContext* Context = nullptr;
-	IDXGISwapChain* SwapChain = nullptr;
-	IDXGIAdapter* MainAdapter = nullptr;
-	ID3D11Texture2D* DXBackBufferTexture = nullptr;
-	ID3D11RenderTargetView* RTV = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Device> Device = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> Context = nullptr;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> SwapChain = nullptr;
+	Microsoft::WRL::ComPtr<IDXGIAdapter> MainAdapter = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
 };
 
