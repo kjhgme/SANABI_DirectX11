@@ -85,7 +85,6 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 	UEngineWindow::WindowMessageLoop(
 		[]()
 		{
-			UEngineInitData Data;
 			Device.CreateDeviceAndContext();
 			Core->EngineStart(Data);
 			MainWindow.SetWindowPosAndScale(Data.WindowPos, Data.WindowSize);

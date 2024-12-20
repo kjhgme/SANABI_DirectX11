@@ -18,36 +18,6 @@ void UEngineGraphicDevice::Release()
     Context = nullptr;
     Device = nullptr;
     RTV = nullptr;
-
-    //if (nullptr != RTV)
-    //{
-    //    RTV->Release();
-    //    RTV = nullptr;
-    //}
-    //
-    //if (nullptr != DXBackBufferTexture)
-    //{
-    //    DXBackBufferTexture->Release();
-    //    DXBackBufferTexture = nullptr;
-    //}
-    //
-    //if (nullptr != SwapChain)
-    //{
-    //    SwapChain->Release();
-    //    SwapChain = nullptr;
-    //}
-    //
-    //if (nullptr != Context)
-    //{
-    //    Context->Release();
-    //    Context = nullptr;
-    //}
-    //
-    //if (nullptr != Device)
-    //{
-    //    Device->Release();
-    //    Device = nullptr;
-    //}
 }
 
 IDXGIAdapter* UEngineGraphicDevice::GetHighPerformanceAdapter()
