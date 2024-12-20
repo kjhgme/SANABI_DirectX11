@@ -12,10 +12,36 @@ public:
 	USceneComponent& operator=(const USceneComponent& _Other) = delete;
 	USceneComponent& operator=(USceneComponent&& _Other) noexcept = delete;
 
+	// GetFunction
+	FTransform& GetTransformRef()
+	{
+		return Transform;
+	}
+	
+	// SetFunction
+	void SetRelativeScale3D(const FVector& _Scale)
+	{
+		Transform.Scale = _Scale;
+		Transform.TransformUpdate();
+	}
+
+	void SetLocation(const FVector& _Value)
+	{
+		Transform.Location = _Value;
+		Transform.TransformUpdate();
+	}
+
+	// Function
+	void AddLocation(const FVector& _Value)
+	{
+		Transform.Location += _Value;
+		Transform.TransformUpdate();
+	}
+
 protected:
+	FTransform Transform;
 
 private:
-	FTransform Transform;
 
 	USceneComponent* Parent;
 	std::list<std::shared_ptr<USceneComponent>> Childs;

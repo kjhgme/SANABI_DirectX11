@@ -3,6 +3,8 @@
 
 #include <EngineBase/EngineString.h>
 
+#include "EngineCamera.h"
+
 URenderer::URenderer()
 {
 }
@@ -22,7 +24,7 @@ void URenderer::SetOrder(int _Order)
 	
 	std::shared_ptr<URenderer> RendererPtr = GetThis<URenderer>();
 
-	Level->ChangeRenderGroup(PrevOrder, RendererPtr);
+	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
 }
 
 ENGINEAPI void URenderer::BeginPlay()
@@ -34,10 +36,19 @@ ENGINEAPI void URenderer::BeginPlay()
 	InputAssembler2Init();
 	RasterizerInit();
 	PixelShaderInit();
+	ShaderResInit();
 }
 
-void URenderer::Render(float _DeltaTime)
+void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+
+	RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+
+	ShaderResSetting();
 	InputAssembler1Setting();
 	VertexShaderSetting();
 	InputAssembler2Setting();
@@ -46,6 +57,43 @@ void URenderer::Render(float _DeltaTime)
 	OutPutMergeSetting();
 
 	UEngineCore::Device.GetContext()->DrawIndexed(6, 0, 0);
+}
+
+void URenderer::ShaderResInit()
+{
+	D3D11_BUFFER_DESC BufferInfo = { 0 };
+	BufferInfo.ByteWidth = sizeof(FTransform);
+	BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
+	BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
+
+	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer))
+	{
+		MSGASSERT("Constant Buffer failed.");
+		return;
+	}
+}
+
+void URenderer::ShaderResSetting()
+{
+	FTransform& RendererTrans = GetTransformRef();
+
+	D3D11_MAPPED_SUBRESOURCE Data = {};
+	UEngineCore::Device.GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
+
+	if (nullptr == Data.pData)
+	{
+		MSGASSERT("Connect to GraphicCard failed.");
+	}
+
+	memcpy_s(Data.pData, sizeof(FTransform), &RendererTrans, sizeof(FTransform));
+
+	UEngineCore::Device.GetContext()->Unmap(TransformConstBuffer.Get(), 0);
+
+	ID3D11Buffer* ArrPtr[16] = { TransformConstBuffer.Get() };
+
+	UEngineCore::Device.GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
+
 }
 
 void URenderer::InputAssembler1Init()

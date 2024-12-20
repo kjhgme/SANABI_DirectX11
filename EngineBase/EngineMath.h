@@ -3,6 +3,9 @@
 #include <Windows.h>
 #include <functional>
 
+#include <DirectXMath.h>
+#include <DirectXCollision.h>
+
 #include "EngineDefine.h"
 
 class ENGINEAPI UEngineMath
@@ -76,6 +79,8 @@ public:
 
 		float Arr2D[1][4];
 		float Arr1D[4];
+
+		DirectX::XMVECTOR DirectVector;
 	};
 
 
@@ -445,6 +450,8 @@ public:
 	}
 };
 
+using float4 = FVector;
+
 class FMatrix
 {
 public:
@@ -453,6 +460,7 @@ public:
 		float Arr2D[4][4] = { 0, };
 		FVector ArrVector[4];
 		float Arr1D[16];
+		DirectX::XMMATRIX DirectMatrix;
 
 		struct
 		{
@@ -483,10 +491,7 @@ public:
 
 	void Identity()
 	{
-		Arr2D[0][0] = 1.0f;
-		Arr2D[1][1] = 1.0f;
-		Arr2D[2][2] = 1.0f;
-		Arr2D[3][3] = 1.0f;
+		DirectMatrix = DirectX::XMMatrixIdentity();
 	}
 
 	FVector GetFoward()
@@ -513,33 +518,26 @@ public:
 		return Dir;
 	}
 
-	FMatrix operator*(const FMatrix& _Value);
+	ENGINEAPI FMatrix operator*(const FMatrix& _Value);
 
 	void Scale(const FVector& _Value)
 	{
-		Arr2D[0][0] = _Value.X;
-		Arr2D[1][1] = _Value.Y;
-		Arr2D[2][2] = _Value.Z;
+		DirectMatrix = DirectX::XMMatrixScalingFromVector(_Value.DirectVector);
 	}
 
 	void Position(const FVector& _Value)
 	{
-		Arr2D[3][0] = _Value.X;
-		Arr2D[3][1] = _Value.Y;
-		Arr2D[3][2] = _Value.Z;
+		DirectMatrix = DirectX::XMMatrixTranslationFromVector(_Value.DirectVector);
 	}
 
 	void RotationDeg(const FVector& _Angle)
 	{
-		FMatrix RotX;
-		FMatrix RotY;
-		FMatrix RotZ;
-
-		RotX.RotationXDeg(_Angle.X);
-		RotY.RotationYDeg(_Angle.Y);
-		RotZ.RotationZDeg(_Angle.Z);
-
-		*this = RotX * RotY * RotZ;
+		RotationRad(_Angle * UEngineMath::D2R);
+	}
+	
+	void RotationRad(const FVector& _Angle)
+	{
+		DirectMatrix = DirectX::XMMatrixRotationRollPitchYawFromVector(_Angle.DirectVector);
 	}
 
 	void Transpose()
@@ -558,31 +556,8 @@ public:
 
 	void View(const FVector& _Pos, const FVector& _Dir, const FVector& _Up)
 	{
-		FVector Forward = _Dir.NormalizeReturn();
-		FVector Up = _Up.NormalizeReturn();
-		FVector Right = FVector::Cross(Up, Forward);
-		Right.Normalize();
-
-		ArrVector[2] = Forward;
-		ArrVector[1] = Up;
-		ArrVector[0] = Right;
-
-		ArrVector[2].W = 0.0f;
-		ArrVector[1].W = 0.0f;
-		ArrVector[0].W = 0.0f;
-
-		Transpose();
-
-		FMatrix OrginRot = *this;
-
-		FVector NPos = -_Pos;
-
-		ArrVector[3].X = FVector::Dot(Right, NPos);
-		ArrVector[3].Y = FVector::Dot(Up, NPos);
-		ArrVector[3].Z = FVector::Dot(Forward, NPos);
-
-		FVector Move = ArrVector[3];
-		FVector OriginMove = NPos * OrginRot;
+		Identity();
+		DirectMatrix = DirectX::XMMatrixLookToLH(_Pos.DirectVector, _Dir.DirectVector, _Up.DirectVector);
 
 		return;
 	}
@@ -590,13 +565,7 @@ public:
 	void OrthographicLH(float _Width, float _Height, float _Near, float _Far)
 	{
 		Identity();
-
-		float fRange = 1.0f / (_Far - _Near);
-
-		Arr2D[0][0] = 2.0f / _Width;
-		Arr2D[1][1] = 2.0f / _Height;
-		Arr2D[2][2] = fRange;
-		Arr2D[3][2] = -fRange * _Near;
+		DirectMatrix = DirectX::XMMatrixOrthographicLH(_Width, _Height, _Near, _Far);
 	}
 
 	void PerspectiveFovDeg(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
@@ -608,16 +577,8 @@ public:
 	{
 		Identity();
 
-		float ScreenRatio = _Width / _Height;
-		float DivFov = _FovAngle / 2.0f;
-				
-		Arr2D[2][3] = 1.0f;
-		Arr2D[3][3] = 0.0f;
-		
-		Arr2D[0][0] = 1.0f / (tanf(DivFov) * ScreenRatio);
-		Arr2D[1][1] = 1.0f / tanf(DivFov);
-		Arr2D[2][2] = (_Far + _Near) / (_Far - _Near);
-		Arr2D[3][2] = -2 * (_Near * _Far) / (_Far - _Near);
+		Identity();
+		DirectMatrix = DirectX::XMMatrixPerspectiveFovLH(_FovAngle, _Width / _Height, _Near, _Far);
 	}
 
 	void ViewPort(float _Width, float _Height, float _Left, float _Top, float _ZMin, float _ZMax)
@@ -675,7 +636,7 @@ public:
 
 };
 
-
+using float4x4 = FMatrix;
 
 enum class ECollisionType
 {
@@ -685,8 +646,29 @@ enum class ECollisionType
 	Max
 };
 
-class FTransform
+struct FTransform
 {
+	float4 Scale;
+	float4 Rotation;
+	float4 Location;
+
+	float4x4 ScaleMat;
+	float4x4 RotationMat;
+	float4x4 LocationMat;
+	
+	float4x4 World;
+	float4x4 View;
+	float4x4 Projection;
+	float4x4 WVP;
+
+	FTransform()
+		: Scale({ 1.0f, 1.0f, 1.0f, 1.0f })
+	{
+
+	}
+
+	ENGINEAPI void TransformUpdate();
+
 private:
 	friend class CollisionFunctionInit;
 
@@ -703,15 +685,6 @@ public:
 
 	static bool CirCleToCirCle(const FTransform& _Left, const FTransform& _Right);
 	static bool CirCleToRect(const FTransform& _Left, const FTransform& _Right);
-
-	FVector Scale;
-	FVector Rotation;
-	FVector Location;
-
-	FMatrix World;
-	FMatrix View;
-	FMatrix Projection;
-	FMatrix WVP;
 
 	FVector ZAxisCenterLeftTop() const
 	{
@@ -853,5 +826,3 @@ public:
 
 	}
 };
-
-using float4 = FVector;

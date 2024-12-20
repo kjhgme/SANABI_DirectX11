@@ -4,9 +4,12 @@
 #include "Actor.h"
 #include "Renderer.h"
 #include "EngineCore.h"
+#include "CameraActor.h"
+#include "EngineCamera.h"
 
 ULevel::ULevel()
 {
+	SpawnCamera(0);
 }
 
 ULevel::~ULevel()
@@ -54,23 +57,38 @@ void ULevel::Render(float _DeltaTime)
 {
 	UEngineCore::Device.RenderStart();
 
-	for (std::pair<const int, std::list<std::shared_ptr<URenderer>>>& RenderGroup : Renderers)
+	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
 	{
-		std::list<std::shared_ptr<URenderer>>& RenderList = RenderGroup.second;
-
-		for (std::shared_ptr<URenderer> Renderer : RenderList)
-		{
-			Renderer->Render(_DeltaTime);
-		}
+		Camera.second->Tick(_DeltaTime);
+		Camera.second->CameraComponent->Render(_DeltaTime);
 	}
 
 	UEngineCore::Device.RenderEnd();
 }
 
-void ULevel::ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer)
+std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 {
-	Renderers[_PrevGroupOrder].remove(_Renderer);
+	std::shared_ptr<ACameraActor> Camera = std::make_shared<ACameraActor>();
 
-	Renderers[_Renderer->GetOrder()].push_back(_Renderer);
+	if (true == Cameras.contains(_Order))
+	{
+		MSGASSERT("Camera is already exists.");
+	}
+
+	Camera->BeginPlay();
+
+	Cameras.insert({ _Order , Camera });
+	return Camera;
+}
+
+void ULevel::ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer)
+{
+	if (false == Cameras.contains(_CameraOrder))
+	{
+		MSGASSERT("Camera is not exists.");
+	}
+	std::shared_ptr<ACameraActor> Camera = Cameras[_CameraOrder];
+
+	Camera->CameraComponent->ChangeRenderGroup(_PrevGroupOrder, _Renderer);
 }
 

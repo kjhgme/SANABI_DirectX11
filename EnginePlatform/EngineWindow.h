@@ -25,12 +25,12 @@ public:
 	ENGINEAPI void Create(std::string_view _TitleName, std::string_view _ClassName = "Default");
 	ENGINEAPI void Open(std::string_view _TitleName = "Window");
 
-	inline FVector GetWindowSize() const
+	ENGINEAPI inline FVector GetWindowSize() const
 	{
 		return WindowSize;
 	}
 
-	inline void SetWindowTitle(std::string_view Text)
+	ENGINEAPI inline void SetWindowTitle(std::string_view Text)
 	{
 		SetWindowTextA(WindowHandle, Text.data());
 	}

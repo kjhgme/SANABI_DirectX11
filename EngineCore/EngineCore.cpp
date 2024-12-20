@@ -11,6 +11,7 @@ UEngineWindow UEngineCore::MainWindow;
 UEngineGraphicDevice UEngineCore::Device;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
+UEngineInitData UEngineCore::Data;
 
 std::shared_ptr<class ULevel> UEngineCore::NextLevel;
 std::shared_ptr<class ULevel> UEngineCore::CurLevel = nullptr;
@@ -121,6 +122,11 @@ void UEngineCore::OpenLevel(std::string_view _Name)
 	}
 	
 	NextLevel = LevelMap[_Name.data()];
+}
+
+ENGINEAPI FVector UEngineCore::GetScreenScale()
+{
+	return Data.WindowSize;
 }
 
 void UEngineCore::EngineFrame()
