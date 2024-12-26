@@ -17,21 +17,42 @@ cbuffer FTransform : register(b0)
     float4 Scale;
     float4 Rotation;
     float4 Location;
-
+    
+    float4 RelativeScale;
+    float4 RelativeRotation;
+    float4 RelativeQut;
+    float4 RelativeLocation;
+    
+    float4 WorldScale;
+    float4 WorldRotation;
+    float4 WorldQuat;
+    float4 WorldLocation;
+    
     float4x4 ScaleMat;
     float4x4 RotationMat;
     float4x4 LocationMat;
+    float4x4 RevoleMat;
+    float4x4 ParentMat;
+    
+    float4x4 LocalWorld;
     float4x4 World;
     float4x4 View;
     float4x4 Projection;
     float4x4 WVP;
 };
 
+cbuffer FSpriteData : register(b1)
+{
+    float4 CuttingPos;
+    float4 CuttingSize;
+};
+
 VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
 {
     VertexShaderOutPut OutPut;
     OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
-    OutPut.UV = _Vertex.UV;
+    OutPut.UV.x = (_Vertex.UV.x * CuttingSize.x) + CuttingPos.x;
+    OutPut.UV.y = (_Vertex.UV.y * CuttingSize.y) + CuttingPos.y;
 	OutPut.COLOR = _Vertex.COLOR;
 	return OutPut;
 }
@@ -41,5 +62,6 @@ SamplerState ImageSampler : register(s0);
 
 float4 PixelToWorld(VertexShaderOutPut _Vertex) : SV_Target0
 {
-    return ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
+    float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
+    return Color;
 }

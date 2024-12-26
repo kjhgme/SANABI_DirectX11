@@ -5,16 +5,25 @@
     <ClInclude Include="EngineWindow.h">
       <Filter>Window</Filter>
     </ClInclude>
+    <ClInclude Include="EngineInput.h">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
     <ClCompile Include="EngineWindow.cpp">
       <Filter>Window</Filter>
     </ClCompile>
+    <ClCompile Include="EngineInput.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Window">
       <UniqueIdentifier>{76d0b96f-3234-496d-85a4-0036b778fb68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{0498c6a9-04c2-4b28-a416-af22e6ecf883}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -55,6 +55,30 @@ public:
 	}
 };
 
+class FQuat
+{
+public:
+	union
+	{
+		struct
+		{
+			float X;
+			float Y;
+			float Z;
+			float W;
+		};
+
+		float Arr2D[1][4];
+		float Arr1D[4];
+
+		DirectX::XMVECTOR DirectVector;
+
+	};
+
+	class FVector QuaternionToEulerDeg() const;
+	class FVector QuaternionToEulerRad() const;
+};
+
 class FVector
 {
 public:
@@ -333,6 +357,7 @@ public:
 		FVector Result;
 		Result.X = X * _Value;
 		Result.Y = Y * _Value;
+		Result.Z = Z * _Value;
 		
 		return Result;
 	}
@@ -342,6 +367,7 @@ public:
 		FVector Result;
 		Result.X = X + _Other.X;
 		Result.Y = Y + _Other.Y;
+		Result.Z = Z + _Other.Z;
 		
 		return Result;
 	}
@@ -353,6 +379,7 @@ public:
 	{
 		X -= _Other.X;
 		Y -= _Other.Y;
+		Z -= _Other.Z;
 
 		return *this;
 	}
@@ -363,6 +390,8 @@ public:
 		FVector Result;
 		Result.X = X - _Other.X;
 		Result.Y = Y - _Other.Y;
+		Result.Z = Z - _Other.Z;
+
 
 		return Result;
 	}
@@ -382,6 +411,7 @@ public:
 		FVector Result;
 		Result.X = X / _Value;
 		Result.Y = Y / _Value;
+		Result.Z = Z / _Value;
 
 		return Result;
 	}
@@ -391,6 +421,7 @@ public:
 		FVector Result;
 		Result.X = X / Other.X;
 		Result.Y = Y / Other.Y;
+		Result.Z = Z / Other.Z;
 		return Result;
 	}
 
@@ -448,6 +479,13 @@ public:
 
 		return Stream;
 	}
+
+	FQuat DegAngleToQuaternion()
+	{
+		FQuat Result;
+		Result.DirectVector = DirectX::XMQuaternionRotationRollPitchYawFromVector(DirectVector);
+		return Result;
+	}
 };
 
 using float4 = FVector;
@@ -494,7 +532,7 @@ public:
 		DirectMatrix = DirectX::XMMatrixIdentity();
 	}
 
-	FVector GetFoward()
+	FVector GetForward()
 	{
 		FVector Dir = ArrVector[2];
 		Dir.Normalize();
@@ -620,6 +658,20 @@ public:
 		Arr2D[2][2] = cosf(_Angle);
 	}
 
+	FMatrix InverseReturn()
+	{
+		FMatrix Result;
+
+		Result.DirectMatrix = DirectX::XMMatrixInverse(nullptr, DirectMatrix);
+
+		return Result;
+	}
+
+	void Decompose(FVector& _Scale, FQuat& _RotQuaternion, FVector& _Pos)
+	{
+		DirectX::XMMatrixDecompose(&_Scale.DirectVector, &_RotQuaternion.DirectVector, &_Pos.DirectVector, DirectMatrix);
+	}
+
 	void RotationZDeg(float _Angle)
 	{
 		RotationZRad(_Angle * UEngineMath::D2R);
@@ -652,10 +704,23 @@ struct FTransform
 	float4 Rotation;
 	float4 Location;
 
+	float4 RelativeScale;
+	float4 RelativeRotation;
+	FQuat RelativeQuat;
+	float4 RelativeLocation;
+
+	float4 WorldScale;
+	float4 WorldRotation;
+	FQuat WorldQuat;
+	float4 WorldLocation;
+
 	float4x4 ScaleMat;
 	float4x4 RotationMat;
 	float4x4 LocationMat;
-	
+	float4x4 RevolveMat;
+	float4x4 ParentMat;
+
+	float4x4 LocalWorld;
 	float4x4 World;
 	float4x4 View;
 	float4x4 Projection;
@@ -667,7 +732,10 @@ struct FTransform
 
 	}
 
-	ENGINEAPI void TransformUpdate();
+public:
+	ENGINEAPI void TransformUpdate(bool _IsAbsolut = false);
+
+	ENGINEAPI void Decompose();
 
 private:
 	friend class CollisionFunctionInit;

@@ -31,6 +31,12 @@ std::string UEnginePath::GetPathToString()
 
 std::string UEnginePath::GetFileName()
 {
+	if (true == IsDirectory())
+	{
+		MSGASSERT(Path.string() + " is not directory.");
+		return "";
+	}
+
 	return Path.filename().string();
 }
 

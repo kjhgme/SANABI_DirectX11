@@ -1,7 +1,9 @@
 #pragma once
 #include "EngineResources.h"
 
-class UEngineTexture : public UEngineResources<UEngineTexture>
+#include "ThirdParty/DirectxTex/Inc/DirectXTex.h"
+
+class UEngineTexture : public UEngineResources
 {
 public:
 	ENGINEAPI UEngineTexture();
@@ -21,23 +23,26 @@ public:
 		return Load(FileName, _Path);
 	}
 
-	static std::shared_ptr<UEngineTexture> Load(std::string_view _Name, std::string_view _Path)
+	ENGINEAPI static std::shared_ptr<UEngineTexture> Load(std::string_view _Name, std::string_view _Path);
+
+	ID3D11ShaderResourceView* GetSRV()
 	{
-		std::string UpperName = ToUpperName(_Name);
+		return SRV.Get();
+	}
 
-		if (true == Contains(UpperName))
-		{
-			MSGASSERT(UpperName + " is Contained.");
-			return nullptr;
-		}
-
-		std::shared_ptr<UEngineTexture> NewTexture = MakeRes(_Name, _Path);
-		NewTexture->ResLoad();
-		return NewTexture;
+	FVector GetTextureSize()
+	{
+		return Size;
 	}
 
 protected:
 
 private:
 	ENGINEAPI void ResLoad();
+
+	FVector Size;
+	DirectX::TexMetadata Metadata;
+	DirectX::ScratchImage ImageData;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> Texture2D = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> SRV = nullptr;
 };

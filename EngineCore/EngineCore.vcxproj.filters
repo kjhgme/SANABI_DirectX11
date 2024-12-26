@@ -48,6 +48,12 @@
     <ClInclude Include="Renderer.h">
       <Filter>Object\Component\Render</Filter>
     </ClInclude>
+    <ClInclude Include="EngineSprite.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultSceneComponent.h">
+      <Filter>Object\Component\Contents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -90,6 +96,12 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Object\Component\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineSprite.cpp">
+      <Filter>Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="DefaultSceneComponent.cpp">
+      <Filter>Object\Component\Contents</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,7 +154,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="ThirdParty\DirectxTex\Debug\DirectXTex.lib">
+    <CopyFileToFolders Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">
       <Filter>ThirdParty\DirectxTex\Debug</Filter>
     </CopyFileToFolders>
   </ItemGroup>

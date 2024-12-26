@@ -11,7 +11,7 @@ public:
 	ENGINEAPI UEngineDirectory(std::filesystem::path _Path);
 	ENGINEAPI ~UEngineDirectory();
 
-	ENGINEAPI std::vector<class UEngineFile> GetAllFile(bool _IsRecursive = true);
+	ENGINEAPI std::vector<class UEngineFile> GetAllFile(bool _IsRecursive, std::vector<std::string> _Exts);
 
 	ENGINEAPI std::vector<class UEngineDirectory> GetAllDirectory();
 

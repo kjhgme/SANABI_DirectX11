@@ -3,6 +3,7 @@
 
 #include <EngineBase/EngineDebug.h>
 #include <EnginePlatform/EngineWindow.h>
+#include <EngineCore/EngineResources.h>
 
 #include "Level.h"
 #include "IContentsCore.h"
@@ -150,6 +151,7 @@ void UEngineCore::EngineFrame()
 void UEngineCore::EngineEnd()
 {
 	Device.Release();
+	UEngineResources::Release();
 
 	CurLevel = nullptr;
 	NextLevel = nullptr;

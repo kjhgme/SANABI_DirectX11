@@ -2,11 +2,8 @@
 #include "Renderer.h"
 
 #include <EngineBase/EngineString.h>
-
-#include "EngineCamera.h"
-#include "ThirdParty/DirectxTex/Inc/DirectXTex.h"
-
-#pragma comment(lib, "DirectXTex.lib")
+#include <EngineCore/EngineCamera.h>
+#include <EngineCore/EngineTexture.h>
 
 URenderer::URenderer()
 {
@@ -19,19 +16,9 @@ URenderer::~URenderer()
 	VSErrorCodeBlob = nullptr;
 }
 
-void URenderer::SetOrder(int _Order)
-{
-	int PrevOrder = GetOrder();
-	UObject::SetOrder(_Order);
-	ULevel* Level = GetActor()->GetWorld();
-	
-	std::shared_ptr<URenderer> RendererPtr = GetThis<URenderer>();
-
-	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
-}
-
 ENGINEAPI void URenderer::BeginPlay()
 {
+	USceneComponent::BeginPlay();
 	SetOrder(0);
 
 	InputAssembler1Init();
@@ -62,100 +49,114 @@ void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	UEngineCore::Device.GetContext()->DrawIndexed(6, 0, 0);
 }
 
+void URenderer::SetOrder(int _Order)
+{
+	int PrevOrder = GetOrder();
+	UObject::SetOrder(_Order);
+	ULevel* Level = GetActor()->GetWorld();
+	
+	std::shared_ptr<URenderer> RendererPtr = GetThis<URenderer>();
+
+	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
+}
+
+void URenderer::SetTexture(std::string_view _Value)
+{
+	std::string UpperName = UEngineString::ToUpper(_Value);
+
+	Sprite = UEngineSprite::Find<UEngineSprite>(UpperName);
+
+	if (nullptr == Sprite)
+	{
+		MSGASSERT("Sprite is nullptr.");
+	}
+}
+
+void URenderer::SetSpriteData(size_t _Index)
+{
+	SpriteData = Sprite->GetSpriteData(_Index);
+}
+
 void URenderer::ShaderResInit()
 {
-	D3D11_BUFFER_DESC BufferInfo = { 0 };
-	BufferInfo.ByteWidth = sizeof(FTransform);
-	BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
-	BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
-
-	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer))
 	{
-		MSGASSERT("Constant Buffer failed.");
-		return;
-	}
+		D3D11_BUFFER_DESC BufferInfo = { 0 };
+		BufferInfo.ByteWidth = sizeof(FTransform);
+		BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
+		BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
 
-	UEngineDirectory CurDir;
-	CurDir.MoveParentToDirectory("Resources");
-	UEngineFile File = CurDir.GetFile("test.png");
-
-	std::string Str = File.GetPathToString();
-	std::string Ext = File.GetExtension();
-	std::wstring wLoadPath = UEngineString::AnsiToUnicode(Str.c_str());
-
-	std::string UpperExt = UEngineString::ToUpper(Ext.c_str());
-
-	DirectX::TexMetadata Metadata;
-	DirectX::ScratchImage ImageData;
-
-	if (UpperExt == ".DDS")
-	{
-		if (S_OK != DirectX::LoadFromDDSFile(wLoadPath.c_str(), DirectX::DDS_FLAGS_NONE, &Metadata, ImageData))
+		if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer))
 		{
-			MSGASSERT("DDS 파일 로드에 실패했습니다.");
-			return;
-		}
-	}
-	else if (UpperExt == ".TGA")
-	{
-		if (S_OK != DirectX::LoadFromTGAFile(wLoadPath.c_str(), DirectX::TGA_FLAGS_NONE, &Metadata, ImageData))
-		{
-			MSGASSERT("TGA 파일 로드에 실패했습니다.");
-			return;
-		}
-	}
-	else
-	{
-		if (S_OK != DirectX::LoadFromWICFile(wLoadPath.c_str(), DirectX::WIC_FLAGS_NONE, &Metadata, ImageData))
-		{
-			MSGASSERT(UpperExt + "파일 로드에 실패했습니다.");
+			MSGASSERT("Constant Buffer failed.");
 			return;
 		}
 	}
 
-	if (S_OK != DirectX::CreateShaderResourceView(
-		UEngineCore::Device.GetDevice(),
-		ImageData.GetImages(),
-		ImageData.GetImageCount(),
-		ImageData.GetMetadata(),
-		&SRV
-	))
 	{
-		MSGASSERT(UpperExt + "쉐이더 리소스 뷰 생성에 실패했습니다..");
-		return;
+		D3D11_BUFFER_DESC BufferInfo = { 0 };
+		BufferInfo.ByteWidth = sizeof(FSpriteData);
+		BufferInfo.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
+		BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
+
+		if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, nullptr, SpriteConstBuffer.GetAddressOf()))
+		{
+			MSGASSERT("Constant Buffer failed.");
+			return;
+		}
 	}
 
 	D3D11_SAMPLER_DESC SampInfo = { D3D11_FILTER::D3D11_FILTER_MIN_MAG_MIP_POINT };
+	SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_BORDER;
+	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_BORDER;
+	SampInfo.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_CLAMP;
 
-	SampInfo.AddressU = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
-	SampInfo.AddressV = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
-	SampInfo.AddressW = D3D11_TEXTURE_ADDRESS_MODE::D3D11_TEXTURE_ADDRESS_WRAP;
+	SampInfo.BorderColor[0] = 0.0f;
+	SampInfo.BorderColor[1] = 0.0f;
+	SampInfo.BorderColor[2] = 0.0f;
+	SampInfo.BorderColor[3] = 0.0f;
 
 	UEngineCore::Device.GetDevice()->CreateSamplerState(&SampInfo, &SamplerState);
-
 }
 
 void URenderer::ShaderResSetting()
 {
-	FTransform& RendererTrans = GetTransformRef();
-
-	D3D11_MAPPED_SUBRESOURCE Data = {};
-	UEngineCore::Device.GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
-
-	if (nullptr == Data.pData)
 	{
-		MSGASSERT("Connect to GraphicCard failed.");
+		FTransform& RendererTrans = GetTransformRef();
+
+		D3D11_MAPPED_SUBRESOURCE Data = {};
+		UEngineCore::Device.GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
+
+		if (nullptr == Data.pData)
+		{
+			MSGASSERT("Connect to GraphicCard failed.");
+		}
+
+		memcpy_s(Data.pData, sizeof(FTransform), &RendererTrans, sizeof(FTransform));
+
+		UEngineCore::Device.GetContext()->Unmap(TransformConstBuffer.Get(), 0);
+
+		ID3D11Buffer* ArrPtr[16] = { TransformConstBuffer.Get() };
+		UEngineCore::Device.GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
 	}
 
-	memcpy_s(Data.pData, sizeof(FTransform), &RendererTrans, sizeof(FTransform));
+	{
+		D3D11_MAPPED_SUBRESOURCE Data = {};
+		UEngineCore::Device.GetContext()->Map(SpriteConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
 
-	UEngineCore::Device.GetContext()->Unmap(TransformConstBuffer.Get(), 0);
+		if (nullptr == Data.pData)
+		{
+			MSGASSERT("Connect to GraphicCard failed.");
+		}
+		memcpy_s(Data.pData, sizeof(FSpriteData), &SpriteData, sizeof(FSpriteData));
+		UEngineCore::Device.GetContext()->Unmap(SpriteConstBuffer.Get(), 0);
 
-	ID3D11Buffer* ArrPtr[16] = { TransformConstBuffer.Get() };
-	UEngineCore::Device.GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
+		ID3D11Buffer* ArrPtr[16] = { SpriteConstBuffer.Get() };
+		UEngineCore::Device.GetContext()->VSSetConstantBuffers(1, 1, ArrPtr);
+	}
 
-	ID3D11ShaderResourceView* ArrSRV[16] = { SRV.Get() };
+	ID3D11ShaderResourceView* ArrSRV[16] = { Sprite->GetSRV() };
 	UEngineCore::Device.GetContext()->PSSetShaderResources(0, 1, ArrSRV);
 
 	ID3D11SamplerState* ArrSMP[16] = { SamplerState.Get() };
@@ -184,7 +185,7 @@ void URenderer::InputAssembler1Init()
 
 	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, &Data, &VertexBuffer))
 	{
-		MSGASSERT("버텍스 버퍼 생성에 실패했습니다.");
+		MSGASSERT("Create Vertexes failed.");
 		return;
 	}
 }
@@ -253,7 +254,7 @@ void URenderer::InputAssembler1LayOut()
 
 	if (S_OK != Result)
 	{
-		MSGASSERT("인풋 레이아웃 생성에 실패했습니다");
+		MSGASSERT("CreateInputLayout failed.");
 	}
 }
 
@@ -292,7 +293,7 @@ void URenderer::VertexShaderInit()
 	if (nullptr == VSShaderCodeBlob)
 	{
 		std::string ErrString = reinterpret_cast<char*>(VSErrorCodeBlob->GetBufferPointer());
-		MSGASSERT("쉐이더 코드 중간빌드에서 실패했습니다\n" + ErrString);
+		MSGASSERT(ErrString + "GetBufferPointer failed.");
 		return;
 	}
 
@@ -305,7 +306,7 @@ void URenderer::VertexShaderInit()
 
 	if (S_OK != Result)
 	{
-		MSGASSERT("버텍스 쉐이더 생성에 실패했습니다.");
+		MSGASSERT("CreateVertexShader failed.");
 	}
 
 	InputAssembler1LayOut();
@@ -337,7 +338,7 @@ void URenderer::InputAssembler2Init()
 	Data.pSysMem = &Indexs[0];
 	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, &Data, &IndexBuffer))
 	{
-		MSGASSERT("버텍스 버퍼 생성에 실패했습니다.");
+		MSGASSERT("CreateBuffer failed.");
 		return;
 	}
 }
@@ -408,7 +409,7 @@ void URenderer::PixelShaderInit()
 	if (nullptr == PSShaderCodeBlob)
 	{
 		std::string ErrString = reinterpret_cast<char*>(PSErrorCodeBlob->GetBufferPointer());
-		MSGASSERT("쉐이더 코드 중간빌드에서 실패했습니다\n" + ErrString);
+		MSGASSERT(ErrString + "GetBufferPointer failed.");
 		return;
 	}
 
@@ -421,7 +422,7 @@ void URenderer::PixelShaderInit()
 
 	if (S_OK != Result)
 	{
-		MSGASSERT("픽셀 쉐이더 생성에 실패했습니다.");
+		MSGASSERT("CreatePixelShader failed");
 	}
 }
 

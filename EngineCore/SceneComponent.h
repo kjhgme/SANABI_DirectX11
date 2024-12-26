@@ -3,6 +3,8 @@
 
 class USceneComponent : public UActorComponent
 {
+	friend class AActor;
+
 public:
 	USceneComponent();
 	~USceneComponent();
@@ -19,31 +21,69 @@ public:
 	}
 	
 	// SetFunction
+	void SetLocation(const FVector& _Value)
+	{
+		IsAbsolute = true;
+		Transform.Location = _Value;
+		TransformUpdate();
+	}
+
+	void SetRelativeLocation(const FVector& _Value)
+	{
+		Transform.Location = _Value;
+		TransformUpdate();
+	}
+
+	void SetRotation(const FVector& _Value)
+	{
+		Transform.Rotation = _Value;
+		TransformUpdate();
+	}
+
+	void SetScale3D(const FVector& _Value)
+	{
+		IsAbsolute = true;
+		Transform.Scale = _Value;
+		TransformUpdate();
+	}	
+	
 	void SetRelativeScale3D(const FVector& _Scale)
 	{
 		Transform.Scale = _Scale;
-		Transform.TransformUpdate();
-	}
-
-	void SetLocation(const FVector& _Value)
-	{
-		Transform.Location = _Value;
-		Transform.TransformUpdate();
+		TransformUpdate();
 	}
 
 	// Function
-	void AddLocation(const FVector& _Value)
+	void AddRelativeLocation(const FVector& _Value)
 	{
 		Transform.Location += _Value;
-		Transform.TransformUpdate();
+		TransformUpdate();
+	}
+	
+	void AddRotation(const FVector& _Value)
+	{
+		Transform.Rotation += _Value;
+		TransformUpdate();
 	}
 
+	ENGINEAPI void SetupAttachment(std::shared_ptr<USceneComponent> _Parent);
+
+	void SetupAttachment(USceneComponent* _Parent);
+
+	ENGINEAPI void TransformUpdate();
+
 protected:
+	bool IsAbsolute = false;
+
 	FTransform Transform;
+
+	ENGINEAPI void BeginPlay() override;
+
+	void ParentMatrixCheck();
 
 private:
 
-	USceneComponent* Parent;
+	USceneComponent* Parent = nullptr;
 	std::list<std::shared_ptr<USceneComponent>> Childs;
 };
 

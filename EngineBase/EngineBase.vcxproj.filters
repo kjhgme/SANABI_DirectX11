@@ -26,6 +26,9 @@
     <ClCompile Include="EngineString.cpp">
       <Filter>String</Filter>
     </ClCompile>
+    <ClCompile Include="EngineDelegate.cpp">
+      <Filter>Event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h" />
@@ -56,6 +59,9 @@
     <ClInclude Include="EngineString.h">
       <Filter>String</Filter>
     </ClInclude>
+    <ClInclude Include="EngineDelegate.h">
+      <Filter>Event</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="IO">
@@ -75,6 +81,9 @@
     </Filter>
     <Filter Include="String">
       <UniqueIdentifier>{9e5be2e0-e82a-484c-9a46-38772235eba9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event">
+      <UniqueIdentifier>{1d23c810-0e71-4e43-8f6a-b39a284adb50}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
