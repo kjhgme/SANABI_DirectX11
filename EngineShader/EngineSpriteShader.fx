@@ -16,6 +16,7 @@ cbuffer FTransform : register(b0)
 {
     float4 Scale;
     float4 Rotation;
+    float4 Qut;
     float4 Location;
     
     float4 RelativeScale;
@@ -45,6 +46,7 @@ cbuffer FSpriteData : register(b1)
 {
     float4 CuttingPos;
     float4 CuttingSize;
+    float4 Pivot;
 };
 
 VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
@@ -56,6 +58,11 @@ VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
 	OutPut.COLOR = _Vertex.COLOR;
 	return OutPut;
 }
+
+cbuffer MatColor : register(b1)
+{
+    float4 Albedo;
+};
 
 Texture2D ImageTexture : register(t0);
 SamplerState ImageSampler : register(s0);

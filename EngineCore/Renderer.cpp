@@ -4,6 +4,7 @@
 #include <EngineBase/EngineString.h>
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/EngineTexture.h>
+#include "EngineVertex.h"
 
 URenderer::URenderer()
 {
@@ -60,11 +61,21 @@ void URenderer::SetOrder(int _Order)
 	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
 }
 
-void URenderer::SetTexture(std::string_view _Value)
+void URenderer::SetSprite(std::string_view _Value)
 {
 	std::string UpperName = UEngineString::ToUpper(_Value);
 
-	Sprite = UEngineSprite::Find<UEngineSprite>(UpperName);
+	Sprite = UEngineSprite::Find<UEngineSprite>(UpperName).get();
+
+	if (nullptr == Sprite)
+	{
+		MSGASSERT("Sprite is nullptr.");
+	}
+}
+
+void URenderer::SetSprite(UEngineSprite* _Sprite)
+{
+	Sprite = _Sprite;
 
 	if (nullptr == Sprite)
 	{

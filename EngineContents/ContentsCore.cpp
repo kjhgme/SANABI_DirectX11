@@ -29,13 +29,14 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			MSGASSERT("Wrong Directory.");
 			return;
 		}
+		Dir.Append("SNB");
 
-		std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
-		for (size_t i = 0; i < ImageFiles.size(); i++)
-		{
-			std::string FilePath = ImageFiles[i].GetPathToString();
-			UEngineTexture::Load(FilePath);
-		}
+		 std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
+		 for (size_t i = 0; i < ImageFiles.size(); i++)
+		 {
+		 	std::string FilePath = ImageFiles[i].GetPathToString();
+		 	UEngineTexture::Load(FilePath);
+		 }
 	}
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");

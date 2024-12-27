@@ -10,16 +10,19 @@ ATitleLogo::ATitleLogo()
 	RootComponent = Default;
 
 	LogoRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	LogoRenderer->SetSprite("test.png", 0);
+	LogoRenderer->SetSprite("SNB_01.png", 0);
+
+	//LogoRenderer->CreateAnimation("Idle", "SNB_01.png", 0, 0, 0.1f);
+	//{
+	//	USpriteRenderer::FrameAnimation* Animation = LogoRenderer->FindAnimation("Idle");
+	//	Animation->IsAutoScale = true;
+	//	Animation->AutoScaleRatio = 4.0f;
+	//}
+	//
+	//LogoRenderer->ChangeAnimation("Idle");
 
 	LogoRenderer->SetRelativeScale3D({ 50, 50, 1.0f });
 	LogoRenderer->SetupAttachment(RootComponent);
-
-	Child = CreateDefaultSubObject<USpriteRenderer>();
-	Child->SetSprite("Player.png", 2);
-	Child->SetRelativeLocation({ 100.0f, 0.0f, 0.0f });
-	Child->SetScale3D({ 50.0f, 50.0f, 1.0f });
-	Child->SetupAttachment(RootComponent);
 }
 
 ATitleLogo::~ATitleLogo()

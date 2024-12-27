@@ -28,7 +28,7 @@ public:
 
 	IDXGIAdapter* GetHighPerformanceAdapter();
 
-	void Release();
+	ENGINEAPI void Release();
 
 	void RenderStart();
 
@@ -58,5 +58,9 @@ private:
 	Microsoft::WRL::ComPtr<IDXGIAdapter> MainAdapter = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
+
+	ENGINEAPI void DefaultResourcesInit();
+
+	ENGINEAPI void MeshInit();
 };
 

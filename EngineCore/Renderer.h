@@ -1,14 +1,7 @@
 #pragma once
 #include "SceneComponent.h"
 #include "EngineSprite.h"
-
-struct EngineVertex
-{
-public:
-	float4 POSITION;
-	float4 TEXCOORD;
-	float4 COLOR;
-};
+#include "RenderUnit.h"
 
 class URenderer : public USceneComponent
 {
@@ -25,19 +18,21 @@ public:
 
 	void SetOrder(int _Order) override;
 
-	void SetTexture(std::string_view _Value);
+	ENGINEAPI void SetSprite(std::string_view _Value);
+	ENGINEAPI void SetSprite(UEngineSprite* _Sprite);
 
 	ENGINEAPI void SetSpriteData(size_t _Index);
 
 protected:
 	ENGINEAPI void BeginPlay() override;
+	ENGINEAPI virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 private:
-	virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
 
 public:
 	FSpriteData SpriteData;
-	std::shared_ptr<class UEngineSprite> Sprite = nullptr;
+	class UEngineSprite* Sprite = nullptr;
+
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> SpriteConstBuffer = nullptr;

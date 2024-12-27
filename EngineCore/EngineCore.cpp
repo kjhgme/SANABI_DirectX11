@@ -129,6 +129,11 @@ ENGINEAPI FVector UEngineCore::GetScreenScale()
 	return Data.WindowSize;
 }
 
+ENGINEAPI UEngineGraphicDevice& UEngineCore::GetDevice()
+{
+	return Device;
+}
+
 void UEngineCore::EngineFrame()
 {
 	if (nullptr != NextLevel)
