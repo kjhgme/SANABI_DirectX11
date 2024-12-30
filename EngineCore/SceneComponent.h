@@ -7,7 +7,7 @@ class USceneComponent : public UActorComponent
 
 public:
 	USceneComponent();
-	~USceneComponent();
+	virtual ~USceneComponent() = 0;
 
 	USceneComponent(const USceneComponent& _Other) = delete;
 	USceneComponent(USceneComponent&& _Other) noexcept = delete;

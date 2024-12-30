@@ -18,10 +18,9 @@ public:
 
 	void SetOrder(int _Order) override;
 
-	ENGINEAPI void SetSprite(std::string_view _Value);
-	ENGINEAPI void SetSprite(UEngineSprite* _Sprite);
+	ENGINEAPI void SetTexture(UEngineTexture* _Texture);
 
-	ENGINEAPI void SetSpriteData(size_t _Index);
+	ENGINEAPI void SetSpriteData(UEngineSprite* _Sprite, size_t _Index);
 
 	ENGINEAPI void SetMesh(std::string_view _Name);
 
@@ -35,7 +34,7 @@ private:
 
 public:
 	FSpriteData SpriteData;
-	class UEngineSprite* Sprite = nullptr;
+	UEngineTexture* Texture = nullptr;
 	class UMesh* Mesh = nullptr;
 	class UEngineBlend* Blend = nullptr;
 

@@ -12,12 +12,16 @@ USpriteRenderer::~USpriteRenderer()
 void USpriteRenderer::BeginPlay()
 {
 	URenderer::BeginPlay();
+	SetMesh("Rect");
+	SetBlend("AlphaBlend");
 }
 
 void USpriteRenderer::SetSprite(std::string_view _Name, size_t _Index)
 {
-	URenderer::SetSprite(_Name);
-	SetSpriteData(_Index);
+	Sprite = UEngineSprite::Find<UEngineSprite>(_Name).get();
+
+	URenderer::SetTexture(Sprite->GetTexture(_Index));
+	SetSpriteData(Sprite, _Index);
 }
 
 USpriteRenderer::FrameAnimation* USpriteRenderer::FindAnimation(std::string_view _AnimationName)
@@ -36,8 +40,11 @@ void USpriteRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
 	if (nullptr != CurAnimation)
 	{
-		URenderer::SetSprite(CurAnimation->Sprite);
-		URenderer::SetSpriteData(CurIndex);
+		UEngineSprite* Sprite = CurAnimation->Sprite;
+		size_t CurIndex = CurAnimation->CurIndex;
+
+		URenderer::SetTexture(Sprite->GetTexture(CurIndex));
+		URenderer::SetSpriteData(Sprite, CurIndex);
 	}
 
 	URenderer::Render(_Camera, _DeltaTime);
@@ -216,7 +223,12 @@ void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 		CurAnimation->Events[CurAnimation->CurIndex]();
 	}
 
-	Sprite = CurAnimation->Sprite;
+	if (true == CurAnimation->IsAutoScale)
+	{
+		FVector Scale = CurAnimation->Sprite->GetSpriteScaleToReal(CurIndex);
+		Scale.Z = 1.0f;
+		SetRelativeScale3D(Scale * CurAnimation->AutoScaleRatio);
+	}
 }
 
 

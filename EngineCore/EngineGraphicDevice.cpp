@@ -1,11 +1,6 @@
 #include "PreCompile.h"
 #include "EngineGraphicDevice.h"
 
-#include "EngineVertex.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "Mesh.h"
-
 UEngineGraphicDevice::UEngineGraphicDevice()
 {
 }
@@ -139,6 +134,8 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
         MSGASSERT("Thread has wrong something.");
         return;
     }
+
+    DefaultResourcesInit();
 }
 
 void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)

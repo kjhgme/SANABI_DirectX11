@@ -2,6 +2,7 @@
 #include "ContentsCore.h"
 
 #include <EngineCore/Level.h>
+#include <EngineCore/EngineSprite.h>
 #include <EngineCore/EngineTexture.h>
 
 #include "TitleGameMode.h"
@@ -29,14 +30,26 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			MSGASSERT("Wrong Directory.");
 			return;
 		}
-		Dir.Append("SNB");
-
+		Dir.Append("Image");
+	 
 		 std::vector<UEngineFile> ImageFiles = Dir.GetAllFile(true, { ".PNG", ".BMP", ".JPG" });
 		 for (size_t i = 0; i < ImageFiles.size(); i++)
 		 {
 		 	std::string FilePath = ImageFiles[i].GetPathToString();
 		 	UEngineTexture::Load(FilePath);
 		 }
+	}
+
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("Resources/Image"))
+		{
+			MSGASSERT("Wrong Directory.");
+			return;
+		}
+		Dir.Append("SNB");
+
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
 	}
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");

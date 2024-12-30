@@ -3,6 +3,7 @@
 
 #include <EngineBase/EngineDebug.h>
 #include <EnginePlatform/EngineWindow.h>
+#include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineResources.h>
 
 #include "Level.h"
@@ -13,6 +14,7 @@ UEngineGraphicDevice UEngineCore::Device;
 HMODULE UEngineCore::ContentsDLL = nullptr;
 std::shared_ptr<IContentsCore> UEngineCore::Core;
 UEngineInitData UEngineCore::Data;
+UEngineTimer UEngineCore::Timer;
 
 std::shared_ptr<class ULevel> UEngineCore::NextLevel;
 std::shared_ptr<class ULevel> UEngineCore::CurLevel = nullptr;
@@ -95,7 +97,7 @@ void UEngineCore::EngineStart(HINSTANCE _Instance, std::string_view _DllName)
 		{
 			EngineFrame();
 		},
-		[]()
+		[]() 
 		{
 			EngineEnd();
 		});		
@@ -124,12 +126,12 @@ void UEngineCore::OpenLevel(std::string_view _Name)
 	NextLevel = LevelMap[_Name.data()];
 }
 
-ENGINEAPI FVector UEngineCore::GetScreenScale()
+FVector UEngineCore::GetScreenScale()
 {
 	return Data.WindowSize;
 }
 
-ENGINEAPI UEngineGraphicDevice& UEngineCore::GetDevice()
+UEngineGraphicDevice& UEngineCore::GetDevice()
 {
 	return Device;
 }
@@ -147,10 +149,15 @@ void UEngineCore::EngineFrame()
 
 		CurLevel->LevelChangeStart();
 		NextLevel = nullptr;
+		Timer.TimeStart();
 	}
 
-	CurLevel->Tick(0.0f);
-	CurLevel->Render(0.0f);
+	Timer.TimeCheck();
+	float DeltaTime = Timer.GetDeltaTime();
+	UEngineInput::KeyCheck(DeltaTime);
+
+	CurLevel->Tick(DeltaTime);
+	CurLevel->Render(DeltaTime);
 }
 
 void UEngineCore::EngineEnd()

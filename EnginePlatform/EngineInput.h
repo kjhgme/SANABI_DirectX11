@@ -23,12 +23,6 @@ public:
 	UEngineInput& operator=(const UEngineInput& _Other) = delete;
 	UEngineInput& operator=(UEngineInput&& _Other) noexcept = delete;
 
-	static UEngineInput& GetInst()
-	{
-		static UEngineInput Inst = UEngineInput();
-		return Inst;
-	}
-
 private:
 	class UEngineKey
 	{
@@ -41,11 +35,12 @@ private:
 		bool IsFree = true;
 
 		float PressTime = 0.0f;
+		float FreeTime = 0.0f;
 
-		std::vector<std::function<void(float)>> PressEvents;
-		std::vector<std::function<void(float)>> DownEvents;
-		std::vector<std::function<void(float)>> UpEvents;
-		std::vector<std::function<void(float)>> FreeEvents;
+		std::vector<std::function<void()>> PressEvents;
+		std::vector<std::function<void()>> DownEvents;
+		std::vector<std::function<void()>> UpEvents;
+		std::vector<std::function<void()>> FreeEvents;
 
 		UEngineKey()
 		{
@@ -55,70 +50,72 @@ private:
 		{
 		}
 
-		void EventCheck(float _DeltaTime);
+		void EventCheck();
 		void KeyCheck(float _DeltaTime);
 	};
 
-public:
-	void KeyCheck(float _DeltaTime);
-	void EventCheck(float _DeltaTime);
+	ENGINEAPI static UEngineInput& GetInst();
+	ENGINEAPI static void EventCheck(float _DeltaTime);
 
-	bool IsDown(int _KeyIndex)
+public:
+	ENGINEAPI static void KeyCheck(float _DeltaTime);
+
+	static bool IsDown(int _KeyIndex)
 	{
-		if (false == Keys.contains(_KeyIndex))
+		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
 			MSGASSERT("Entered keys that is not yet registered.(EngineInput)");
 			return false;
 		}
 
-		return Keys[_KeyIndex].IsDown;
+		return GetInst().Keys[_KeyIndex].IsDown;
 	}
 
 	bool IsUp(int _KeyIndex)
 	{
-		if (false == Keys.contains(_KeyIndex))
+		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
 			MSGASSERT("Entered keys that is not yet registered.(EngineInput)");
 			return false;
 		}
 
-		return Keys[_KeyIndex].IsUp;
+		return GetInst().Keys[_KeyIndex].IsUp;
 	}
 
-	bool IsPress(int _KeyIndex)
+	static bool IsPress(int _KeyIndex)
 	{
-		if (false == Keys.contains(_KeyIndex))
+		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
 			MSGASSERT("Entered keys that is not yet registered.(EngineInput)");
 			return false;
 		}
 
-		return Keys[_KeyIndex].IsPress;
+		return GetInst().Keys[_KeyIndex].IsPress;
 	}
 
-	float IsPressTime(int _KeyIndex)
+	static float IsPressTime(int _KeyIndex)
 	{
-		if (false == Keys.contains(_KeyIndex))
+		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
 			MSGASSERT("Entered keys that is not yet registered.(EngineInput)");
 			return false;
 		}
 
-		return Keys[_KeyIndex].PressTime;
+		return GetInst().Keys[_KeyIndex].PressTime;
 	}
 
-	bool IsFree(int _KeyIndex)
+	static bool IsFree(int _KeyIndex)
 	{
-		if (false == Keys.contains(_KeyIndex))
+		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
 			MSGASSERT("Entered keys that is not yet registered.(EngineInput)");
 			return false;
 		}
 
-		return Keys[_KeyIndex].IsFree;
+		return GetInst().Keys[_KeyIndex].IsFree;
 	}
 
-	void BindAction(int _KeyIndex, KeyEvent _EventType, std::function<void(float)> _Function);
+	void BindAction(int _KeyIndex, KeyEvent _EventType, std::function<void()> _Function);
 
 protected:
 

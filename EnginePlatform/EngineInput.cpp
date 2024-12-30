@@ -5,7 +5,10 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 {
 	if (0 != GetAsyncKeyState(Key))
 	{
-		PressTime += _DeltaTime;
+		if (true == IsPress)
+		{
+			PressTime += _DeltaTime;
+		}
 
 		if (true == IsFree)
 		{
@@ -16,6 +19,7 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 		}
 		else if (true == IsDown)
 		{
+			FreeTime = 0.0f;
 			IsDown = false;
 			IsPress = true;
 			IsFree = false;
@@ -28,6 +32,10 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 
 		if (true == IsPress)
 		{
+			FreeTime += _DeltaTime;
+		}
+		if (true == IsPress)
+		{
 			IsDown = false;
 			IsPress = false;
 			IsFree = true;
@@ -35,22 +43,22 @@ void UEngineInput::UEngineKey::KeyCheck(float _DeltaTime)
 		}
 		else if (true == IsUp)
 		{
+			PressTime = 0.0f;
 			IsDown = false;
 			IsPress = false;
 			IsFree = true;
 			IsUp = false;
 		}
-
 	}
 }
 
-void UEngineInput::UEngineKey::EventCheck(float _DeltaTime)
+void UEngineInput::UEngineKey::EventCheck()
 {
 	if (true == IsDown)
 	{
 		for (size_t i = 0; i < DownEvents.size(); i++)
 		{
-			DownEvents[i](_DeltaTime);
+			DownEvents[i]();
 		}
 	}
 
@@ -58,7 +66,7 @@ void UEngineInput::UEngineKey::EventCheck(float _DeltaTime)
 	{
 		for (size_t i = 0; i < PressEvents.size(); i++)
 		{
-			PressEvents[i](_DeltaTime);
+			PressEvents[i]();
 		}
 	}
 
@@ -66,7 +74,7 @@ void UEngineInput::UEngineKey::EventCheck(float _DeltaTime)
 	{
 		for (size_t i = 0; i < FreeEvents.size(); i++)
 		{
-			FreeEvents[i](_DeltaTime);
+			FreeEvents[i]();
 		}
 	}
 
@@ -74,7 +82,7 @@ void UEngineInput::UEngineKey::EventCheck(float _DeltaTime)
 	{
 		for (size_t i = 0; i < UpEvents.size(); i++)
 		{
-			UpEvents[i](_DeltaTime);
+			UpEvents[i]();
 		}
 	}
 }
@@ -186,35 +194,43 @@ UEngineInput::UEngineInput()
 	Keys.insert({ VK_F24		, UEngineKey(VK_F24) });
 }
 
+ENGINEAPI UEngineInput& UEngineInput::GetInst()
+{
+	static UEngineInput Inst = UEngineInput();
+	return Inst;
+}
+
 void UEngineInput::EventCheck(float _DeltaTime)
 {
-	std::map<int, UEngineKey>::iterator StartIter = Keys.begin();
-	std::map<int, UEngineKey>::iterator EndIter = Keys.end();
+	std::map<int, UEngineKey>::iterator StartIter = GetInst().Keys.begin();
+	std::map<int, UEngineKey>::iterator EndIter = GetInst().Keys.end();
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
 		UEngineKey& CurKey = StartIter->second;
-		CurKey.EventCheck(_DeltaTime);
+		CurKey.EventCheck();
 	}
 }
 
 void UEngineInput::KeyCheck(float _DeltaTime)
 {
-	std::map<int, UEngineKey>::iterator StartIter = Keys.begin();
-	std::map<int, UEngineKey>::iterator EndIter = Keys.end();
+	std::map<int, UEngineKey>::iterator StartIter = GetInst().Keys.begin();
+	std::map<int, UEngineKey>::iterator EndIter = GetInst().Keys.end();
 
 	for (; StartIter != EndIter; ++StartIter)
 	{
 		UEngineKey& CurKey = StartIter->second;
 		CurKey.KeyCheck(_DeltaTime);
 	}
+
+	EventCheck(_DeltaTime);
 }
 
 UEngineInput::~UEngineInput()
 {
 }
 
-void UEngineInput::BindAction(int _KeyIndex, KeyEvent _EventType, std::function<void(float) > _Function)
+void UEngineInput::BindAction(int _KeyIndex, KeyEvent _EventType, std::function<void() > _Function)
 {
 	if (false == Keys.contains(_KeyIndex))
 	{

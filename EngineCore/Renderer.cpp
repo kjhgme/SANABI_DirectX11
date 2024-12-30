@@ -35,6 +35,12 @@ void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	RendererTrans.View = CameraTrans.View;
 	RendererTrans.Projection = CameraTrans.Projection;
 	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+	
+	if (nullptr == Mesh)
+	{
+		MSGASSERT("Mesh is nullptr.");
+		return;
+	}
 
 	ShaderResSetting();
 	InputAssembler1Setting();
@@ -44,7 +50,7 @@ void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	PixelShaderSetting();
 	OutPutMergeSetting();
 
-	UEngineCore::Device.GetContext()->DrawIndexed(6, 0, 0);
+	UEngineCore::GetDevice().GetContext()->DrawIndexed(6, 0, 0);
 }
 
 void URenderer::SetOrder(int _Order)
@@ -58,34 +64,17 @@ void URenderer::SetOrder(int _Order)
 	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
 }
 
-void URenderer::SetSprite(std::string_view _Value)
+void URenderer::SetTexture(UEngineTexture* _Texture)
 {
-	std::string UpperName = UEngineString::ToUpper(_Value);
-
-	Sprite = UEngineSprite::Find<UEngineSprite>(UpperName).get();
-
-	if (nullptr == Sprite)
-	{
-		MSGASSERT("Sprite is nullptr.");
-	}
+	Texture = _Texture;
 }
 
-void URenderer::SetSprite(UEngineSprite* _Sprite)
+void URenderer::SetSpriteData(UEngineSprite* _Sprite, size_t _Index)
 {
-	Sprite = _Sprite;
-
-	if (nullptr == Sprite)
-	{
-		MSGASSERT("Sprite is nullptr.");
-	}
+	SpriteData = _Sprite->GetSpriteData(_Index);
 }
 
-void URenderer::SetSpriteData(size_t _Index)
-{
-	SpriteData = Sprite->GetSpriteData(_Index);
-}
-
-ENGINEAPI void URenderer::SetMesh(std::string_view _Name)
+void URenderer::SetMesh(std::string_view _Name)
 {
 	std::shared_ptr<UMesh> FindMesh = UMesh::Find<UMesh>(_Name);
 
@@ -158,7 +147,7 @@ void URenderer::ShaderResSetting()
 		FTransform& RendererTrans = GetTransformRef();
 
 		D3D11_MAPPED_SUBRESOURCE Data = {};
-		UEngineCore::Device.GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
+		UEngineCore::GetDevice().GetContext()->Map(TransformConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
 
 		if (nullptr == Data.pData)
 		{
@@ -167,32 +156,32 @@ void URenderer::ShaderResSetting()
 
 		memcpy_s(Data.pData, sizeof(FTransform), &RendererTrans, sizeof(FTransform));
 
-		UEngineCore::Device.GetContext()->Unmap(TransformConstBuffer.Get(), 0);
+		UEngineCore::GetDevice().GetContext()->Unmap(TransformConstBuffer.Get(), 0);
 
 		ID3D11Buffer* ArrPtr[16] = { TransformConstBuffer.Get() };
-		UEngineCore::Device.GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
+		UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(0, 1, ArrPtr);
 	}
 
 	{
 		D3D11_MAPPED_SUBRESOURCE Data = {};
-		UEngineCore::Device.GetContext()->Map(SpriteConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
+		UEngineCore::GetDevice().GetContext()->Map(SpriteConstBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &Data);
 
 		if (nullptr == Data.pData)
 		{
 			MSGASSERT("Connect to GraphicCard failed.");
 		}
 		memcpy_s(Data.pData, sizeof(FSpriteData), &SpriteData, sizeof(FSpriteData));
-		UEngineCore::Device.GetContext()->Unmap(SpriteConstBuffer.Get(), 0);
+		UEngineCore::GetDevice().GetContext()->Unmap(SpriteConstBuffer.Get(), 0);
 
 		ID3D11Buffer* ArrPtr[16] = { SpriteConstBuffer.Get() };
-		UEngineCore::Device.GetContext()->VSSetConstantBuffers(1, 1, ArrPtr);
+		UEngineCore::GetDevice().GetContext()->VSSetConstantBuffers(1, 1, ArrPtr);
 	}
 
-	ID3D11ShaderResourceView* ArrSRV[16] = { Sprite->GetSRV() };
-	UEngineCore::Device.GetContext()->PSSetShaderResources(0, 1, ArrSRV);
+	ID3D11ShaderResourceView* ArrSRV[16] = { Texture->GetSRV() };
+	UEngineCore::GetDevice().GetContext()->PSSetShaderResources(0, 1, ArrSRV);
 
 	ID3D11SamplerState* ArrSMP[16] = { SamplerState.Get() };
-	UEngineCore::Device.GetContext()->PSSetSamplers(0, 1, ArrSMP);
+	UEngineCore::GetDevice().GetContext()->PSSetSamplers(0, 1, ArrSMP);
 }
 
 void URenderer::InputAssembler1Setting()
@@ -244,7 +233,7 @@ void URenderer::InputAssembler1LayOut()
 		InputLayOutData.push_back(Desc);
 	}
 
-	HRESULT Result = UEngineCore::Device.GetDevice()->CreateInputLayout(
+	HRESULT Result = UEngineCore::GetDevice().GetDevice()->CreateInputLayout(
 		&InputLayOutData[0],
 		static_cast<unsigned int>(InputLayOutData.size()),
 		VSShaderCodeBlob->GetBufferPointer(),
@@ -296,7 +285,7 @@ void URenderer::VertexShaderInit()
 		return;
 	}
 
-	HRESULT Result = UEngineCore::Device.GetDevice()->CreateVertexShader(
+	HRESULT Result = UEngineCore::GetDevice().GetDevice()->CreateVertexShader(
 		VSShaderCodeBlob->GetBufferPointer(),
 		VSShaderCodeBlob->GetBufferSize(),
 		nullptr,
@@ -326,10 +315,10 @@ void URenderer::RasterizerInit()
 {
 	D3D11_RASTERIZER_DESC Desc = {};
 
-	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
+	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 
-	UEngineCore::Device.GetDevice()->CreateRasterizerState(&Desc, RasterizerState.GetAddressOf());
+	UEngineCore::GetDevice().GetDevice()->CreateRasterizerState(&Desc, &RasterizerState);
 
 	ViewPortInfo.Height = 720.0f;
 	ViewPortInfo.Width = 1280.0f;
@@ -383,7 +372,7 @@ void URenderer::PixelShaderInit()
 		return;
 	}
 
-	HRESULT Result = UEngineCore::Device.GetDevice()->CreatePixelShader(
+	HRESULT Result = UEngineCore::GetDevice().GetDevice()->CreatePixelShader(
 		PSShaderCodeBlob->GetBufferPointer(),
 		PSShaderCodeBlob->GetBufferSize(),
 		nullptr,
@@ -408,7 +397,7 @@ void URenderer::OutPutMergeSetting()
 		Blend->Setting();
 	}
 
-	ID3D11RenderTargetView* RTV = UEngineCore::Device.GetRTV();
+	ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
 
 	ID3D11RenderTargetView* ArrRtv[16] = { 0 };
 	ArrRtv[0] = RTV;

@@ -14,7 +14,11 @@ ULevel::ULevel()
 
 ULevel::~ULevel()
 {
+	BeginPlayList.clear();
+	AllActorList.clear();
+	Cameras.clear();
 }
+
 void ULevel::LevelChangeStart()
 {
 
@@ -24,7 +28,6 @@ void ULevel::LevelChangeEnd()
 {
 
 }
-
 
 void ULevel::Tick(float _DeltaTime)
 {
@@ -55,7 +58,7 @@ void ULevel::Tick(float _DeltaTime)
 
 void ULevel::Render(float _DeltaTime)
 {
-	UEngineCore::Device.RenderStart();
+	UEngineCore::GetDevice().RenderStart();
 
 	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
 	{
@@ -63,7 +66,7 @@ void ULevel::Render(float _DeltaTime)
 		Camera.second->CameraComponent->Render(_DeltaTime);
 	}
 
-	UEngineCore::Device.RenderEnd();
+	UEngineCore::GetDevice().RenderEnd();
 }
 
 std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)

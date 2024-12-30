@@ -93,6 +93,7 @@ private:
 
 	std::map<std::string, FrameAnimation> FrameAnimations;
 	FrameAnimation* CurAnimation = nullptr;
+	UEngineSprite* Sprite = nullptr;
 
 };
 
