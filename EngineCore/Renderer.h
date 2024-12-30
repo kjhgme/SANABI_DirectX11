@@ -25,6 +25,8 @@ public:
 
 	ENGINEAPI void SetMesh(std::string_view _Name);
 
+	ENGINEAPI void SetBlend(std::string_view _Name);
+
 protected:
 	ENGINEAPI void BeginPlay() override;
 	ENGINEAPI virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
@@ -35,6 +37,7 @@ public:
 	FSpriteData SpriteData;
 	class UEngineSprite* Sprite = nullptr;
 	class UMesh* Mesh = nullptr;
+	class UEngineBlend* Blend = nullptr;
 
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr;
@@ -67,5 +70,6 @@ public:
 	void PixelShaderSetting();
 
 	void OutPutMergeSetting();
-};
 
+	std::vector<URenderUnit> Units;
+};

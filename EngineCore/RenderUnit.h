@@ -1,14 +1,14 @@
 #pragma once
-class RenderUnit
+class URenderUnit
 {
 public:
-	RenderUnit();
-	~RenderUnit();
+	URenderUnit();
+	~URenderUnit();
 
-	RenderUnit(const RenderUnit& _Other) = delete;
-	RenderUnit(RenderUnit&& _Other) noexcept = delete;
-	RenderUnit& operator=(const RenderUnit& _Other) = delete;
-	RenderUnit& operator=(RenderUnit&& _Other) noexcept = delete;
+	URenderUnit(const URenderUnit& _Other) = delete;
+	URenderUnit(URenderUnit&& _Other) noexcept = delete;
+	URenderUnit& operator=(const URenderUnit& _Other) = delete;
+	URenderUnit& operator=(URenderUnit&& _Other) noexcept = delete;
 
 protected:
 

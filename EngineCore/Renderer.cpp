@@ -6,6 +6,7 @@
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/Mesh.h>
 #include "EngineVertex.h"
+#include "EngineBlend.h"
 
 URenderer::URenderer()
 {
@@ -93,6 +94,18 @@ ENGINEAPI void URenderer::SetMesh(std::string_view _Name)
 	if (nullptr == Mesh)
 	{
 		MSGASSERT("Mesh is nullptr.");
+	}
+}
+
+void URenderer::SetBlend(std::string_view _Name)
+{
+	std::shared_ptr<UEngineBlend> FindBlend = UEngineBlend::Find<UEngineBlend>(_Name);
+
+	Blend = FindBlend.get();
+
+	if (nullptr == Blend)
+	{
+		MSGASSERT("Blend is nullptr.");
 	}
 }
 
@@ -390,6 +403,11 @@ void URenderer::PixelShaderSetting()
 
 void URenderer::OutPutMergeSetting()
 {
+	if (nullptr != Blend)
+	{
+		Blend->Setting();
+	}
+
 	ID3D11RenderTargetView* RTV = UEngineCore::Device.GetRTV();
 
 	ID3D11RenderTargetView* ArrRtv[16] = { 0 };

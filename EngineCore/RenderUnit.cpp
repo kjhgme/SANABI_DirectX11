@@ -1,10 +1,10 @@
 #include "PreCompile.h"
 #include "RenderUnit.h"
 
-RenderUnit::RenderUnit()
+URenderUnit::URenderUnit()
 {
 }
 
-RenderUnit::~RenderUnit()
+URenderUnit::~URenderUnit()
 {
 }

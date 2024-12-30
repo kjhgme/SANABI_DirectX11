@@ -52,16 +52,34 @@ cbuffer FSpriteData : register(b1)
 VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
 {
     VertexShaderOutPut OutPut;
+    
+    _Vertex.POSITION.x += (1.0f - Pivot.x) - 0.5f;
+    _Vertex.POSITION.y += (1.0f - Pivot.y) - 0.5f;
     OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
+    
     OutPut.UV.x = (_Vertex.UV.x * CuttingSize.x) + CuttingPos.x;
     OutPut.UV.y = (_Vertex.UV.y * CuttingSize.y) + CuttingPos.y;
-	OutPut.COLOR = _Vertex.COLOR;
+	
+    OutPut.COLOR = _Vertex.COLOR;
+    
 	return OutPut;
 }
 
 cbuffer MatColor : register(b1)
 {
     float4 Albedo;
+};
+
+struct OutTargetColor
+{
+    float4 Target0 : SV_Target0;
+    float4 Target1 : SV_Target1;
+    float4 Target2 : SV_Target2;
+    float4 Target3 : SV_Target3;
+    float4 Target4 : SV_Target4;
+    float4 Target5 : SV_Target5;
+    float4 Target6 : SV_Target6;
+    float4 Target7 : SV_Target7;
 };
 
 Texture2D ImageTexture : register(t0);
