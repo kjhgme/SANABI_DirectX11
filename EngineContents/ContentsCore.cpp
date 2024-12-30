@@ -6,6 +6,7 @@
 #include <EngineCore/EngineTexture.h>
 
 #include "TitleGameMode.h"
+#include "InGameMode.h"
 
 CreateContentsCoreDefine(UContentsCore);
 
@@ -47,13 +48,27 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			MSGASSERT("Wrong Directory.");
 			return;
 		}
-		Dir.Append("SNB");
+		Dir.Append("SNB/SNB_Idle");
 
 		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
 	}
 
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("Resources/Image"))
+		{
+			MSGASSERT("Wrong Directory.");
+			return;
+		}
+		Dir.Append("SNB/SNB_Walking");
+
+		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
+	}
+
+
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
-	UEngineCore::OpenLevel("TitleLevel");	
+	UEngineCore::CreateLevel<AInGameMode, APawn>("InGameLevel");
+	UEngineCore::OpenLevel("InGameLevel");	
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

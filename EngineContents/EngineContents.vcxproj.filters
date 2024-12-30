@@ -10,6 +10,9 @@
     <ClInclude Include="TitleLogo.h">
       <Filter>Title</Filter>
     </ClInclude>
+    <ClInclude Include="InGameMode.h">
+      <Filter>GameMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -20,6 +23,9 @@
     </ClCompile>
     <ClCompile Include="TitleLogo.cpp">
       <Filter>Title</Filter>
+    </ClCompile>
+    <ClCompile Include="InGameMode.cpp">
+      <Filter>GameMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
