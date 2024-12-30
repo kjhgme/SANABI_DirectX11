@@ -16,6 +16,9 @@
     <ClInclude Include="BackGround.h">
       <Filter>InGame</Filter>
     </ClInclude>
+    <ClInclude Include="ContentsEnum.h">
+      <Filter>Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -43,6 +46,9 @@
     </Filter>
     <Filter Include="InGame">
       <UniqueIdentifier>{7dfa965d-4c7e-4550-867a-b2607f7187d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global">
+      <UniqueIdentifier>{e319c592-d0ec-4194-9ad5-b5d9901cf1c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

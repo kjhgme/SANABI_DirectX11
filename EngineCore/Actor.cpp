@@ -36,3 +36,20 @@ void AActor::Tick(float _DeltaTime)
 		ActorComponent->ComponentTick(_DeltaTime);
 	}
 }
+
+void AActor::AttachToActor(AActor* _Parent)
+{
+	if (nullptr == RootComponent)
+	{
+		MSGASSERT("RootComponent is nullptr.");
+		return;
+	}
+
+	if (nullptr == _Parent->RootComponent)
+	{
+		MSGASSERT("_Parent->RootComponent is nullptr.");
+		return;
+	}
+
+	RootComponent->SetupAttachment(_Parent->RootComponent);
+}

@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 #include <EngineCore/IContentsCore.h>
 
 class UContentsCore : public IContentsCore
@@ -18,6 +20,7 @@ protected:
 	void EngineEnd();
 
 private:
+	void LoadFolder(std::string_view _Path);
 
 };
 

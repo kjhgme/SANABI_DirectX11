@@ -1,5 +1,6 @@
 #include "PreCompile.h"
 #include "Player.h"
+#include "ContentsEnum.h"
 
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/SpriteRenderer.h>
@@ -27,6 +28,7 @@ APlayer::APlayer()
 	}
 
 	PlayerRenderer->ChangeAnimation("Idle");
+	PlayerRenderer->SetOrder(static_cast<int>(ERenderOrder::PLAYER));
 
 	PlayerRenderer->SetRelativeScale3D({ 1.0f, 1.0f, 1.0f });
 	PlayerRenderer->SetupAttachment(RootComponent);

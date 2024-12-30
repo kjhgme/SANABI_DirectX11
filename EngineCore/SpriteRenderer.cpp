@@ -18,7 +18,9 @@ void USpriteRenderer::BeginPlay()
 
 void USpriteRenderer::SetSprite(std::string_view _Name, size_t _Index)
 {
-	Sprite = UEngineSprite::Find<UEngineSprite>(_Name).get();
+	std::string UpperString = UEngineString::ToUpper(_Name);
+
+	Sprite = UEngineSprite::Find<UEngineSprite>(UpperString).get();
 
 	URenderer::SetTexture(Sprite->GetTexture(_Index));
 	SetSpriteData(Sprite, _Index);

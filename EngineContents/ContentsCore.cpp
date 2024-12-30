@@ -41,29 +41,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 		 }
 	}
 
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("Resources/Image"))
-		{
-			MSGASSERT("Wrong Directory.");
-			return;
-		}
-		Dir.Append("SNB/SNB_Idle");
-
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
-
-	{
-		UEngineDirectory Dir;
-		if (false == Dir.MoveParentToDirectory("Resources/Image"))
-		{
-			MSGASSERT("Wrong Directory.");
-			return;
-		}
-		Dir.Append("SNB/SNB_Walking");
-
-		UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());
-	}
+	LoadFolder("BackGround/PRLG_BG");
+	LoadFolder("SNB/SNB_Idle");
+	LoadFolder("SNB/SNB_Walking");
 
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
@@ -79,4 +59,17 @@ void UContentsCore::EngineTick(float _DeltaTime)
 void UContentsCore::EngineEnd()
 {
 
+}
+
+void UContentsCore::LoadFolder(std::string_view _Path)
+{	
+	UEngineDirectory Dir;
+	if (false == Dir.MoveParentToDirectory("Resources/Image"))
+	{
+		MSGASSERT("Wrong Directory.");
+		return;
+	}
+	Dir.Append(_Path);
+
+	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());	
 }

@@ -3,9 +3,11 @@
 
 #include <EngineCore/CameraActor.h>
 #include "Player.h"
+#include "BackGround.h"
 
 AInGameMode::AInGameMode()
 {
+	BackGround = GetWorld()->SpawnActor<ABackGround>();
 	Player = GetWorld()->SpawnActor<APlayer>();
 
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();

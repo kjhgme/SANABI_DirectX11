@@ -172,6 +172,7 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="ContentsCore.h" />
+    <ClInclude Include="ContentsEnum.h" />
     <ClInclude Include="InGameMode.h">
       <SubType>
       </SubType>

@@ -1,18 +1,21 @@
 #pragma once
-class BackGround
+#include <EngineCore/Actor.h>
+
+class ABackGround : public AActor
 {
 public:
-	BackGround();
-	~BackGround();
+	ABackGround();
+	~ABackGround();
 
-	BackGround(const BackGround& _Other) = delete;
-	BackGround(BackGround&& _Other) noexcept = delete;
-	BackGround& operator=(const BackGround& _Other) = delete;
-	BackGround& operator=(BackGround&& _Other) noexcept = delete;
+	ABackGround(const ABackGround& _Other) = delete;
+	ABackGround(ABackGround&& _Other) noexcept = delete;
+	ABackGround& operator=(const ABackGround& _Other) = delete;
+	ABackGround& operator=(ABackGround&& _Other) noexcept = delete;
 
 protected:
 
 private:
+	std::shared_ptr<class USpriteRenderer> BackGroundRenderer;
 
 };
 
