@@ -59,6 +59,8 @@ public:
 
 	ENGINEAPI void SetSprite(std::string_view _Name, size_t _CurIndex = 0);
 
+	void SetSprite(UEngineSprite* _Sprite);
+
 	void SetAnimationSpeed(float _Speed)
 	{
 		CurAnimationSpeed = _Speed;

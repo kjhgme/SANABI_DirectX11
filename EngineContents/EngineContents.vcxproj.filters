@@ -13,6 +13,9 @@
     <ClInclude Include="InGameMode.h">
       <Filter>GameMode</Filter>
     </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -27,6 +30,9 @@
     <ClCompile Include="InGameMode.cpp">
       <Filter>GameMode</Filter>
     </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameMode">
@@ -34,6 +40,9 @@
     </Filter>
     <Filter Include="Title">
       <UniqueIdentifier>{a390e6cc-cc26-40e1-b6aa-996f60bc420c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InGame">
+      <UniqueIdentifier>{7dfa965d-4c7e-4550-867a-b2607f7187d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

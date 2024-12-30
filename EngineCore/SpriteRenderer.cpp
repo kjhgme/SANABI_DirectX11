@@ -24,6 +24,16 @@ void USpriteRenderer::SetSprite(std::string_view _Name, size_t _Index)
 	SetSpriteData(Sprite, _Index);
 }
 
+void USpriteRenderer::SetSprite(UEngineSprite* _Sprite)
+{
+	Sprite = _Sprite;
+
+	if (nullptr == Sprite)
+	{
+		MSGASSERT("Sprite is nullptr.");
+	}
+}
+
 USpriteRenderer::FrameAnimation* USpriteRenderer::FindAnimation(std::string_view _AnimationName)
 {
 	std::string UpperString = UEngineString::ToUpper(_AnimationName);
