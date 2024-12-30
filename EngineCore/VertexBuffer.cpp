@@ -26,8 +26,19 @@ std::shared_ptr<UVertexBuffer> UVertexBuffer::Create(std::string_view _Name, con
 	return NewRes;
 }
 
+void UVertexBuffer::Setting()
+{
+	UINT Offset = 0;
+	ID3D11Buffer* ArrBuffer[1];
+	ArrBuffer[0] = VertexBuffer.Get();
+	UEngineCore::GetDevice().GetContext()->IASetVertexBuffers(0, 1, ArrBuffer, &VertexSize, &Offset);
+}
+
 void UVertexBuffer::ResCreate(const void* _InitData, size_t _VertexSize, size_t _VertexCount)
 {
+	VertexSize = static_cast<UINT>(_VertexSize);
+	VertexCount = static_cast<UINT>(_VertexCount);
+
 	BufferInfo.ByteWidth = static_cast<UINT>(_VertexSize * _VertexCount);
 	BufferInfo.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	BufferInfo.CPUAccessFlags = 0;
@@ -36,7 +47,7 @@ void UVertexBuffer::ResCreate(const void* _InitData, size_t _VertexSize, size_t 
 	D3D11_SUBRESOURCE_DATA Data;
 	Data.pSysMem = _InitData;
 
-	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, VertexBuffer.GetAddressOf()))
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, &VertexBuffer))
 	{
 		MSGASSERT("CreateBuffer failed.");
 		return;

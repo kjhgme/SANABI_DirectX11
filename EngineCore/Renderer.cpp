@@ -4,6 +4,7 @@
 #include <EngineBase/EngineString.h>
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/EngineTexture.h>
+#include <EngineCore/Mesh.h>
 #include "EngineVertex.h"
 
 URenderer::URenderer()
@@ -12,9 +13,6 @@ URenderer::URenderer()
 
 URenderer::~URenderer()
 {
-	VertexBuffer = nullptr;
-	VSShaderCodeBlob = nullptr;
-	VSErrorCodeBlob = nullptr;
 }
 
 ENGINEAPI void URenderer::BeginPlay()
@@ -22,9 +20,7 @@ ENGINEAPI void URenderer::BeginPlay()
 	USceneComponent::BeginPlay();
 	SetOrder(0);
 
-	InputAssembler1Init();
 	VertexShaderInit();
-	InputAssembler2Init();
 	RasterizerInit();
 	PixelShaderInit();
 	ShaderResInit();
@@ -88,6 +84,18 @@ void URenderer::SetSpriteData(size_t _Index)
 	SpriteData = Sprite->GetSpriteData(_Index);
 }
 
+ENGINEAPI void URenderer::SetMesh(std::string_view _Name)
+{
+	std::shared_ptr<UMesh> FindMesh = UMesh::Find<UMesh>(_Name);
+
+	Mesh = FindMesh.get();
+
+	if (nullptr == Mesh)
+	{
+		MSGASSERT("Mesh is nullptr.");
+	}
+}
+
 void URenderer::ShaderResInit()
 {
 	{
@@ -97,7 +105,7 @@ void URenderer::ShaderResInit()
 		BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
 		BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
 
-		if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer))
+		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, nullptr, &TransformConstBuffer))
 		{
 			MSGASSERT("Constant Buffer failed.");
 			return;
@@ -111,7 +119,7 @@ void URenderer::ShaderResInit()
 		BufferInfo.CPUAccessFlags = D3D11_CPU_ACCESS_FLAG::D3D11_CPU_ACCESS_WRITE;
 		BufferInfo.Usage = D3D11_USAGE_DYNAMIC;
 
-		if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, nullptr, SpriteConstBuffer.GetAddressOf()))
+		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, nullptr, &SpriteConstBuffer))
 		{
 			MSGASSERT("Constant Buffer failed.");
 			return;
@@ -128,7 +136,7 @@ void URenderer::ShaderResInit()
 	SampInfo.BorderColor[2] = 0.0f;
 	SampInfo.BorderColor[3] = 0.0f;
 
-	UEngineCore::Device.GetDevice()->CreateSamplerState(&SampInfo, &SamplerState);
+	UEngineCore::GetDevice().GetDevice()->CreateSamplerState(&SampInfo, &SamplerState);
 }
 
 void URenderer::ShaderResSetting()
@@ -174,43 +182,10 @@ void URenderer::ShaderResSetting()
 	UEngineCore::Device.GetContext()->PSSetSamplers(0, 1, ArrSMP);
 }
 
-void URenderer::InputAssembler1Init()
-{
-	std::vector<EngineVertex> Vertexes;
-	Vertexes.resize(4);
-
-	Vertexes[0] = EngineVertex{ FVector(-0.5f, 0.5f, -0.0f), {0.0f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} };
-	Vertexes[1] = EngineVertex{ FVector(0.5f, 0.5f, -0.0f), {1.0f, 0.0f} , {0.0f, 1.0f, 0.0f, 1.0f} };
-	Vertexes[2] = EngineVertex{ FVector(-0.5f, -0.5f, -0.0f), {0.0f, 1.0f} , {0.0f, 0.0f, 1.0f, 1.0f} };
-	Vertexes[3] = EngineVertex{ FVector(0.5f, -0.5f, -0.0f), {1.0f, 1.0f} , {1.0f, 1.0f, 1.0f, 1.0f} };
-
-	D3D11_BUFFER_DESC BufferInfo = { 0 };
-
-	BufferInfo.ByteWidth = sizeof(EngineVertex) * static_cast<int>(Vertexes.size());
-	BufferInfo.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	BufferInfo.CPUAccessFlags = 0;
-	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
-
-	D3D11_SUBRESOURCE_DATA Data;
-	Data.pSysMem = &Vertexes[0];
-
-	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, &Data, &VertexBuffer))
-	{
-		MSGASSERT("Create Vertexes failed.");
-		return;
-	}
-}
-
 void URenderer::InputAssembler1Setting()
 {
-	UINT VertexSize = sizeof(EngineVertex);
-	UINT Offset = 0;
-
-	ID3D11Buffer* ArrBuffer[1];
-	ArrBuffer[0] = VertexBuffer.Get();
-
-	UEngineCore::Device.GetContext()->IASetVertexBuffers(0, 1, ArrBuffer, &VertexSize, &Offset);
-	UEngineCore::Device.GetContext()->IASetInputLayout(InputLayOut.Get());
+	Mesh->GetVertexBuffer()->Setting();
+	UEngineCore::GetDevice().GetContext()->IASetInputLayout(InputLayOut.Get());
 }
 
 void URenderer::InputAssembler1LayOut()
@@ -325,42 +300,13 @@ void URenderer::VertexShaderInit()
 
 void URenderer::VertexShaderSetting()
 {
-	UEngineCore::Device.GetContext()->VSSetShader(VertexShader.Get(), nullptr, 0);
-}
-
-void URenderer::InputAssembler2Init()
-{
-	std::vector<unsigned int> Indexs;
-
-	Indexs.push_back(0);
-	Indexs.push_back(1);
-	Indexs.push_back(2);
-
-	Indexs.push_back(1);
-	Indexs.push_back(3);
-	Indexs.push_back(2);
-
-	D3D11_BUFFER_DESC BufferInfo = { 0 };
-	BufferInfo.ByteWidth = sizeof(unsigned int) * static_cast<int>(Indexs.size());
-	BufferInfo.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	BufferInfo.CPUAccessFlags = 0;
-	BufferInfo.Usage = D3D11_USAGE_DEFAULT;
-	D3D11_SUBRESOURCE_DATA Data;
-	Data.pSysMem = &Indexs[0];
-	if (S_OK != UEngineCore::Device.GetDevice()->CreateBuffer(&BufferInfo, &Data, &IndexBuffer))
-	{
-		MSGASSERT("CreateBuffer failed.");
-		return;
-	}
+	UEngineCore::GetDevice().GetContext()->VSSetShader(VertexShader.Get(), nullptr, 0);
 }
 
 void URenderer::InputAssembler2Setting()
 {
-	int Offset = 0;
-
-	UEngineCore::Device.GetContext()->IASetIndexBuffer(IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, Offset);
-
-	UEngineCore::Device.GetContext()->IASetPrimitiveTopology(Topology);
+	Mesh->GetIndexBuffer()->Setting();
+	UEngineCore::GetDevice().GetContext()->IASetPrimitiveTopology(Topology);
 }
 
 void URenderer::RasterizerInit()
@@ -382,8 +328,8 @@ void URenderer::RasterizerInit()
 
 void URenderer::RasterizerSetting()
 {
-	UEngineCore::Device.GetContext()->RSSetViewports(1, &ViewPortInfo);
-	UEngineCore::Device.GetContext()->RSSetState(RasterizerState.Get());
+	UEngineCore::GetDevice().GetContext()->RSSetViewports(1, &ViewPortInfo);
+	UEngineCore::GetDevice().GetContext()->RSSetState(RasterizerState.Get());
 }
 
 void URenderer::PixelShaderInit()
@@ -439,7 +385,7 @@ void URenderer::PixelShaderInit()
 
 void URenderer::PixelShaderSetting()
 {
-	UEngineCore::Device.GetContext()->PSSetShader(PixelShader.Get(), nullptr, 0);
+	UEngineCore::GetDevice().GetContext()->PSSetShader(PixelShader.Get(), nullptr, 0);
 }
 
 void URenderer::OutPutMergeSetting()
@@ -449,5 +395,5 @@ void URenderer::OutPutMergeSetting()
 	ID3D11RenderTargetView* ArrRtv[16] = { 0 };
 	ArrRtv[0] = RTV;
 
-	UEngineCore::Device.GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
+	UEngineCore::GetDevice().GetContext()->OMSetRenderTargets(1, &ArrRtv[0], nullptr);
 }

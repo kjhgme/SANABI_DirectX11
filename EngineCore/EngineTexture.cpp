@@ -41,9 +41,6 @@ void UEngineTexture::ResLoad()
 	std::wstring wLoadPath = UEngineString::AnsiToUnicode(Str.c_str());
 	std::string UpperExt = UEngineString::ToUpper(Ext.c_str());
 
-	DirectX::TexMetadata Metadata;
-	DirectX::ScratchImage ImageData;
-
 	if (UpperExt == ".DDS")
 	{
 		if (S_OK != DirectX::LoadFromDDSFile(wLoadPath.c_str(), DirectX::DDS_FLAGS_NONE, &Metadata, ImageData))
@@ -74,10 +71,13 @@ void UEngineTexture::ResLoad()
 		ImageData.GetImages(),
 		ImageData.GetImageCount(),
 		ImageData.GetMetadata(),
-		SRV.GetAddressOf()
+		&SRV
 	))
 	{
 		MSGASSERT(UpperExt + " CreateShader failed.");
 		return;
 	}
+
+	Size.X = static_cast<float>(Metadata.width);
+	Size.Y = static_cast<float>(Metadata.height);
 }

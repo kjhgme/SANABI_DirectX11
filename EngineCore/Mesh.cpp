@@ -1,8 +1,6 @@
 #include "PreCompile.h"
 #include "Mesh.h"
 
-#include <EngineBase/EngineString.h>
-
 UMesh::UMesh()
 {
 }

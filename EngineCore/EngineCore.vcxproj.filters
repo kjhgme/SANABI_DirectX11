@@ -130,6 +130,9 @@
     <ClCompile Include="VertexBuffer.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="EngineGraphicDevice_Resources.cpp">
+      <Filter>Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">

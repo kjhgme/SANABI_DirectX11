@@ -176,7 +176,7 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
         MSGASSERT("스왑체인 제작에 실패했습니다.");
     }
 
-    if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(DXBackBufferTexture.GetAddressOf())))
+    if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &DXBackBufferTexture))
     {
         MSGASSERT("백버퍼 텍스처를 얻어오는데 실패했습니다.");
     };
@@ -204,43 +204,5 @@ void UEngineGraphicDevice::RenderEnd()
     {
         MSGASSERT("해상도 변경이나 디바이스 관련 설정이 런타임 도중 수정되었습니다");
         return;
-    }
-}
-
-void UEngineGraphicDevice::DefaultResourcesInit()
-{
-    MeshInit();
-}
-
-void UEngineGraphicDevice::MeshInit()
-{
-    {
-        std::vector<EngineVertex> Vertexs;
-        Vertexs.resize(4);
-        Vertexs[0] = EngineVertex{ FVector(-0.5f, 0.5f, -0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
-        Vertexs[1] = EngineVertex{ FVector(0.5f, 0.5f, -0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
-        Vertexs[2] = EngineVertex{ FVector(-0.5f, -0.5f, -0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} };
-        Vertexs[3] = EngineVertex{ FVector(0.5f, -0.5f, -0.0f), {1.0f , 1.0f } , {1.0f, 1.0f, 1.0f, 1.0f} };
-
-        UVertexBuffer::Create("Rect", Vertexs);
-    }
-
-    {
-        std::vector<unsigned int> Indexs;
-
-        Indexs.push_back(0);
-        Indexs.push_back(1);
-        Indexs.push_back(2);
-
-        Indexs.push_back(1);
-        Indexs.push_back(3);
-        Indexs.push_back(2);
-
-
-        UIndexBuffer::Create("Rect", Indexs);
-    }
-
-    {
-        UMesh::Create("Rect");
     }
 }

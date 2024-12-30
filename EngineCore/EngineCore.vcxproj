@@ -248,6 +248,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineGraphicDevice_Resources.cpp" />
     <ClCompile Include="EngineResources.cpp" />
     <ClCompile Include="EngineSprite.cpp">
       <SubType>
