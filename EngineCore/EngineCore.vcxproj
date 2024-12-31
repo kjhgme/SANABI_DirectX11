@@ -310,7 +310,6 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
     <None Include="ThirdParty\DirectxTex\Inc\DirectXTex.inl" />
   </ItemGroup>
   <ItemGroup>

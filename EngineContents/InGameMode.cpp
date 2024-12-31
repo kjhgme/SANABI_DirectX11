@@ -10,8 +10,8 @@ AInGameMode::AInGameMode()
 	BackGround = GetWorld()->SpawnActor<ABackGround>();
 	Player = GetWorld()->SpawnActor<APlayer>();
 
-	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
-	Camera->SetActorLocation({ 0.0f, 0.0f, -10000.0f, 1.0f });
+	MainCamera = GetWorld()->GetMainCamera();
+	MainCamera->SetActorLocation({ 0.0f, 0.0f, -10000.0f, 1.0f });
 }
 
 AInGameMode::~AInGameMode()

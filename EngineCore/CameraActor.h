@@ -17,6 +17,10 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+
+	ENGINEAPI FVector ScreenMousePosToWorldPos();
+	ENGINEAPI FVector ScreenMousePosToWorldPosWithOutPos();
+
 protected:
 
 private:

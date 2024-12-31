@@ -188,7 +188,6 @@
     <None Include="ThirdParty\DirectxTex\Inc\DirectXTex.inl">
       <Filter>ThirdParty\DirectxTex\Inc</Filter>
     </None>
-    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">

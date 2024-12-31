@@ -19,7 +19,7 @@ URenderer::~URenderer()
 ENGINEAPI void URenderer::BeginPlay()
 {
 	USceneComponent::BeginPlay();
-	SetOrder(0);
+	SetOrder(GetOrder());
 
 	VertexShaderInit();
 	RasterizerInit();
@@ -55,6 +55,10 @@ void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 
 void URenderer::SetOrder(int _Order)
 {
+	if (0 != GetOrder() && _Order == GetOrder())
+	{
+		return;
+	}
 	int PrevOrder = GetOrder();
 	UObject::SetOrder(_Order);
 	ULevel* Level = GetActor()->GetWorld();
@@ -62,6 +66,16 @@ void URenderer::SetOrder(int _Order)
 	std::shared_ptr<URenderer> RendererPtr = GetThis<URenderer>();
 
 	Level->ChangeRenderGroup(0, PrevOrder, RendererPtr);
+}
+
+ENGINEAPI void URenderer::SetTexture(std::string_view _Value)
+{
+	Texture = UEngineTexture::Find<UEngineTexture>(_Value).get();
+
+	if (nullptr == Texture)
+	{
+		MSGASSERT("Texture is nullptr.");
+	}
 }
 
 void URenderer::SetTexture(UEngineTexture* _Texture)
@@ -96,6 +110,11 @@ void URenderer::SetBlend(std::string_view _Name)
 	{
 		MSGASSERT("Blend is nullptr.");
 	}
+}
+
+ENGINEAPI void URenderer::AddUVPlusValue(float4 _Value)
+{
+	UVValueData.PlusUVValue += _Value;
 }
 
 void URenderer::ShaderResInit()
@@ -320,8 +339,8 @@ void URenderer::RasterizerInit()
 
 	UEngineCore::GetDevice().GetDevice()->CreateRasterizerState(&Desc, &RasterizerState);
 
-	ViewPortInfo.Height = 720.0f;
-	ViewPortInfo.Width = 1280.0f;
+	ViewPortInfo.Width = UEngineCore::GetScreenScale().X;
+	ViewPortInfo.Height = UEngineCore::GetScreenScale().Y;
 	ViewPortInfo.TopLeftX = 0.0f;
 	ViewPortInfo.TopLeftY = 0.0f;
 	ViewPortInfo.MinDepth = 0.0f;

@@ -57,6 +57,20 @@ public:
 	{
 		return World;
 	}
+	
+	FTransform GetActorTransform()
+	{
+		if (nullptr == RootComponent)
+		{
+			return FTransform();
+		}
+
+		return RootComponent->GetTransformRef();
+	}
+
+	ENGINEAPI FVector GetActorUpVector();
+	ENGINEAPI FVector GetActorRightVector();
+	ENGINEAPI FVector GetActorForwardVector();
 
 	// SetFunction
 	void SetActorLocation(const FVector& _Value)

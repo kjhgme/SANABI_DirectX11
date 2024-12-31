@@ -3,6 +3,11 @@
 #include "EngineSprite.h"
 #include "RenderUnit.h"
 
+struct FUVValue
+{
+	float4 PlusUVValue;
+};
+
 class URenderer : public USceneComponent
 {
 	friend class UEngineCamera;
@@ -16,7 +21,10 @@ public:
 	URenderer& operator=(const URenderer& _Other) = delete;
 	URenderer& operator=(URenderer&& _Other) noexcept = delete;
 
-	void SetOrder(int _Order) override;
+	// SetFunction
+	ENGINEAPI void SetOrder(int _Order) override;
+
+	ENGINEAPI void SetTexture(std::string_view _Value);
 
 	ENGINEAPI void SetTexture(UEngineTexture* _Texture);
 
@@ -26,6 +34,9 @@ public:
 
 	ENGINEAPI void SetBlend(std::string_view _Name);
 
+	// Function
+	ENGINEAPI void AddUVPlusValue(float4 _Value);
+
 protected:
 	ENGINEAPI void BeginPlay() override;
 	ENGINEAPI virtual void Render(UEngineCamera* _Camera, float _DeltaTime);
@@ -34,6 +45,7 @@ private:
 
 public:
 	FSpriteData SpriteData;
+	FUVValue UVValueData;
 	UEngineTexture* Texture = nullptr;
 	class UMesh* Mesh = nullptr;
 	class UEngineBlend* Blend = nullptr;
@@ -41,6 +53,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> TransformConstBuffer = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Buffer> SpriteConstBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> UVValue = nullptr;
 	void ShaderResInit();
 	void ShaderResSetting();
 
