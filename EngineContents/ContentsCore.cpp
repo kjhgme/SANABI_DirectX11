@@ -7,6 +7,7 @@
 
 #include "TitleGameMode.h"
 #include "InGameMode.h"
+#include "EndingGameMode.h"
 
 CreateContentsCoreDefine(UContentsCore);
 
@@ -43,6 +44,10 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	// Title
 	{
 		LoadFolder("Title");
+	}
+	// Ending
+	{
+		LoadFolder("Ending/BadEnding");
 	}
 	// BackGround
 	{
@@ -82,7 +87,8 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	UEngineCore::CreateLevel<AInGameMode, APawn>("InGameLevel");
-	UEngineCore::OpenLevel("TitleLevel");	
+	UEngineCore::CreateLevel<AEndingGameMode, APawn>("EndingGameLevel");
+	UEngineCore::OpenLevel("EndingGameLevel");
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

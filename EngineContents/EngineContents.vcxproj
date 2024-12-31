@@ -173,6 +173,14 @@
     </ClInclude>
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="ContentsEnum.h" />
+    <ClInclude Include="EndingGameMode.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="EndingPlayer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="InGameMode.h">
       <SubType>
       </SubType>
@@ -195,6 +203,14 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="ContentsCore.cpp" />
+    <ClCompile Include="EndingGameMode.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="EndingPlayer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="InGameMode.cpp">
       <SubType>
       </SubType>

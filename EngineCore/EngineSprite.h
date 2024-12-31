@@ -47,6 +47,11 @@ public:
 
 	ENGINEAPI FVector GetSpriteScaleToReal(size_t _Index);
 
+	ENGINEAPI int GetSpriteTextureCount()
+	{
+		return static_cast<int>(SpriteTexture.size());
+	}
+
 protected:
 
 private:

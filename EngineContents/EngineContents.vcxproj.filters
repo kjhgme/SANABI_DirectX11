@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="PreCompile.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="ContentsCore.h" />
     <ClInclude Include="TitleGameMode.h">
       <Filter>GameMode</Filter>
@@ -22,10 +21,18 @@
     <ClInclude Include="TitleBG.h">
       <Filter>Title</Filter>
     </ClInclude>
+    <ClInclude Include="EndingGameMode.h">
+      <Filter>GameMode</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingPlayer.h">
+      <Filter>Ending</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="ContentsCore.cpp" />
     <ClCompile Include="TitleGameMode.cpp">
       <Filter>GameMode</Filter>
@@ -42,6 +49,15 @@
     <ClCompile Include="TitleBG.cpp">
       <Filter>Title</Filter>
     </ClCompile>
+    <ClCompile Include="EndingGameMode.cpp">
+      <Filter>GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="EndingPlayer.cpp">
+      <Filter>Ending</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameMode">
@@ -55,6 +71,9 @@
     </Filter>
     <Filter Include="Global">
       <UniqueIdentifier>{e319c592-d0ec-4194-9ad5-b5d9901cf1c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ending">
+      <UniqueIdentifier>{61becbcd-71f7-4cb1-949c-8b80219ca43c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

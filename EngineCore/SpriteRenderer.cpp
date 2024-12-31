@@ -128,6 +128,20 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 	}
 }
 
+void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, float Time /*= 0.1f*/, bool _Loop /*= true*/)
+{
+	std::shared_ptr<UEngineSprite> FindSprite = UEngineSprite::Find<UEngineSprite>(_SpriteName);
+	
+	if (nullptr == FindSprite)
+	{
+		MSGASSERT(std::string(_SpriteName) + " is not found.");
+		return;
+	}
+
+	int SpriteCount = FindSprite.get()->GetSpriteTextureCount() - 1;
+
+	CreateAnimation(_AnimationName, _SpriteName, 0, SpriteCount, Time, _Loop);
+}
 
 void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, int _Start, int _End, float Time /*= 0.1f*/, bool _Loop /*= true*/)
 {
@@ -158,10 +172,8 @@ void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::stri
 		}
 	}
 
-
 	CreateAnimation(_AnimationName, _SpriteName, Indexes, Times, _Loop);
 }
-
 
 void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, float _Frame, bool _Loop /*= true*/)
 {
