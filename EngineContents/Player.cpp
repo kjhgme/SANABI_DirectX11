@@ -64,77 +64,36 @@ void APlayer::Tick(float _DeltaTime)
 
 void APlayer::InitPlayerAnimation()
 {
-	PlayerRenderer->CreateAnimation("Idle", "SNB_Idle", 0, 7, 0.12f);
+	SetAnimation(PlayerRenderer, "Idle", "SNB_Idle", 0, 7);
+	SetAnimation(ArmRenderer, "ArmIdle", "SNB_Arm_Idle", 0, 7);
+	SetAnimation(PlayerRenderer, "Walking", "SNB_Walking", 0, 11);
+	SetAnimation(ArmRenderer, "ArmWalking", "SNB_Arm_Walking", 0, 11);
+	SetAnimation(PlayerRenderer, "RunStart", "SNB_RunStart", 0, 1);
+	SetAnimation(ArmRenderer, "ArmRunStart", "SNB_Arm_RunStart", 0, 1);
+	SetAnimation(PlayerRenderer, "Running", "SNB_Running", 0, 19);
+	SetAnimation(ArmRenderer, "ArmRunning", "SNB_Arm_Running", 0, 19);
+	SetAnimation(PlayerRenderer, "RunStop", "SNB_RunStop", 0, 5);
+	SetAnimation(ArmRenderer, "ArmRunStop", "SNB_Arm_RunStop", 0, 5);
+	SetAnimation(PlayerRenderer, "Jumping", "SNB_Jumping", 0, 5);
+	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_Jumping", 0, 5);
+	SetAnimation(PlayerRenderer, "Jumping", "SNB_FallStart", 0, 2);
+	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_FallStart", 0, 2);
+	SetAnimation(PlayerRenderer, "Jumping", "SNB_Falling", 0, 2);
+	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_Falling", 0, 2);
+	SetAnimation(PlayerRenderer, "Jumping", "SNB_Landing", 0, 2);
+	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_Landing", 0, 2);
+	SetAnimation(PlayerRenderer, "Jumping", "SNB_Land2Run", 0, 11);
+	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_Land2Run", 0, 11);
+}
+
+void APlayer::SetAnimation(std::shared_ptr<class USpriteRenderer> Renderer, std::string_view AnimationName, std::string_view TextureName, int StartFrame, int EndFrame, float FrameRate, float AutoScaleRatio)
+{
+	Renderer->CreateAnimation(AnimationName, TextureName, StartFrame, EndFrame, FrameRate);
+	USpriteRenderer::FrameAnimation* Animation = Renderer->FindAnimation(AnimationName);
+	if (Animation)
 	{
-		USpriteRenderer::FrameAnimation* Animation = PlayerRenderer->FindAnimation("Idle");
 		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	ArmRenderer->CreateAnimation("ArmIdle", "SNB_Arm_Idle", 0, 7, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = ArmRenderer->FindAnimation("ArmIdle");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	PlayerRenderer->CreateAnimation("Walking", "SNB_Walking", 0, 11, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = PlayerRenderer->FindAnimation("Walking");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	ArmRenderer->CreateAnimation("ArmWalking", "SNB_Arm_Walking", 0, 11, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = ArmRenderer->FindAnimation("ArmWalking");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	PlayerRenderer->CreateAnimation("RunStart", "SNB_RunStart", 0, 11, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = PlayerRenderer->FindAnimation("RunStart");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	ArmRenderer->CreateAnimation("ArmRunStart", "SNB_Arm_RunStart", 0, 11, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = ArmRenderer->FindAnimation("ArmRunStart");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	PlayerRenderer->CreateAnimation("Running", "SNB_Running", 0, 11, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = PlayerRenderer->FindAnimation("Running");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	ArmRenderer->CreateAnimation("ArmRunning", "SNB_Arm_Running", 0, 11, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = ArmRenderer->FindAnimation("ArmRunning");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}	
-	PlayerRenderer->CreateAnimation("RunStop", "SNB_RunStop", 0, 11, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = PlayerRenderer->FindAnimation("RunStop");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	ArmRenderer->CreateAnimation("ArmRunStop", "SNB_Arm_RunStop", 0, 11, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = ArmRenderer->FindAnimation("ArmRunStop");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	PlayerRenderer->CreateAnimation("Jumping", "SNB_Jumping", 0, 5, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = PlayerRenderer->FindAnimation("Jumping");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
-	}
-	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Jumping", 0, 5, 0.12f);
-	{
-		USpriteRenderer::FrameAnimation* Animation = ArmRenderer->FindAnimation("ArmJumping");
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = 2.0f;
+		Animation->AutoScaleRatio = AutoScaleRatio;
 	}
 }
 
