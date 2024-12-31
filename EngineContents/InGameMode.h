@@ -20,6 +20,7 @@ protected:
 
 private:
 	std::shared_ptr<class APlayer> Player;
+	std::shared_ptr<class ADaughter> Daughter;
 	std::shared_ptr<class ABackGround> BackGround;
 	std::shared_ptr<class ACameraActor> MainCamera;
 	std::shared_ptr<class ACameraActor> TestCamera;

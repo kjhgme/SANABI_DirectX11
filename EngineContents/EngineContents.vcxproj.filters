@@ -30,6 +30,12 @@
     <ClInclude Include="EndingPlayer.h">
       <Filter>Ending</Filter>
     </ClInclude>
+    <ClInclude Include="Daughter.h">
+      <Filter>InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="TextBubble.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -58,6 +64,12 @@
     <ClCompile Include="EndingPlayer.cpp">
       <Filter>Ending</Filter>
     </ClCompile>
+    <ClCompile Include="Daughter.cpp">
+      <Filter>InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="TextBubble.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameMode">
@@ -74,6 +86,9 @@
     </Filter>
     <Filter Include="Ending">
       <UniqueIdentifier>{61becbcd-71f7-4cb1-949c-8b80219ca43c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{f85dbcc1-7cdd-47a8-833c-e151e68550a7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
