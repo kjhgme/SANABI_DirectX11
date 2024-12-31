@@ -40,39 +40,49 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 		 	UEngineTexture::Load(FilePath);
 		 }
 	}
-
-	LoadFolder("BackGround/PRLG_BG");
-	LoadFolder("SNB/SNB_Idle");
-	LoadFolder("SNB/SNB_Walking");
-	LoadFolder("SNB/SNB_RunStart");
-	LoadFolder("SNB/SNB_Running");
-	LoadFolder("SNB/SNB_RunStop");
-	LoadFolder("SNB/SNB_Jumping");
-	LoadFolder("SNB/SNB_FallStart");
-	LoadFolder("SNB/SNB_Falling");
-	LoadFolder("SNB/SNB_Landing");
-	LoadFolder("SNB/SNB_Land2Run");
-	LoadFolder("SNB/SNB_Swing");
-	LoadFolder("SNB/SNB_SwingJump");
-	LoadFolder("SNB/SNB_SwingJumpUp");
-
-	LoadFolder("SNB/SNB_Arm_Idle");
-	LoadFolder("SNB/SNB_Arm_Walking");
-	LoadFolder("SNB/SNB_Arm_RunStart");
-	LoadFolder("SNB/SNB_Arm_Running");
-	LoadFolder("SNB/SNB_Arm_RunStop");
-	LoadFolder("SNB/SNB_Arm_Jumping");
-	LoadFolder("SNB/SNB_Arm_FallStart");
-	LoadFolder("SNB/SNB_Arm_Falling");
-	LoadFolder("SNB/SNB_Arm_Landing");
-	LoadFolder("SNB/SNB_Arm_Land2Run");
-	LoadFolder("SNB/SNB_Arm_SwingJump");
-	LoadFolder("SNB/SNB_Arm_SwingJumpUp");
-
+	// Title
+	{
+		LoadFolder("Title");
+	}
+	// BackGround
+	{
+		LoadFolder("BackGround/PRLG_BG");
+	}
+	// SNB
+	{
+		LoadFolder("SNB/SNB_Idle");
+		LoadFolder("SNB/SNB_Walking");
+		LoadFolder("SNB/SNB_RunStart");
+		LoadFolder("SNB/SNB_Running");
+		LoadFolder("SNB/SNB_RunStop");
+		LoadFolder("SNB/SNB_Jumping");
+		LoadFolder("SNB/SNB_FallStart");
+		LoadFolder("SNB/SNB_Falling");
+		LoadFolder("SNB/SNB_Landing");
+		LoadFolder("SNB/SNB_Land2Run");
+		LoadFolder("SNB/SNB_Swing");
+		LoadFolder("SNB/SNB_SwingJump");
+		LoadFolder("SNB/SNB_SwingJumpUp");
+	}
+	//SNB Arm
+	{
+		LoadFolder("SNB/SNB_Arm_Idle");
+		LoadFolder("SNB/SNB_Arm_Walking");
+		LoadFolder("SNB/SNB_Arm_RunStart");
+		LoadFolder("SNB/SNB_Arm_Running");
+		LoadFolder("SNB/SNB_Arm_RunStop");
+		LoadFolder("SNB/SNB_Arm_Jumping");
+		LoadFolder("SNB/SNB_Arm_FallStart");
+		LoadFolder("SNB/SNB_Arm_Falling");
+		LoadFolder("SNB/SNB_Arm_Landing");
+		LoadFolder("SNB/SNB_Arm_Land2Run");
+		LoadFolder("SNB/SNB_Arm_SwingJump");
+		LoadFolder("SNB/SNB_Arm_SwingJumpUp");
+	}
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	UEngineCore::CreateLevel<AInGameMode, APawn>("InGameLevel");
-	UEngineCore::OpenLevel("InGameLevel");	
+	UEngineCore::OpenLevel("TitleLevel");	
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

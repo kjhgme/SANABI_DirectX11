@@ -17,6 +17,7 @@ public:
 protected:
 
 private:
-	std::shared_ptr<class ATitleLogo> Logo;
+	std::shared_ptr<class ATitleBG> TitleBG;
+	std::shared_ptr<class ATitleLogo> TitleLogo;
 };
 

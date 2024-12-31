@@ -3,13 +3,14 @@
 
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/SpriteRenderer.h>
+#include "TitleBG.h"
 #include "TitleLogo.h"
 
 ATitleGameMode::ATitleGameMode()
 {
 	{
-		Logo = GetWorld()->SpawnActor<ATitleLogo>();
-		// Logo->SetActorLocation({ 300.0f, 0.0f, 0.0f });
+		TitleBG = GetWorld()->SpawnActor<ATitleBG>();
+		TitleLogo = GetWorld()->SpawnActor<ATitleLogo>();
 	}
 
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
