@@ -44,6 +44,25 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	LoadFolder("BackGround/PRLG_BG");
 	LoadFolder("SNB/SNB_Idle");
 	LoadFolder("SNB/SNB_Walking");
+	LoadFolder("SNB/SNB_RunStart");
+	LoadFolder("SNB/SNB_Running");
+	LoadFolder("SNB/SNB_RunStop");
+	LoadFolder("SNB/SNB_Jumping");
+	LoadFolder("SNB/SNB_FallStart");
+	LoadFolder("SNB/SNB_Falling");
+	LoadFolder("SNB/SNB_Landing");
+	LoadFolder("SNB/SNB_Land2Run");
+
+	LoadFolder("SNB/SNB_Arm_Idle");
+	LoadFolder("SNB/SNB_Arm_Walking");
+	LoadFolder("SNB/SNB_Arm_RunStart");
+	LoadFolder("SNB/SNB_Arm_Running");
+	LoadFolder("SNB/SNB_Arm_RunStop");
+	LoadFolder("SNB/SNB_Arm_Jumping");
+	LoadFolder("SNB/SNB_Arm_FallStart");
+	LoadFolder("SNB/SNB_Arm_Falling");
+	LoadFolder("SNB/SNB_Arm_Landing");
+	LoadFolder("SNB/SNB_Arm_Land2Run");
 
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");

@@ -15,7 +15,9 @@ public:
 protected:
 
 private:
-	std::shared_ptr<class USpriteRenderer> BackGroundRenderer;
+	std::shared_ptr<class USpriteRenderer> BGSkyRenderer;
+	std::shared_ptr<class USpriteRenderer> BGMountainRenderer;
+	std::shared_ptr<class USpriteRenderer> BGCloudRenderer;
 
 };
 

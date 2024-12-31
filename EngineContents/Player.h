@@ -12,6 +12,8 @@ public:
 	APlayer& operator=(const APlayer& _Other) = delete;
 	APlayer& operator=(APlayer&& _Other) noexcept = delete;
 
+	void InitPlayerAnimation();
+
 	void PlayerMove(float _DeltaTime);
 
 protected:
@@ -20,7 +22,11 @@ protected:
 
 private:
 	std::shared_ptr<class USpriteRenderer> PlayerRenderer;
-	std::shared_ptr<class USpriteRenderer> Child;
+	std::shared_ptr<class USpriteRenderer> ArmRenderer;
 
+	bool IsIdle = true;
+	bool IsWalking = true;
+	bool IsRunning = false;
+	bool IsJumping = false;
 };
 
