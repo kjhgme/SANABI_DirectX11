@@ -64,42 +64,31 @@ void APlayer::Tick(float _DeltaTime)
 
 void APlayer::InitPlayerAnimation()
 {
-	SetAnimation(PlayerRenderer, "Idle", "SNB_Idle", 0, 7);
-	SetAnimation(ArmRenderer, "ArmIdle", "SNB_Arm_Idle", 0, 7);
-	SetAnimation(PlayerRenderer, "Walking", "SNB_Walking", 0, 11);
-	SetAnimation(ArmRenderer, "ArmWalking", "SNB_Arm_Walking", 0, 11);
-	SetAnimation(PlayerRenderer, "RunStart", "SNB_RunStart", 0, 1);
-	SetAnimation(ArmRenderer, "ArmRunStart", "SNB_Arm_RunStart", 0, 1);
-	SetAnimation(PlayerRenderer, "Running", "SNB_Running", 0, 19);
-	SetAnimation(ArmRenderer, "ArmRunning", "SNB_Arm_Running", 0, 19);
-	SetAnimation(PlayerRenderer, "RunStop", "SNB_RunStop", 0, 5);
-	SetAnimation(ArmRenderer, "ArmRunStop", "SNB_Arm_RunStop", 0, 5);
-	SetAnimation(PlayerRenderer, "Jumping", "SNB_Jumping", 0, 5);
-	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_Jumping", 0, 5);
-	SetAnimation(PlayerRenderer, "Jumping", "SNB_FallStart", 0, 2);
-	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_FallStart", 0, 2);
-	SetAnimation(PlayerRenderer, "Jumping", "SNB_Falling", 0, 2);
-	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_Falling", 0, 2);
-	SetAnimation(PlayerRenderer, "Jumping", "SNB_Landing", 0, 2);
-	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_Landing", 0, 2);
-	SetAnimation(PlayerRenderer, "Jumping", "SNB_Land2Run", 0, 11);
-	SetAnimation(ArmRenderer, "ArmJumping", "SNB_Arm_Land2Run", 0, 11);
-	SetAnimation(PlayerRenderer, "Swing", "SNB_Swing", 0, 14);
-	SetAnimation(PlayerRenderer, "SwingJump", "SNB_SwingJump", 0, 8);
-	SetAnimation(ArmRenderer, "ArmJSwingJump", "SNB_Arm_SwingJump", 0, 8);
-	SetAnimation(PlayerRenderer, "SwingJumpUp", "SNB_SwingJumpUp", 0, 4);
-	SetAnimation(ArmRenderer, "ArmSwingJumpUp", "SNB_Arm_SwingJumpUp", 0, 4);
-}
-
-void APlayer::SetAnimation(std::shared_ptr<class USpriteRenderer> Renderer, std::string_view AnimationName, std::string_view TextureName, int StartFrame, int EndFrame, float FrameRate, float AutoScaleRatio)
-{
-	Renderer->CreateAnimation(AnimationName, TextureName, StartFrame, EndFrame, FrameRate);
-	USpriteRenderer::FrameAnimation* Animation = Renderer->FindAnimation(AnimationName);
-	if (Animation)
-	{
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = AutoScaleRatio;
-	}
+	PlayerRenderer->CreateAnimation("Idle", "SNB_Idle");
+	ArmRenderer->CreateAnimation("ArmIdle", "SNB_Arm_Idle");
+	PlayerRenderer->CreateAnimation("Walking", "SNB_Walking");
+	ArmRenderer->CreateAnimation("ArmWalking", "SNB_Arm_Walking");
+	PlayerRenderer->CreateAnimation("RunStart", "SNB_RunStart");
+	ArmRenderer->CreateAnimation("ArmRunStart", "SNB_Arm_RunStart");
+	PlayerRenderer->CreateAnimation("Running", "SNB_Running");
+	ArmRenderer->CreateAnimation("ArmRunning", "SNB_Arm_Running");
+	PlayerRenderer->CreateAnimation("RunStop", "SNB_RunStop");
+	ArmRenderer->CreateAnimation("ArmRunStop", "SNB_Arm_RunStop");
+	PlayerRenderer->CreateAnimation("Jumping", "SNB_Jumping");
+	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Jumping");
+	PlayerRenderer->CreateAnimation("Jumping", "SNB_FallStart");
+	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_FallStart");
+	PlayerRenderer->CreateAnimation("Jumping", "SNB_Falling");
+	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Falling");
+	PlayerRenderer->CreateAnimation("Jumping", "SNB_Landing");
+	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Landing");
+	PlayerRenderer->CreateAnimation("Jumping", "SNB_Land2Run");
+	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Land2Run");
+	PlayerRenderer->CreateAnimation("Swing", "SNB_Swing");
+	PlayerRenderer->CreateAnimation("SwingJump", "SNB_SwingJump");
+	ArmRenderer->CreateAnimation("ArmJSwingJump", "SNB_Arm_SwingJump");
+	PlayerRenderer->CreateAnimation("SwingJumpUp", "SNB_SwingJumpUp");
+	ArmRenderer->CreateAnimation("ArmSwingJumpUp", "SNB_Arm_SwingJumpUp");
 }
 
 void APlayer::PlayerMove(float _DeltaTime)

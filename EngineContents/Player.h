@@ -13,13 +13,6 @@ public:
 	APlayer& operator=(APlayer&& _Other) noexcept = delete;
 
 	void InitPlayerAnimation();
-	void SetAnimation(std::shared_ptr<class USpriteRenderer> Renderer,
-		std::string_view AnimationName,
-		std::string_view TextureName,
-		int StartFrame,
-		int EndFrame,
-		float FrameRate = 0.1f,
-		float AutoScaleRatio = 2.0f);
 
 	void PlayerMove(float _DeltaTime);
 

@@ -18,6 +18,11 @@ AInGameMode::~AInGameMode()
 {
 }
 
+void AInGameMode::BeginPlay()
+{
+	AActor::BeginPlay();
+}
+
 void AInGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);

@@ -88,7 +88,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	UEngineCore::CreateLevel<AInGameMode, APawn>("InGameLevel");
 	UEngineCore::CreateLevel<AEndingGameMode, APawn>("EndingGameLevel");
-	UEngineCore::OpenLevel("EndingGameLevel");
+	UEngineCore::OpenLevel("InGameLevel");
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

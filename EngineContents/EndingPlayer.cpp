@@ -28,19 +28,8 @@ AEndingPlayer::~AEndingPlayer()
 
 void AEndingPlayer::InitPlayerAnimation()
 {
-	SetAnimation(PlayerRenderer, "Idle", "SNB_Idle");
-	SetAnimation(PlayerRenderer, "BadEnding", "BadEnding", false);
-}
-
-void AEndingPlayer::SetAnimation(std::shared_ptr<class USpriteRenderer> Renderer, std::string_view AnimationName, std::string_view TextureName, bool Loop /*= true*/, float FrameRate /*= 0.12f*/, float AutoScaleRatio /*= 2.0f*/)
-{
-	Renderer->CreateAnimation(AnimationName, TextureName, FrameRate, Loop);
-	USpriteRenderer::FrameAnimation* Animation = Renderer->FindAnimation(AnimationName);
-	if (Animation)
-	{
-		Animation->IsAutoScale = true;
-		Animation->AutoScaleRatio = AutoScaleRatio;
-	}
+	PlayerRenderer->CreateAnimation("Idle", "SNB_Idle");
+	PlayerRenderer->CreateAnimation("BadEnding", "BadEnding", false);
 }
 
 void AEndingPlayer::BeginPlay()
