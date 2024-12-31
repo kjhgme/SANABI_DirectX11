@@ -31,9 +31,12 @@ private:
 	std::shared_ptr<class USpriteRenderer> PlayerRenderer;
 	std::shared_ptr<class USpriteRenderer> ArmRenderer;
 
+	bool IsRight = true;
 	bool IsIdle = true;
 	bool IsWalking = true;
 	bool IsRunning = false;
 	bool IsJumping = false;
+
+	void SetArmPosition();
 };
 

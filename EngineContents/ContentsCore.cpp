@@ -52,6 +52,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	LoadFolder("SNB/SNB_Falling");
 	LoadFolder("SNB/SNB_Landing");
 	LoadFolder("SNB/SNB_Land2Run");
+	LoadFolder("SNB/SNB_Swing");
+	LoadFolder("SNB/SNB_SwingJump");
+	LoadFolder("SNB/SNB_SwingJumpUp");
 
 	LoadFolder("SNB/SNB_Arm_Idle");
 	LoadFolder("SNB/SNB_Arm_Walking");
@@ -63,6 +66,8 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	LoadFolder("SNB/SNB_Arm_Falling");
 	LoadFolder("SNB/SNB_Arm_Landing");
 	LoadFolder("SNB/SNB_Arm_Land2Run");
+	LoadFolder("SNB/SNB_Arm_SwingJump");
+	LoadFolder("SNB/SNB_Arm_SwingJumpUp");
 
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
