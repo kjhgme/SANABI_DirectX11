@@ -70,7 +70,6 @@ public:
 	D3D11_PRIMITIVE_TOPOLOGY Topology = D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	void InputAssembler2Setting();
 
-	D3D11_VIEWPORT ViewPortInfo;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> RasterizerState = nullptr;
 	void RasterizerInit();
 	void RasterizerSetting();

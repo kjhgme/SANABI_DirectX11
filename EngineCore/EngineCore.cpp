@@ -131,6 +131,11 @@ FVector UEngineCore::GetScreenScale()
 	return Data.WindowSize;
 }
 
+UEngineWindow& UEngineCore::GetMainWindow()
+{
+	return MainWindow;
+}
+
 UEngineGraphicDevice& UEngineCore::GetDevice()
 {
 	return Device;
