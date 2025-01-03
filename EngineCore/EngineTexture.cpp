@@ -81,3 +81,50 @@ void UEngineTexture::ResLoad()
 	Size.X = static_cast<float>(Metadata.width);
 	Size.Y = static_cast<float>(Metadata.height);
 }
+
+void UEngineTexture::Setting(EShaderType _Type, UINT _BindIndex)
+{
+	// 같은 상수버퍼를 
+	ID3D11ShaderResourceView* ArrPtr[1] = { SRV.Get() };
+
+	switch (_Type)
+	{
+	case EShaderType::VS:
+		UEngineCore::GetDevice().GetContext()->VSSetShaderResources(_BindIndex, 1, ArrPtr);
+		break;
+	case EShaderType::PS:
+		UEngineCore::GetDevice().GetContext()->PSSetShaderResources(_BindIndex, 1, ArrPtr);
+		break;
+	case EShaderType::HS:
+	case EShaderType::DS:
+	case EShaderType::GS:
+	case EShaderType::CS:
+	default:
+		MSGASSERT("Shader is not exist.");
+		break;
+	}
+}
+
+void UEngineTexture::ResCreate(const D3D11_TEXTURE2D_DESC& _Value)
+{
+	Desc = _Value;
+
+	UEngineCore::GetDevice().GetDevice()->CreateTexture2D(&Desc, nullptr, &Texture2D);
+
+	if (nullptr == Texture2D)
+	{
+		MSGASSERT("CreateTexture2D failed.");
+		return;
+	}
+
+	if (Desc.BindFlags & D3D11_BIND_DEPTH_STENCIL)
+	{
+		if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(Texture2D.Get(), nullptr, &DSV))
+		{
+			MSGASSERT("CreateDepthStencilView failed.");
+			return;
+		}
+	}
+
+
+}

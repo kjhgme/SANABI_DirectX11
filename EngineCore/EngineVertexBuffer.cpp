@@ -1,15 +1,15 @@
 #include "PreCompile.h"
-#include "VertexBuffer.h"
+#include "EngineVertexBuffer.h"
 
-UVertexBuffer::UVertexBuffer()
+UEngineVertexBuffer::UEngineVertexBuffer()
 {
 }
 
-UVertexBuffer::~UVertexBuffer()
+UEngineVertexBuffer::~UEngineVertexBuffer()
 {
 }
 
-std::shared_ptr<UVertexBuffer> UVertexBuffer::Create(std::string_view _Name, const void* _InitData, size_t _VertexSize, size_t _VertexCount)
+std::shared_ptr<UEngineVertexBuffer> UEngineVertexBuffer::Create(std::string_view _Name, const void* _InitData, size_t _VertexSize, size_t _VertexCount, UEngineInputLayOutInfo* _InfoPtr) 
 {
 	std::string UpperName = ToUpperName(_Name);
 
@@ -19,25 +19,26 @@ std::shared_ptr<UVertexBuffer> UVertexBuffer::Create(std::string_view _Name, con
 		return nullptr;
 	}
 
-	std::shared_ptr<UVertexBuffer> NewRes = std::make_shared<UVertexBuffer>();
-	PushRes<UVertexBuffer>(NewRes, _Name, "");
+	std::shared_ptr<UEngineVertexBuffer> NewRes = std::make_shared<UEngineVertexBuffer>();
+	PushRes<UEngineVertexBuffer>(NewRes, _Name, "");
 	NewRes->ResCreate(_InitData, _VertexSize, _VertexCount);
+	NewRes->InfoPtr = _InfoPtr;
 
 	return NewRes;
 }
 
-void UVertexBuffer::Setting()
+void UEngineVertexBuffer::Setting()
 {
 	UINT Offset = 0;
 	ID3D11Buffer* ArrBuffer[1];
-	ArrBuffer[0] = VertexBuffer.Get();
+	ArrBuffer[0] = Buffer.Get();
 	UEngineCore::GetDevice().GetContext()->IASetVertexBuffers(0, 1, ArrBuffer, &VertexSize, &Offset);
 }
 
-void UVertexBuffer::ResCreate(const void* _InitData, size_t _VertexSize, size_t _VertexCount)
+void UEngineVertexBuffer::ResCreate(const void* _InitData, size_t _VertexSize, size_t _VertexCount)
 {
-	VertexSize = static_cast<UINT>(_VertexSize);
 	VertexCount = static_cast<UINT>(_VertexCount);
+	VertexSize = static_cast<UINT>(_VertexSize);
 
 	BufferInfo.ByteWidth = static_cast<UINT>(_VertexSize * _VertexCount);
 	BufferInfo.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -47,7 +48,7 @@ void UVertexBuffer::ResCreate(const void* _InitData, size_t _VertexSize, size_t 
 	D3D11_SUBRESOURCE_DATA Data;
 	Data.pSysMem = _InitData;
 
-	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, &VertexBuffer))
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, &Buffer))
 	{
 		MSGASSERT("CreateBuffer failed.");
 		return;

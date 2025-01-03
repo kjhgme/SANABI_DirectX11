@@ -1,6 +1,7 @@
 #pragma once
-#include <wrl.h>
+#include <memory>
 
+#include <wrl.h>
 #include <d3d11_4.h>
 #include <d3dcompiler.h>
 #include <EnginePlatform/EngineWindow.h>
@@ -59,9 +60,15 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
 
+	std::shared_ptr<class UEngineTexture> DepthTex;
+
 	ENGINEAPI void DefaultResourcesInit();
 
 	ENGINEAPI void MeshInit();
 	ENGINEAPI void BlendInit();
+	ENGINEAPI void ShaderInit();
+	ENGINEAPI void MaterialInit();
+	ENGINEAPI void RasterizerStateInit();
+	ENGINEAPI void TextureInit();
 };
 

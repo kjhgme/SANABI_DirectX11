@@ -1,15 +1,15 @@
 #include "PreCompile.h"
-#include "IndexBuffer.h"
+#include "EngineIndexBuffer.h"
 
-UIndexBuffer::UIndexBuffer()
+UEngineIndexBuffer::UEngineIndexBuffer()
 {
 }
 
-UIndexBuffer::~UIndexBuffer()
+UEngineIndexBuffer::~UEngineIndexBuffer()
 {
 }
 
-std::shared_ptr<UIndexBuffer> UIndexBuffer::Create(std::string_view _Name, const void* _InitData, size_t _VertexSize, size_t _VertexCount)
+std::shared_ptr<UEngineIndexBuffer> UEngineIndexBuffer::Create(std::string_view _Name, const void* _InitData, size_t _VertexSize, size_t _VertexCount)
 {
 	std::string UpperName = ToUpperName(_Name);
 
@@ -19,14 +19,14 @@ std::shared_ptr<UIndexBuffer> UIndexBuffer::Create(std::string_view _Name, const
 		return nullptr;
 	}
 
-	std::shared_ptr<UIndexBuffer> NewRes = std::make_shared<UIndexBuffer>();
-	PushRes<UIndexBuffer>(NewRes, _Name, "");
+	std::shared_ptr<UEngineIndexBuffer> NewRes = std::make_shared<UEngineIndexBuffer>();
+	PushRes<UEngineIndexBuffer>(NewRes, _Name, "");
 	NewRes->ResCreate(_InitData, _VertexSize, _VertexCount);
 
 	return NewRes;
 }
 
-void UIndexBuffer::ResCreate(const void* _InitData, size_t _Size, size_t _Count)
+void UEngineIndexBuffer::ResCreate(const void* _InitData, size_t _Size, size_t _Count)
 {
 	IndexSize = static_cast<UINT>(_Size);
 	IndexCount = static_cast<UINT>(_Count);
@@ -51,15 +51,15 @@ void UIndexBuffer::ResCreate(const void* _InitData, size_t _Size, size_t _Count)
 	D3D11_SUBRESOURCE_DATA Data;
 	Data.pSysMem = _InitData;
 
-	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, &IndexBuffer))
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateBuffer(&BufferInfo, &Data, &Buffer))
 	{
 		MSGASSERT("CreateBuffer failed.");
 		return;
 	}
 }
 
-void UIndexBuffer::Setting()
+void UEngineIndexBuffer::Setting()
 {
 	int Offset = 0;
-	UEngineCore::GetDevice().GetContext()->IASetIndexBuffer(IndexBuffer.Get(), Format, Offset);
+	UEngineCore::GetDevice().GetContext()->IASetIndexBuffer(Buffer.Get(), Format, Offset);
 }

@@ -5,6 +5,7 @@
 #include <EnginePlatform/EngineWindow.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/EngineResources.h>
+#include <EngineCore/EngineConstantBuffer.h>
 
 #include "Level.h"
 #include "IContentsCore.h"
@@ -169,6 +170,7 @@ void UEngineCore::EngineEnd()
 {
 	Device.Release();
 	UEngineResources::Release();
+	UEngineConstantBuffer::Release();
 
 	CurLevel = nullptr;
 	NextLevel = nullptr;
