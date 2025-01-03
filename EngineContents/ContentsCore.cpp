@@ -1,6 +1,9 @@
 #include "PreCompile.h"
 #include "ContentsCore.h"
 
+#include <windows.h>
+#include <iostream>
+
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineSprite.h>
 #include <EngineCore/EngineTexture.h>
@@ -85,6 +88,13 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 		LoadFolder("SNB/SNB_Arm_SwingJumpUp");
 	}
 
+	// Font 설치
+	{
+		std::string Font = "PFStardust.ttf";
+
+		InstallFont(Font);
+	}
+
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	UEngineCore::CreateLevel<AInGameMode, APawn>("InGameLevel");
 	UEngineCore::CreateLevel<AEndingGameMode, APawn>("EndingGameLevel");
@@ -112,4 +122,26 @@ void UContentsCore::LoadFolder(std::string_view _Path)
 	Dir.Append(_Path);
 
 	UEngineSprite::CreateSpriteToFolder(Dir.GetPathToString());	
+}
+
+bool UContentsCore::InstallFont(std::string_view _Font)
+{
+	UEngineDirectory Dir;
+	if (false == Dir.MoveParentToDirectory("Resources/Font"))
+	{
+		MSGASSERT("Wrong Directory.");
+		return false;
+	}
+	Dir.Append(_Font);
+
+	int result = AddFontResourceEx(Dir.GetPathToString().c_str(), FR_PRIVATE, nullptr);
+
+	if (result > 0) {
+		SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
+		return true;
+	}
+	else {
+		std::cerr << "폰트 설치 실패: " << _Font << std::endl;
+		return false;
+	}
 }
