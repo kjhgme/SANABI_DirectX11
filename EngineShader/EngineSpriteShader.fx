@@ -54,12 +54,13 @@ cbuffer FUVValue : register(b2)
 	float4 PlusUVValue;
 };
 
-VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
+VertexShaderOutPut VertexToWorld_VS(EngineVertex _Vertex)
 {
     VertexShaderOutPut OutPut;
     
     _Vertex.POSITION.x += (1.0f - Pivot.x) - 0.5f;
     _Vertex.POSITION.y += (1.0f - Pivot.y) - 0.5f;
+
     OutPut.SVPOSITION = mul(_Vertex.POSITION, WVP);
     
     OutPut.UV = _Vertex.UV;
@@ -72,11 +73,6 @@ VertexShaderOutPut VertexToWorld(EngineVertex _Vertex)
     
 	return OutPut;
 }
-
-cbuffer MatColor : register(b1)
-{
-    float4 Albedo;
-};
 
 struct OutTargetColor
 {
@@ -100,8 +96,7 @@ cbuffer ResultColor : register(b0)
 };
 
 float4 PixelToWorld_PS(VertexShaderOutPut _Vertex) : SV_Target0
-{
-	
+{	
 	float4 Color = ImageTexture.Sample(ImageSampler, _Vertex.UV.xy);
 	Color += PlusColor;
 	Color *= MulColor;

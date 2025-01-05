@@ -93,59 +93,59 @@ void APlayer::InitPlayerAnimation()
 
 void APlayer::PlayerMove(float _DeltaTime)
 {
-		if (UEngineInput::IsPress('A'))
-		{
-			IsRight = false;
-			if (IsWalking == true) {
-				PlayerRenderer->ChangeAnimation("Walking");
-				ArmRenderer->ChangeAnimation("ArmWalking");
-				PlayerRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-				ArmRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+	if (UEngineInput::IsPress('A'))
+	{
+		IsRight = false;
+		if (IsWalking == true) {
+			PlayerRenderer->ChangeAnimation("Walking");
+			ArmRenderer->ChangeAnimation("ArmWalking");
+			PlayerRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+			ArmRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
 
-				AddRelativeLocation(FVector{ -100.0f * _DeltaTime, 0.0f, 0.0f });
-			}
-			else if (IsRunning == true) {
-				PlayerRenderer->ChangeAnimation("Running");
-				ArmRenderer->ChangeAnimation("ArmRunning");
-				PlayerRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-				ArmRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-
-				AddRelativeLocation(FVector{ -300.0f * _DeltaTime, 0.0f, 0.0f });
-			}
+			AddRelativeLocation(FVector{ -100.0f * _DeltaTime, 0.0f, 0.0f });
 		}
-		if (UEngineInput::IsPress('D'))
-		{
-			IsRight = true;
-			if (IsWalking == true) {
-				PlayerRenderer->ChangeAnimation("Walking");
-				ArmRenderer->ChangeAnimation("ArmWalking");
-				PlayerRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
-				ArmRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+		else if (IsRunning == true) {
+			PlayerRenderer->ChangeAnimation("Running");
+			ArmRenderer->ChangeAnimation("ArmRunning");
+			PlayerRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+			ArmRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
 
-				AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
-			}
-			else if (IsRunning == true) {
-				PlayerRenderer->ChangeAnimation("Running");
-				ArmRenderer->ChangeAnimation("ArmRunning");
-				PlayerRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
-				ArmRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+			AddRelativeLocation(FVector{ -300.0f * _DeltaTime, 0.0f, 0.0f });
+		}
+	}
+	if (UEngineInput::IsPress('D'))
+	{
+		IsRight = true;
+		if (IsWalking == true) {
+			PlayerRenderer->ChangeAnimation("Walking");
+			ArmRenderer->ChangeAnimation("ArmWalking");
+			PlayerRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+			ArmRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-				AddRelativeLocation(FVector{ 300.0f * _DeltaTime, 0.0f, 0.0f });
-			}
+			AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
 		}
-		if (UEngineInput::IsPress(VK_SPACE))
-		{
-			PlayerRenderer->ChangeAnimation("Jumping");
-			ArmRenderer->ChangeAnimation("ArmJumping");
+		else if (IsRunning == true) {
+			PlayerRenderer->ChangeAnimation("Running");
+			ArmRenderer->ChangeAnimation("ArmRunning");
+			PlayerRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+			ArmRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+
+			AddRelativeLocation(FVector{ 300.0f * _DeltaTime, 0.0f, 0.0f });
 		}
-		if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D') &&
-			true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S') &&
-			true == UEngineInput::IsFree('T'))
-		{
-			IsIdle = true;
-			PlayerRenderer->ChangeAnimation("Idle");
-			ArmRenderer->ChangeAnimation("ArmIdle");
-		}	
+	}
+	if (UEngineInput::IsPress(VK_SPACE))
+	{
+		PlayerRenderer->ChangeAnimation("Jumping");
+		ArmRenderer->ChangeAnimation("ArmJumping");
+	}
+	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D') &&
+		true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S') &&
+		true == UEngineInput::IsFree('T'))
+	{
+		IsIdle = true;
+		PlayerRenderer->ChangeAnimation("Idle");
+		ArmRenderer->ChangeAnimation("ArmIdle");
+	}	
 }
 
 void APlayer::SetArmPosition()

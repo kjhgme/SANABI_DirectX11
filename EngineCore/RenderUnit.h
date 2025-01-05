@@ -1,19 +1,14 @@
 #pragma once
 #include "EngineShaderResources.h"
+#include "Mesh.h"
 #include "EngineMaterial.h"
 #include "EngineEnums.h"
-#include "Mesh.h"
 
 class URenderUnit
 {
 public:
 	URenderUnit();
 	~URenderUnit();
-
-	URenderUnit(const URenderUnit& _Other) = delete;
-	URenderUnit(URenderUnit&& _Other) noexcept = delete;
-	URenderUnit& operator=(const URenderUnit& _Other) = delete;
-	URenderUnit& operator=(URenderUnit&& _Other) noexcept = delete;
 
 	URenderer* ParentRenderer = nullptr;
 
@@ -24,8 +19,6 @@ public:
 
 	ENGINEAPI void SetMesh(std::string_view _Name);
 	ENGINEAPI void SetMaterial(std::string_view _Name);
-	ENGINEAPI void SetTexture(std::string_view _Name, std::string_view _ResName);
-	ENGINEAPI void SetSampler(std::string_view Name, std::string_view _ResName);
 
 	ENGINEAPI virtual void Render(class UEngineCamera* _Camera, float _DeltaTime);
 
@@ -39,8 +32,8 @@ public:
 
 	ENGINEAPI void ConstantBufferLinkData(std::string_view Name, void* _Data);
 
-
-protected:
+	ENGINEAPI void SetTexture(std::string_view _Name, std::string_view _ResName);
+	ENGINEAPI void SetSampler(std::string_view Name, std::string_view _ResName);
 
 private:
 	std::map<EShaderType, UEngineShaderResources> Resources;

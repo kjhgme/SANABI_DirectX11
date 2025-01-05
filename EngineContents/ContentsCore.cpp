@@ -137,7 +137,7 @@ bool UContentsCore::InstallFont(std::string_view _Font)
 	int result = AddFontResourceEx(Dir.GetPathToString().c_str(), FR_PRIVATE, nullptr);
 
 	if (result > 0) {
-		SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
+		// SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
 		return true;
 	}
 	else {
