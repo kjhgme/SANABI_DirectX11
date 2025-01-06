@@ -67,9 +67,11 @@ public:
 	// SetFunction
 	ENGINEAPI void SetAnimationEvent(std::string_view _AnimationName, int _Frame, std::function<void()> _Function);
 
-	ENGINEAPI void SetSprite(std::string_view _Name, size_t _CurIndex = 0);
+	ENGINEAPI void SetSprite(std::string_view _Name, UINT _CurIndex = 0);
 
 	void SetSprite(UEngineSprite* _Sprite);
+
+	ENGINEAPI void SetTexture(std::string_view _Name, bool AutoScale = false, float _Ratio = 1.0f);
 
 	void SetAnimationSpeed(float _Speed)
 	{

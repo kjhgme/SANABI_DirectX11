@@ -12,11 +12,13 @@ public:
 	ACameraActor& operator=(const ACameraActor& _Other) = delete;
 	ACameraActor& operator=(ACameraActor&& _Other) noexcept = delete;
 
-	std::shared_ptr<class UEngineCamera> CameraComponent = nullptr;
-
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
+	ENGINEAPI std::shared_ptr<class UEngineCamera> GetCameraComponent()
+	{
+		return CameraComponent;
+	}
 
 	ENGINEAPI FVector ScreenMousePosToWorldPos();
 	ENGINEAPI FVector ScreenMousePosToWorldPosWithOutPos();
@@ -24,5 +26,6 @@ public:
 protected:
 
 private:
+	std::shared_ptr<class UEngineCamera> CameraComponent = nullptr;
 };
 

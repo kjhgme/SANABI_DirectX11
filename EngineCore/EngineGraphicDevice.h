@@ -63,12 +63,12 @@ private:
 	std::shared_ptr<class UEngineTexture> DepthTex;
 
 	ENGINEAPI void DefaultResourcesInit();
-
 	ENGINEAPI void MeshInit();
 	ENGINEAPI void BlendInit();
 	ENGINEAPI void ShaderInit();
 	ENGINEAPI void MaterialInit();
 	ENGINEAPI void RasterizerStateInit();
 	ENGINEAPI void TextureInit();
+	ENGINEAPI void DepthStencilInit();
 };
 

@@ -190,6 +190,10 @@
       </SubType>
     </ClInclude>
     <ClInclude Include="EngineCore.h" />
+    <ClInclude Include="EngineDepthStencilState.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="EngineDeviceBuffer.h">
       <SubType>
       </SubType>
@@ -297,6 +301,10 @@
       </SubType>
     </ClCompile>
     <ClCompile Include="EngineCore.cpp" />
+    <ClCompile Include="EngineDepthStencilState.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="EngineDeviceBuffer.cpp">
       <SubType>
       </SubType>

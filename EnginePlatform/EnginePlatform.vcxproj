@@ -169,6 +169,10 @@
   <ItemGroup>
     <ClInclude Include="EngineInput.h" />
     <ClInclude Include="EngineWindow.h" />
+    <ClInclude Include="EngineWinImage.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="PreCompile.h">
       <SubType>
       </SubType>
@@ -177,6 +181,10 @@
   <ItemGroup>
     <ClCompile Include="EngineInput.cpp" />
     <ClCompile Include="EngineWindow.cpp" />
+    <ClCompile Include="EngineWinImage.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="PreCompile.cpp">
       <SubType>
       </SubType>

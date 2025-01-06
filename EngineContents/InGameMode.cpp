@@ -2,6 +2,7 @@
 #include "InGameMode.h"
 
 #include <EngineCore/CameraActor.h>
+#include <EngineCore/EngineCamera.h>
 #include "Player.h"
 #include "Daughter.h"
 #include "BackGround.h"
@@ -14,6 +15,8 @@ AInGameMode::AInGameMode()
 
 	MainCamera = GetWorld()->GetMainCamera();
 	MainCamera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
+	MainCamera->GetCameraComponent()->SetZSort(0, true);
+
 }
 
 AInGameMode::~AInGameMode()

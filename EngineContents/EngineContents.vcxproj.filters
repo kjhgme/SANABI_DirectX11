@@ -36,6 +36,9 @@
     <ClInclude Include="TextBubble.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="BossGameMode.h">
+      <Filter>GameMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -69,6 +72,9 @@
     </ClCompile>
     <ClCompile Include="TextBubble.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BossGameMode.cpp">
+      <Filter>GameMode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

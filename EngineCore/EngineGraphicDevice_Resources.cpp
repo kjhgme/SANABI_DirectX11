@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "EngineGraphicDevice.h"
 
+#include "EngineDepthStencilState.h"
 #include "EngineVertexBuffer.h"
 #include "EngineIndexBuffer.h"
 #include "EngineMaterial.h"
@@ -12,12 +13,24 @@
 
 void UEngineGraphicDevice::DefaultResourcesInit()
 {
+	DepthStencilInit();
     TextureInit();
     MeshInit();
     BlendInit();
     RasterizerStateInit();
     ShaderInit();
     MaterialInit();
+}
+
+void UEngineGraphicDevice::DepthStencilInit()
+{
+	D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
+	Desc.DepthEnable = true;
+	Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	Desc.DepthFunc = D3D11_COMPARISON_LESS;
+	Desc.StencilEnable = false;
+
+	UEngineDepthStencilState::Create("BaseDepth", Desc);
 }
 
 void UEngineGraphicDevice::MeshInit()

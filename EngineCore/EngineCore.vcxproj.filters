@@ -107,6 +107,9 @@
     <ClInclude Include="EngineCore.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="EngineDepthStencilState.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -208,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="EngineCore.cpp">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineDepthStencilState.cpp">
+      <Filter>Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
