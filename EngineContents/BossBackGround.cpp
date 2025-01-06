@@ -24,11 +24,11 @@ ABossBackGround::ABossBackGround()
 	BG_Building1_Renderer->SetSprite("BOSS_BG", 3);
 	BG_Building2_Renderer->SetSprite("BOSS_BG", 4);
 
-	BG_Sky_Renderer->SetRelativeLocation({ 0.0f, -600.0f, 1000.0f });
+	BG_Sky_Renderer->SetRelativeLocation({ 0.0f, -1000.0f, 1000.0f });
 	BG_Cloud1_Renderer->SetRelativeLocation({ 0.0f, 0.0f, 999.0f });
 	BG_Cloud2_Renderer->SetRelativeLocation({ 0.0f, -100.0f, 998.0f });
-	BG_Building1_Renderer->SetRelativeLocation({ 0.0f, -1200.0f, 997.0f });
-	BG_Building2_Renderer->SetRelativeLocation({ 0.0f, -1400.0f, 996.0f });
+	BG_Building1_Renderer->SetRelativeLocation({ 0.0f, -2500.0f, 997.0f });
+	BG_Building2_Renderer->SetRelativeLocation({ 0.0f, -3000.0f, 996.0f });
 
 	BG_Sky_Renderer->SetupAttachment(RootComponent);
 	BG_Cloud1_Renderer->SetupAttachment(RootComponent);
@@ -36,13 +36,11 @@ ABossBackGround::ABossBackGround()
 	BG_Building1_Renderer->SetupAttachment(RootComponent);
 	BG_Building2_Renderer->SetupAttachment(RootComponent);
 
-	BG_Sky_Renderer->SetAutoScaleRatio(3.0f);
-	BG_Cloud1_Renderer->SetAutoScaleRatio(2.0f);
-	BG_Cloud2_Renderer->SetAutoScaleRatio(2.0f);
-	BG_Building1_Renderer->SetAutoScaleRatio(2.0f);
-	BG_Building2_Renderer->SetAutoScaleRatio(2.0f);
-
-	Camera = GetWorld()->GetMainCamera();
+	BG_Sky_Renderer->SetAutoScaleRatio(4.0f);
+	BG_Cloud1_Renderer->SetAutoScaleRatio(4.0f);
+	BG_Cloud2_Renderer->SetAutoScaleRatio(4.0f);
+	BG_Building1_Renderer->SetAutoScaleRatio(4.0f);
+	BG_Building2_Renderer->SetAutoScaleRatio(4.0f);
 }
 
 ABossBackGround::~ABossBackGround()

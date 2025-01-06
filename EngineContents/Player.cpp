@@ -33,9 +33,6 @@ APlayer::APlayer()
 	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, 0.0f });
 	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
 
-	PlayerRenderer->SetAutoScaleRatio(2.0f);
-	ArmRenderer->SetAutoScaleRatio(2.0f);
-
 	PlayerCamera = GetWorld()->GetCamera(0);
 	PlayerCamera->AttachToActor(this);
 }
@@ -52,8 +49,6 @@ void APlayer::BeginPlay()
 void APlayer::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
-
-	PlayerCamera->AddRelativeLocation({ 0.0f, 0.0f, -100.f * _DeltaTime, 1.0f });
 
 	UEngineCore::GetMainWindow().GetMousePos();
 

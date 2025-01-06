@@ -16,7 +16,7 @@ ABossGameMode::ABossGameMode()
 	BackGround->AttachToActor(Player.get());
 
 	MainCamera = GetWorld()->GetMainCamera();
-	MainCamera->SetActorLocation({ 0.0f, 0.0f, -200.0f, 1.0f });
+	MainCamera->SetActorLocation({ 0.0f, 0.0f, -500.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 }
 
