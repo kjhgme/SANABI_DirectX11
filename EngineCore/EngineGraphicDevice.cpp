@@ -87,10 +87,10 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
    
     MainAdapter = GetHighPerformanceAdapter();
 
-    int iFlag = 0;
+    UINT iFlag = 0;
 
 #ifdef _DEBUG
-    iFlag = D3D11_CREATE_DEVICE_DEBUG;
+    iFlag = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG;
 #endif
     D3D_FEATURE_LEVEL ResultLevel;
 
@@ -130,7 +130,28 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
         return;
     }
 
+    if (FAILED(Result))
+    {
+        MSGASSERT("Failed to create Direct2D render target.");
+        return;
+    }
+
     Result = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+   
+    // Direct2D 팩토리 생성
+    Result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, d2dFactory.ReleaseAndGetAddressOf());
+    // if (FAILED(hr)) return hr;
+
+    // DirectWrite 팩토리 생성
+    Result = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)dwriteFactory.ReleaseAndGetAddressOf());
+    // if (FAILED(hr)) return hr;
+
+    // 텍스트 형식 생성
+    Result = dwriteFactory->CreateTextFormat(
+        L"Arial", nullptr,
+        DWRITE_FONT_WEIGHT_REGULAR, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
+        32.0f, L"en-us", textFormat.ReleaseAndGetAddressOf()
+    );
 
     if (Result != S_OK)
     {
@@ -203,6 +224,8 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
     {
         MSGASSERT("텍스처 수정권한 획득에 실패했습니다");
     }
+
+    CreateD2DRenderTarget();
 }
 
 void UEngineGraphicDevice::RenderStart()
@@ -221,6 +244,7 @@ void UEngineGraphicDevice::RenderStart()
 
     std::shared_ptr<UEngineDepthStencilState> DepthState = UEngineDepthStencilState::Find<UEngineDepthStencilState>("BaseDepth");
     DepthState->Setting();
+
 }
 
 void UEngineGraphicDevice::RenderEnd()
@@ -232,4 +256,70 @@ void UEngineGraphicDevice::RenderEnd()
         MSGASSERT("해상도 변경이나 디바이스 관련 설정이 런타임 도중 수정되었습니다");
         return;
     }
+}
+
+ENGINEAPI HRESULT UEngineGraphicDevice::CreateD2DRenderTarget()
+{ 
+    // SwapChain이 올바르게 초기화되었는지 확인
+    if (!SwapChain) {
+        MSGASSERT("SwapChain is not initialized.");
+        return E_FAIL;  // 또는 적절한 오류 코드 반환
+    }
+
+    Microsoft::WRL::ComPtr<IDXGISurface> dxgiSurface;
+    HRESULT hr = SwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)dxgiSurface.ReleaseAndGetAddressOf());
+    if (FAILED(hr)) return hr;
+
+    // Direct2D 렌더 타겟 속성 설정
+    D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(
+        D2D1_RENDER_TARGET_TYPE_DEFAULT,
+        D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
+    );
+
+    // 렌더 타겟 생성
+    hr = d2dFactory->CreateDxgiSurfaceRenderTarget(dxgiSurface.Get(), &props, d2dRenderTarget.ReleaseAndGetAddressOf());
+    return hr;
+}
+
+void UEngineGraphicDevice::RenderText(std::string_view text, float x, float y) {
+    // 멀티바이트 문자열 -> 유니코드 변환
+    int wlen = MultiByteToWideChar(CP_ACP, 0, text.data(), -1, nullptr, 0);
+    std::wstring wText(wlen, L'\0');
+    MultiByteToWideChar(CP_ACP, 0, text.data(), -1, &wText[0], wlen);
+
+    d2dRenderTarget->BeginDraw();
+
+    // 배경색 초기화
+    d2dRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+
+    // 텍스트 출력
+    D2D1_RECT_F layoutRect = D2D1::RectF(x, y, x + 500, y + 100);
+    Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> textBrush;
+    HRESULT hr = d2dRenderTarget->CreateSolidColorBrush(
+        D2D1::ColorF(D2D1::ColorF::White), textBrush.ReleaseAndGetAddressOf()
+    );
+
+    if (FAILED(hr)) {
+        MessageBoxA(nullptr, "Failed to create text brush.", "Error", MB_OK);
+        return;
+    }
+
+    // 유니코드 문자열 출력
+    d2dRenderTarget->DrawText(
+        wText.c_str(),                     // 유니코드 문자열
+        static_cast<UINT32>(wText.length()), // 문자열 길이
+        textFormat.Get(),                  // 텍스트 포맷
+        &layoutRect,                       // 텍스트 레이아웃 영역
+        textBrush.Get()                    // 브러시
+    );
+
+    // 렌더 타겟 끝내기
+    hr = d2dRenderTarget->EndDraw();
+    if (FAILED(hr)) {
+        MessageBoxA(nullptr, "Failed to draw text.", "Error", MB_OK);
+        return;
+    }
+
+    // 스왑 체인 프레젠트
+    SwapChain->Present(1, 0);
 }

@@ -4,11 +4,15 @@
 #include <wrl.h>
 #include <d3d11_4.h>
 #include <d3dcompiler.h>
+#include <d2d1.h>
+#include <dwrite.h>
 #include <EnginePlatform/EngineWindow.h>
 
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler") 
 #pragma comment(lib, "dxguid")
+#pragma comment(lib, "d2d1")
+#pragma comment(lib, "dwrite")
 
 #pragma comment(lib, "DXGI") 
 
@@ -50,6 +54,10 @@ public:
 		return RTV.Get();
 	}
 
+	ENGINEAPI HRESULT CreateD2DRenderTarget();
+
+	ENGINEAPI void RenderText(std::string_view text, float x, float y);
+
 protected:
 
 private:
@@ -59,6 +67,11 @@ private:
 	Microsoft::WRL::ComPtr<IDXGIAdapter> MainAdapter = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
+
+	Microsoft::WRL::ComPtr<ID2D1Factory> d2dFactory;
+	Microsoft::WRL::ComPtr<ID2D1RenderTarget> d2dRenderTarget;
+	Microsoft::WRL::ComPtr<IDWriteFactory> dwriteFactory;
+	Microsoft::WRL::ComPtr<IDWriteTextFormat> textFormat;
 
 	std::shared_ptr<class UEngineTexture> DepthTex;
 

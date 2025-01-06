@@ -6,6 +6,7 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/CameraActor.h>
+#include "TextBubble.h"
 
 APlayer::APlayer()
 {
@@ -68,6 +69,20 @@ void APlayer::Tick(float _DeltaTime)
 
 		PlayerRenderer->ChangeAnimation("Jumping");
 		ArmRenderer->ChangeAnimation("ArmJumping");
+	}
+	if (UEngineInput::IsDown('Q'))
+	{
+		PlayerText = GetWorld()->SpawnActor<ATextBubble>();
+	}
+	if (UEngineInput::IsDown('E'))
+	{
+		PlayerText->Destroy();
+		PlayerText = nullptr;
+	}
+
+	if (PlayerText != nullptr)
+	{
+		PlayerText->AttachToActor(this);
 	}
 }
 

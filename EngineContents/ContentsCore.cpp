@@ -45,6 +45,11 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 		 	UEngineTexture::Load(FilePath);
 		 }
 	}
+	// UI
+	{
+		LoadFolder("UI/TextUI");
+		LoadFolder("UI/TextUI/BubbleSelectionMarker");
+	}
 	// Title
 	{
 		LoadFolder("Title");

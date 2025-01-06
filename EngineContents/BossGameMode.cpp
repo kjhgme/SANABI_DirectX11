@@ -5,6 +5,7 @@
 #include <EngineCore/EngineCamera.h>
 #include "Player.h"
 #include "BossBackGround.h"
+#include "TextBubble.h"
 
 ABossGameMode::ABossGameMode()
 {
@@ -31,5 +32,5 @@ void ABossGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	Player->AddRelativeLocation({ _DeltaTime * 100.0f, 0.0f, 0.0f });
+	// Player->AddRelativeLocation({ _DeltaTime * 100.0f, 0.0f, 0.0f });
 }
