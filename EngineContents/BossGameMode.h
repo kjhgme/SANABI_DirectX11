@@ -22,5 +22,7 @@ private:
 	std::shared_ptr<class APlayer> Player;
 	std::shared_ptr<class ABossBackGround> BackGround;
 	std::shared_ptr<class ACameraActor> MainCamera;
+
+	float4 LastPlayerPosition;
 };
 

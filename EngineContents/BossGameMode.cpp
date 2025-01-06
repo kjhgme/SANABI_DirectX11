@@ -3,6 +3,7 @@
 
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
+#include <EngineCore/SpriteRenderer.h>
 #include "Player.h"
 #include "BossBackGround.h"
 #include "TextBubble.h"
@@ -26,11 +27,22 @@ ABossGameMode::~ABossGameMode()
 void ABossGameMode::BeginPlay()
 {
 	AActor::BeginPlay();
+
+	LastPlayerPosition = Player.get()->GetActorTransform().Location;
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	// Player->AddRelativeLocation({ _DeltaTime * 100.0f, 0.0f, 0.0f });
+	float4 CurrentPlayerPosition = Player.get()->GetActorTransform().Location;
+
+	float4 DeltaPosition = CurrentPlayerPosition - LastPlayerPosition;
+
+	BackGround->GetBG_Boss_Cloud1_Renderer().get()->AddUVPlusValue({ DeltaPosition.X * 0.00002f, 0.0f, 0.0f, 1.0f });
+	BackGround->GetBG_Boss_Cloud2_Renderer().get()->AddUVPlusValue({ DeltaPosition.X * 0.00008f, 0.0f, 0.0f, 1.0f });
+	BackGround->GetBG_Boss_Building1_Renderer().get()->AddUVPlusValue({ DeltaPosition.X * 0.0004f, 0.0f, 0.0f, 1.0f });
+	BackGround->GetBG_Boss_Building2_Renderer().get()->AddUVPlusValue({ DeltaPosition.X * 0.0008f, 0.0f, 0.0f, 1.0f });
+
+	LastPlayerPosition = CurrentPlayerPosition;
 }
