@@ -53,6 +53,8 @@ void APlayer::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	PlayerCamera->AddRelativeLocation({ 0.0f, 0.0f, -100.f * _DeltaTime, 1.0f });
+
 	UEngineCore::GetMainWindow().GetMousePos();
 
 	PlayerMove(_DeltaTime);
