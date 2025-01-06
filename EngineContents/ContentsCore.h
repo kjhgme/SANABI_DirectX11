@@ -22,5 +22,6 @@ private:
 	void LoadFolder(std::string_view _Path);
 
 	bool InstallFont(std::string_view _Font);
+	bool RemoveFont(std::string_view _Font);
 };
 

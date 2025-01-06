@@ -41,12 +41,21 @@ void ATextBubble::BeginPlay()
 {
 	AActor::BeginPlay();
 
-	UEngineGraphicDevice& test = UEngineCore::GetDevice();
 
-	test.RenderText("Hio", 10.f, 10.f);
+
 }
 
 void ATextBubble::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+
+	UEngineGraphicDevice& test = UEngineCore::GetDevice();
+
+	test.RenderText("한글가능?", 100.f, 10.f);
+
+	int a = 0;
+}
+
+void ATextBubble::SetText()
+{
 }

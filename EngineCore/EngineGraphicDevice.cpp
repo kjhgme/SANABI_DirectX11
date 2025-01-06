@@ -148,10 +148,19 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
 
     // 텍스트 형식 생성
     Result = dwriteFactory->CreateTextFormat(
-        L"Arial", nullptr,
-        DWRITE_FONT_WEIGHT_REGULAR, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL,
-        32.0f, L"en-us", textFormat.ReleaseAndGetAddressOf()
+        L"PFStardust", nullptr,
+        DWRITE_FONT_WEIGHT_REGULAR,
+        DWRITE_FONT_STYLE_NORMAL,
+        DWRITE_FONT_STRETCH_NORMAL,
+        64.0f, L"ko", textFormat.ReleaseAndGetAddressOf()
     );
+    if (FAILED(Result)) {
+        std::wcerr << L"폰트 생성 실패: HRESULT = " << Result << std::endl;
+        // 실패한 경우 더 자세한 오류 처리를 할 수 있습니다.
+    }
+    else {
+        std::wcout << L"폰트 생성 성공: PFStardust" << std::endl;
+    }
 
     if (Result != S_OK)
     {
@@ -290,7 +299,7 @@ void UEngineGraphicDevice::RenderText(std::string_view text, float x, float y) {
     d2dRenderTarget->BeginDraw();
 
     // 배경색 초기화
-    d2dRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+    d2dRenderTarget->Clear(D2D1::ColorF(1.0f, 0.0f, 0.0f, 0.0f));
 
     // 텍스트 출력
     D2D1_RECT_F layoutRect = D2D1::RectF(x, y, x + 500, y + 100);

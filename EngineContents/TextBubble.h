@@ -12,6 +12,8 @@ public:
 	ATextBubble& operator=(const ATextBubble& _Other) = delete;
 	ATextBubble& operator=(ATextBubble&& _Other) noexcept = delete;
 
+	void SetText();
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;

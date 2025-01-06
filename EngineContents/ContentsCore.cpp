@@ -17,10 +17,18 @@ CreateContentsCoreDefine(UContentsCore);
 
 UContentsCore::UContentsCore()
 {
+	// Font 설치
+	{
+		std::string Font = "PFStardust.ttf";
+
+		InstallFont(Font);
+	}
+
 }
 
 UContentsCore::~UContentsCore()
 {
+	RemoveFont("PFStardust.ttf");
 }
 
 
@@ -95,13 +103,6 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 		LoadFolder("SNB/SNB_Arm_SwingJumpUp");
 	}
 
-	// Font 설치
-	{
-		std::string Font = "PFStardust.ttf";
-
-		InstallFont(Font);
-	}
-
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	UEngineCore::CreateLevel<AInGameMode, APawn>("InGameLevel");
 	UEngineCore::CreateLevel<ABossGameMode, APawn>("BossGameLevel");
@@ -116,7 +117,6 @@ void UContentsCore::EngineTick(float _DeltaTime)
 
 void UContentsCore::EngineEnd()
 {
-
 }
 
 void UContentsCore::LoadFolder(std::string_view _Path)
@@ -142,14 +142,34 @@ bool UContentsCore::InstallFont(std::string_view _Font)
 	}
 	Dir.Append(_Font);
 
-	int result = AddFontResourceEx(Dir.GetPathToString().c_str(), FR_PRIVATE, nullptr);
+	int result = AddFontResourceA(Dir.GetPathToString().c_str());
 
-	if (result > 0) {
-		// SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
+	if (result != 0) {
+		SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
 		return true;
 	}
 	else {
 		std::cerr << "폰트 설치 실패: " << _Font << std::endl;
+		return false;
+	}
+}
+
+bool UContentsCore::RemoveFont(std::string_view _Font)
+{
+	UEngineDirectory Dir;
+	if (false == Dir.MoveParentToDirectory("Resources/Font"))
+	{
+		MSGASSERT("Wrong Directory.");
+		return false;
+	}
+	Dir.Append(_Font);
+
+	int result = RemoveFontResourceA(Dir.GetPathToString().c_str());
+	if (result != 0) {
+		SendMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
+		return true;
+	}
+	else {
 		return false;
 	}
 }
