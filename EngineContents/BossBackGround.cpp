@@ -25,8 +25,8 @@ ABossBackGround::ABossBackGround()
 	BG_Sky_Renderer->SetRelativeLocation({ 0.0f, -360.0f, 1000.0f });
 	BG_Cloud1_Renderer->SetRelativeLocation({ 0.0f, -360.0f, 999.0f });
 	BG_Cloud2_Renderer->SetRelativeLocation({ 0.0f, -360.0f, 998.0f });
-	BG_Building1_Renderer->SetRelativeLocation({ 0.0f, -360.0f, 997.0f });
-	BG_Building2_Renderer->SetRelativeLocation({ 0.0f, -800.0f, 996.0f });
+	BG_Building1_Renderer->SetRelativeLocation({ 0.0f, -1200.0f, 997.0f });
+	BG_Building2_Renderer->SetRelativeLocation({ 0.0f, -1400.0f, 996.0f });
 
 	BG_Sky_Renderer->SetupAttachment(RootComponent);
 	BG_Cloud1_Renderer->SetupAttachment(RootComponent);
@@ -34,8 +34,11 @@ ABossBackGround::ABossBackGround()
 	BG_Building1_Renderer->SetupAttachment(RootComponent);
 	BG_Building2_Renderer->SetupAttachment(RootComponent);
 
-	BG_Building2_Renderer->SetAutoScaleRatio(1.0f);
-	//BG_Sky_Renderer->SetAutoScaleRatio(2.f);
+	BG_Sky_Renderer->SetAutoScaleRatio(2.0f);
+	BG_Cloud1_Renderer->SetAutoScaleRatio(2.0f);
+	BG_Cloud2_Renderer->SetAutoScaleRatio(2.0f);
+	BG_Building1_Renderer->SetAutoScaleRatio(2.0f);
+	BG_Building2_Renderer->SetAutoScaleRatio(2.0f);
 }
 
 ABossBackGround::~ABossBackGround()
@@ -53,8 +56,8 @@ void ABossBackGround::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	BG_Cloud1_Renderer->AddRelativeLocation({ _DeltaTime * -100.0f, 0.0f, 0.0f });
-	BG_Cloud2_Renderer->AddRelativeLocation({ _DeltaTime * -100.0f, 0.0f, 0.0f });
-	BG_Building1_Renderer->AddRelativeLocation({ _DeltaTime * -100.0f, 0.0f, 0.0f });
-	BG_Building2_Renderer->AddRelativeLocation({ _DeltaTime * -100.0f, 0.0f, 0.0f });
+	BG_Cloud1_Renderer->AddUVPlusValue({ _DeltaTime * 0.01f, 0.0f, 0.0f, 1.0f });
+	BG_Cloud2_Renderer->AddUVPlusValue({ _DeltaTime * 0.04f, 0.0f, 0.0f, 1.0f });
+	BG_Building1_Renderer->AddUVPlusValue({ _DeltaTime * 0.2f, 0.0f, 0.0f, 1.0f });
+	BG_Building2_Renderer->AddUVPlusValue({ _DeltaTime * 0.5f, 0.0f, 0.0f, 1.0f });
 }

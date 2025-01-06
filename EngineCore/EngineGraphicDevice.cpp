@@ -146,21 +146,6 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
     Result = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)dwriteFactory.ReleaseAndGetAddressOf());
     // if (FAILED(hr)) return hr;
 
-    // 텍스트 형식 생성
-    Result = dwriteFactory->CreateTextFormat(
-        L"PFStardust", nullptr,
-        DWRITE_FONT_WEIGHT_REGULAR,
-        DWRITE_FONT_STYLE_NORMAL,
-        DWRITE_FONT_STRETCH_NORMAL,
-        64.0f, L"ko", textFormat.ReleaseAndGetAddressOf()
-    );
-    if (FAILED(Result)) {
-        std::wcerr << L"폰트 생성 실패: HRESULT = " << Result << std::endl;
-        // 실패한 경우 더 자세한 오류 처리를 할 수 있습니다.
-    }
-    else {
-        std::wcout << L"폰트 생성 성공: PFStardust" << std::endl;
-    }
 
     if (Result != S_OK)
     {
@@ -290,7 +275,7 @@ ENGINEAPI HRESULT UEngineGraphicDevice::CreateD2DRenderTarget()
     return hr;
 }
 
-void UEngineGraphicDevice::RenderText(std::string_view text, float x, float y) {
+void UEngineGraphicDevice::RenderText(std::string_view text, float x, float y, float _FontSize) {
     // 멀티바이트 문자열 -> 유니코드 변환
     int wlen = MultiByteToWideChar(CP_ACP, 0, text.data(), -1, nullptr, 0);
     std::wstring wText(wlen, L'\0');
@@ -311,6 +296,20 @@ void UEngineGraphicDevice::RenderText(std::string_view text, float x, float y) {
     if (FAILED(hr)) {
         MessageBoxA(nullptr, "Failed to create text brush.", "Error", MB_OK);
         return;
+    }
+    // 텍스트 형식 생성
+    hr = dwriteFactory->CreateTextFormat(
+        L"PFStardust", nullptr,
+        DWRITE_FONT_WEIGHT_REGULAR,
+        DWRITE_FONT_STYLE_NORMAL,
+        DWRITE_FONT_STRETCH_NORMAL,
+        _FontSize, L"ko", textFormat.ReleaseAndGetAddressOf()
+    );
+    if (FAILED(hr)) {
+        std::wcerr << L"폰트 생성 실패: HRESULT = " << hr << std::endl;
+    }
+    else {
+        std::wcout << L"폰트 생성 성공: PFStardust" << std::endl;
     }
 
     // 유니코드 문자열 출력

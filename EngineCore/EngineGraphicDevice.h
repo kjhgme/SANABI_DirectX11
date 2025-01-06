@@ -56,7 +56,7 @@ public:
 
 	ENGINEAPI HRESULT CreateD2DRenderTarget();
 
-	ENGINEAPI void RenderText(std::string_view text, float x, float y);
+	ENGINEAPI void RenderText(std::string_view text, float x, float y, float _FontSize = 24.0f);
 
 protected:
 

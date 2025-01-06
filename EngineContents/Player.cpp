@@ -33,6 +33,9 @@ APlayer::APlayer()
 	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, 0.0f });
 	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
 
+	PlayerRenderer->SetAutoScaleRatio(2.0f);
+	ArmRenderer->SetAutoScaleRatio(2.0f);
+
 	PlayerCamera = GetWorld()->GetCamera(0);
 	PlayerCamera->AttachToActor(this);
 }

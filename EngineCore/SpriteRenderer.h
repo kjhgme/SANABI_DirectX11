@@ -108,6 +108,11 @@ public:
 		CurAnimationSpeed = 1.0f;
 	}
 
+	void AddUVPlusValue(float4 _Value)
+	{
+		UVValue.PlusUVValue += _Value;
+	}
+
 	ResultColor ColorData;
 	FUVValue UVValue;
 	FSpriteData SpriteData;
