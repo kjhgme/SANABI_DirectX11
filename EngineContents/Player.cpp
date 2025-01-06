@@ -3,8 +3,9 @@
 #include "ContentsEnum.h"
 
 #include <EnginePlatform/EngineInput.h>
-#include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/DefaultSceneComponent.h>
+#include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/CameraActor.h>
 
 APlayer::APlayer()
 {
@@ -27,6 +28,12 @@ APlayer::APlayer()
 
 	ArmRenderer->SetRelativeScale3D({ 1.0f, 1.0f, 1.0f });
 	ArmRenderer->SetupAttachment(RootComponent);
+
+	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, 0.0f });
+	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
+
+	PlayerCamera = GetWorld()->GetCamera(0);
+	PlayerCamera->AttachToActor(this);
 }
 
 APlayer::~APlayer()
@@ -152,34 +159,34 @@ void APlayer::SetArmPosition()
 {
 	if (IsIdle == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ -16.f, 8.f, 0.f });
+			ArmRenderer->SetRelativeLocation({ -16.f, 8.f, -1.f });
 		}
 		else if(IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 8.f, 0.f });
+			ArmRenderer->SetRelativeLocation({ 16.f, 8.f, -1.f });
 		}
 	}
 	else if (IsWalking == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 8.f, 0.f });
+			ArmRenderer->SetRelativeLocation({ 16.f, 8.f, -1.f });
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ -16.f, 8.f, 0.f });
+			ArmRenderer->SetRelativeLocation({ -16.f, 8.f, -1.f });
 		}
 	}
 	else if (IsRunning == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ -16.f, 15.f, 0.f });
+			ArmRenderer->SetRelativeLocation({ -16.f, 15.f, -1.f });
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 15.f, 0.f });
+			ArmRenderer->SetRelativeLocation({ 16.f, 15.f, -1.f });
 		}
 	}
 	else if (IsJumping == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 8.f, 0.f });
+			ArmRenderer->SetRelativeLocation({ 16.f, 8.f, -1.f });
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 15.f, 0.f });
+			ArmRenderer->SetRelativeLocation({ 16.f, 15.f, -1.f });
 		}
 	}
 }

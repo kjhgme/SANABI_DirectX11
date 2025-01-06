@@ -10,6 +10,7 @@
 
 #include "TitleGameMode.h"
 #include "InGameMode.h"
+#include "BossGameMode.h"
 #include "EndingGameMode.h"
 
 CreateContentsCoreDefine(UContentsCore);
@@ -55,6 +56,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	// BackGround
 	{
 		LoadFolder("BackGround/PRLG_BG");
+		LoadFolder("BackGround/BOSS_BG");
 	}
 	// SNB
 	{
@@ -97,8 +99,9 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	UEngineCore::CreateLevel<AInGameMode, APawn>("InGameLevel");
+	UEngineCore::CreateLevel<ABossGameMode, APawn>("BossGameLevel");
 	UEngineCore::CreateLevel<AEndingGameMode, APawn>("EndingGameLevel");
-	UEngineCore::OpenLevel("InGameLevel");
+	UEngineCore::OpenLevel("BossGameLevel");
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)
