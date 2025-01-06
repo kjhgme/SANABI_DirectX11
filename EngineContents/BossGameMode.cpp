@@ -11,6 +11,8 @@ ABossGameMode::ABossGameMode()
 	BackGround = GetWorld()->SpawnActor<ABossBackGround>();
 	Player = GetWorld()->SpawnActor<APlayer>();
 
+	BackGround->AttachToActor(Player.get());
+
 	MainCamera = GetWorld()->GetMainCamera();
 	MainCamera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
@@ -28,4 +30,6 @@ void ABossGameMode::BeginPlay()
 void ABossGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+
+	Player->AddRelativeLocation({ _DeltaTime * 100.0f, 0.0f, 0.0f });
 }

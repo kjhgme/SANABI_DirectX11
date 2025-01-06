@@ -49,6 +49,8 @@ void APlayer::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	UEngineCore::GetMainWindow().GetMousePos();
+
 	PlayerMove(_DeltaTime);
 	SetArmPosition();
 

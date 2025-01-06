@@ -23,5 +23,6 @@ private:
 	std::shared_ptr<class USpriteRenderer> BG_Building1_Renderer;
 	std::shared_ptr<class USpriteRenderer> BG_Building2_Renderer;
 
+	std::shared_ptr<class ACameraActor> Camera;
 };
 
