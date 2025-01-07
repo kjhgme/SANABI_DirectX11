@@ -19,7 +19,7 @@ void USceneComponent::BeginPlay()
 	}
 }
 
-ENGINEAPI void USceneComponent::ComponentTick(float _DeltaTime)
+void USceneComponent::ComponentTick(float _DeltaTime)
 {
 	UActorComponent::ComponentTick(_DeltaTime);
 

@@ -74,11 +74,11 @@ void APlayer::Tick(float _DeltaTime)
 	{
 		PlayerText = GetWorld()->SpawnActor<ATextBubble>();
 	}
-	if (UEngineInput::IsDown('E'))
+	/*if (UEngineInput::IsDown('E'))
 	{
 		PlayerText->Destroy();
 		PlayerText = nullptr;
-	}
+	}*/
 
 	if (PlayerText != nullptr)
 	{

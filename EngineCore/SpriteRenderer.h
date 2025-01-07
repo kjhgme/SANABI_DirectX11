@@ -89,7 +89,7 @@ public:
 	}
 
 	// Function
-	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, float Time = 0.1f, bool _Loop = true);
+	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, float Time = 0.2f, bool _Loop = true);
 	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, int _Start, int _End, float Time = 0.1f, bool _Loop = true);
 	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, std::vector<float> _Frame, bool _Loop = true);
 	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, float _Frame, bool _Loop = true);

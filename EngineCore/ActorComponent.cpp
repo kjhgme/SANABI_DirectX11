@@ -11,12 +11,12 @@ UActorComponent::~UActorComponent()
 {
 }
 
-class AActor* UActorComponent::GetActor()
+AActor* UActorComponent::GetActor()
 {
 	return Actor;
 }
 
-class ULevel* UActorComponent::GetWorld()
+ULevel* UActorComponent::GetWorld()
 {
 	return Actor->GetWorld();
 }
