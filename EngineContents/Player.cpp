@@ -140,7 +140,7 @@ void APlayer::InitPlayerAnimation()
 		PlayerRenderer->CreateAnimation("SNB_Boss_005_LookBackgroundLoop", "SNB_Boss_005_LookBackgroundLoop");
 		PlayerRenderer->CreateAnimation("SNB_Boss_006_LookBackgroundEnd", "SNB_Boss_006_LookBackgroundEnd", false);
 
-		ArmRenderer->CreateAnimation("SNB_Arm_NoImage", "SNB_Arm_NoImage");
+		ArmRenderer->CreateAnimation("SNB_Arm_NoImage", "SNB_Arm_NoImage", false);
 	}
 }
 
@@ -207,12 +207,12 @@ void APlayer::PlayerMove(float _DeltaTime)
 
 void APlayer::SetAnimation(std::string_view _Anim)
 {
-	PlayerRenderer->ChangeAnimation(_Anim);
-
 	if (false == ArmRenderer->ChangeAnimation("Arm" + std::string(_Anim)))
 	{
 		ArmRenderer->ChangeAnimation("SNB_Arm_NoImage");
 	}
+
+	PlayerRenderer->ChangeAnimation(_Anim);
 }
 
 void APlayer::SetArmPosition()
