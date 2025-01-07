@@ -123,7 +123,20 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 		// BossAnimation
 		{
 			LoadFolder("Mari/BossStage/001_TrainOnHarmonicaPlay");
-
+			LoadFolder("Mari/BossStage/002_TrainOnHarmonicaPlayEndLoop");
+			LoadFolder("Mari/BossStage/003_TrainOnHarmonicaEnd");
+			LoadFolder("Mari/BossStage/004_TrainOnLoop");
+			LoadFolder("Mari/BossStage/005_TrainOnMindBreakStart");
+			LoadFolder("Mari/BossStage/006_TrainOnMindBreakLoop");
+			LoadFolder("Mari/BossStage/007_TrainOnMindBreakEnd");
+			LoadFolder("Mari/BossStage/009_TrainOn2Idle");
+			LoadFolder("Mari/BossStage/010_LookBackgroundStart");
+			LoadFolder("Mari/BossStage/011_LookBackgroundLoop");
+			LoadFolder("Mari/BossStage/012_LookBackgroundEnd");
+			LoadFolder("Mari/BossStage/013_Idle");
+			LoadFolder("Mari/BossStage/014_AltDrone »ý±è");
+			LoadFolder("Mari/BossStage/015_AltDroneRideStart");
+			LoadFolder("Mari/BossStage/016_AltDroneRideCloakStart");
 		}
 	}
 
