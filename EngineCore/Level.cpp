@@ -86,6 +86,30 @@ void ULevel::Render(float _DeltaTime)
 	UEngineCore::GetDevice().RenderEnd();
 }
 
+void ULevel::Collision(float _DeltaTime)
+{
+	for (std::pair<const std::string, std::list<std::string>>& Links : CollisionLinks)
+	{
+		const std::string& LeftProfile = Links.first;
+
+		std::list<std::string>& LinkSecond = Links.second;
+
+		for (std::string& RightProfile : LinkSecond)
+		{
+			std::list<std::shared_ptr<class UCollision>>& LeftList = CheckCollisions[LeftProfile];
+			std::list<std::shared_ptr<class UCollision>>& RightList = Collisions[RightProfile];
+
+			for (std::shared_ptr<class UCollision>& LeftCollision : LeftList)
+			{
+				for (std::shared_ptr<class UCollision>& RightCollision : RightList)
+				{
+					LeftCollision->CollisionEventCheck(RightCollision);
+				}
+			}
+		}
+	}
+}
+
 std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
 {
 	std::shared_ptr<ACameraActor> Camera = std::make_shared<ACameraActor>();
@@ -121,19 +145,37 @@ void ULevel::ChangeCollisionProfileName(std::string_view _ProfileName, std::stri
 		return;
 	}
 
+	std::string PrevUpperName = UEngineString::ToUpper(_PrevProfileName);
+
 	if (_PrevProfileName != "")
 	{
 		std::list<std::shared_ptr<UCollision>>& PrevCollisionGroup = Collisions[_PrevProfileName];
 		PrevCollisionGroup.remove(_Collision);
 	}
 
-	std::list<std::shared_ptr<UCollision>>& CollisionGroup = Collisions[_ProfileName];
+	std::string UpperName = UEngineString::ToUpper(_ProfileName);
+
+	std::list<std::shared_ptr<UCollision>>& CollisionGroup = Collisions[UpperName];
 	CollisionGroup.push_back(_Collision);
 }
 
 void ULevel::CreateCollisionProfile(std::string_view _ProfileName)
 {
-	Collisions[_ProfileName];
+	std::string UpperName = UEngineString::ToUpper(_ProfileName);
+
+	Collisions[UpperName];
+}
+
+void ULevel::PushCollisionProfileEvent(std::shared_ptr<class URenderer> _Renderer)
+{
+}
+
+void ULevel::LinkCollisionProfile(std::string_view _LeftProfileName, std::string_view _RightProfileName)
+{
+	std::string LeftUpperName = UEngineString::ToUpper(_LeftProfileName);
+	std::string RightUpperName = UEngineString::ToUpper(_RightProfileName);
+
+	CollisionLinks[LeftUpperName].push_back(RightUpperName);
 }
 
 void ULevel::Release(float _DeltaTime)
