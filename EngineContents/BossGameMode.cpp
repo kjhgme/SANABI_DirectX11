@@ -12,6 +12,11 @@
 
 ABossGameMode::ABossGameMode()
 {
+	GetWorld()->CreateCollisionProfile("Player");
+	GetWorld()->CreateCollisionProfile("Monster");
+	GetWorld()->CreateCollisionProfile("BossPlatform");
+	GetWorld()->LinkCollisionProfile("Player", "BossPlatform");
+
 	BackGround = GetWorld()->SpawnActor<ABossBackGround>();
 	
 	Platforms.resize(7);

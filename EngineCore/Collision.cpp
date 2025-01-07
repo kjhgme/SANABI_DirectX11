@@ -31,8 +31,10 @@ void UCollision::SetCollisionProfileName(std::string_view _ProfileName)
 		return;
 	}
 
+	std::string UpperName = UEngineString::ToUpper(_ProfileName);
+
 	std::string PrevProfileName = GetCollisionProfileName();
-	ProfileName = _ProfileName;
+	ProfileName = UpperName;
 	ULevel* Level = GetActor()->GetWorld();
 
 	std::shared_ptr<UCollision> ThisPtr = GetThis<UCollision>();

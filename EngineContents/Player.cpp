@@ -6,6 +6,7 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/CameraActor.h>
+#include <EngineCore/Collision.h>
 #include "TextBubble.h"
 
 APlayer::APlayer()
@@ -38,6 +39,18 @@ APlayer::~APlayer()
 void APlayer::BeginPlay()
 {
 	AActor::BeginPlay();
+
+	Collision = CreateDefaultSubObject<UCollision>();
+	Collision->SetupAttachment(RootComponent);
+	Collision->SetCollisionProfileName("Player");
+	Collision->SetRelativeLocation({ { 0.0f, 20.0f, 0.0f } });
+	Collision->SetScale3D({ 18.0f, 38.0f });
+
+	/*Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
+		{
+			_Other->GetActor()->Destroy();
+			UEngineDebug::OutPutString("Enter");
+		});*/
 }
 
 void APlayer::Tick(float _DeltaTime)

@@ -3,6 +3,7 @@
 
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/DefaultSceneComponent.h>
+#include <EngineCore/Collision.h>
 
 ABossPlatform::ABossPlatform()
 {
@@ -19,10 +20,22 @@ ABossPlatform::ABossPlatform()
 	PlatformBoosterRenderer->ChangeAnimation("BossPlatform_A_BoosterLoop");
 
 	PlatformBoxRenderer->SetRelativeLocation({ 0.0f, -100.0f, 1.0f });
-	PlatformBoosterRenderer->SetRelativeLocation({ 4.0f, -142.0f, 2.0f });
+	PlatformBoosterRenderer->SetRelativeLocation({ 0.0f, -142.0f, 2.0f });
 
 	PlatformBoxRenderer->SetupAttachment(RootComponent);
 	PlatformBoosterRenderer->SetupAttachment(RootComponent);
+
+	Collision = CreateDefaultSubObject<UCollision>();
+	Collision->SetupAttachment(RootComponent);
+	Collision->SetCollisionProfileName("BossPlatform");
+	Collision->SetRelativeLocation({ { 0.0f, -48.0f, 0.0f } });
+	Collision->SetScale3D({ 255.0f, 116.0f });
+
+	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
+		{
+			_Other->GetActor()->Destroy();
+			UEngineDebug::OutPutString("Enter");
+		});
 }
 
 ABossPlatform::~ABossPlatform()

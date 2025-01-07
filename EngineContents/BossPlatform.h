@@ -19,5 +19,6 @@ protected:
 private:
 	std::shared_ptr<class USpriteRenderer> PlatformBoxRenderer;
 	std::shared_ptr<class USpriteRenderer> PlatformBoosterRenderer;
+	std::shared_ptr<class UCollision> Collision;
 };
 

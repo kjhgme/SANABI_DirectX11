@@ -24,6 +24,8 @@ protected:
 private:
 	std::shared_ptr<class USpriteRenderer> PlayerRenderer;
 	std::shared_ptr<class USpriteRenderer> ArmRenderer;
+	std::shared_ptr<class UCollision> Collision;
+
 	std::shared_ptr<class ACameraActor> PlayerCamera;
 	std::shared_ptr<class ATextBubble> PlayerText;
 
