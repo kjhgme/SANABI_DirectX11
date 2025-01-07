@@ -1,22 +1,25 @@
 #include "PreCompile.h"
 #include "BossGameMode.h"
 
+#include <EnginePlatform/EngineInput.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/SpriteRenderer.h>
 #include "Player.h"
 #include "BossBackGround.h"
+#include "BossPlatform.h"
 #include "TextBubble.h"
 
 ABossGameMode::ABossGameMode()
 {
 	BackGround = GetWorld()->SpawnActor<ABossBackGround>();
+	Platforms = GetWorld()->SpawnActor<ABossPlatform>();
 	Player = GetWorld()->SpawnActor<APlayer>();
-
+	
 	BackGround->AttachToActor(Player.get());
 
 	MainCamera = GetWorld()->GetMainCamera();
-	MainCamera->SetActorLocation({ 0.0f, 0.0f, -500.0f, 1.0f });
+	MainCamera->SetActorLocation({ 0.0f, 0.0f, -200.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 }
 
@@ -45,4 +48,14 @@ void ABossGameMode::Tick(float _DeltaTime)
 	BackGround->GetBG_Boss_Building2_Renderer().get()->AddUVPlusValue({ DeltaPosition.X * 0.0008f, 0.0f, 0.0f, 1.0f });
 
 	LastPlayerPosition = CurrentPlayerPosition;
+
+	Scene();
+}
+
+void ABossGameMode::Scene()
+{
+	if (UEngineInput::IsPress(VK_SPACE))
+	{
+
+	}
 }

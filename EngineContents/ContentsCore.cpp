@@ -62,6 +62,11 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	{
 		LoadFolder("Title");
 	}
+	// BOSS
+	{
+		LoadFolder("BOSS/BossPlatform/BossPlatform_A_Idle");
+		LoadFolder("BOSS/BossPlatform/BossPlatform_A_BoosterLoop");
+	}
 	// Ending
 	{
 		LoadFolder("Ending/BadEnding");

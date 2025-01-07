@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineCore/Actor.h>
+#include <EngineCore/Pawn.h>
 
 class APlayer : public APawn
 {

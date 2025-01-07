@@ -42,6 +42,9 @@
     <ClInclude Include="Player.h">
       <Filter>Global</Filter>
     </ClInclude>
+    <ClInclude Include="BossPlatform.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -81,6 +84,9 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="BossPlatform.cpp">
+      <Filter>Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
