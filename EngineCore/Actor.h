@@ -68,6 +68,11 @@ public:
 		return RootComponent->GetTransformRef();
 	}
 
+	FVector GetActorLocation()
+	{
+		return RootComponent->Transform.WorldLocation;
+	}
+
 	ENGINEAPI FVector GetActorUpVector();
 	ENGINEAPI FVector GetActorRightVector();
 	ENGINEAPI FVector GetActorForwardVector();

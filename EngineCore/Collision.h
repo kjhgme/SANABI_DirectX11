@@ -38,6 +38,8 @@ public:
 	ENGINEAPI void SetCollisionStay(std::function<void(UCollision*, UCollision*)> _Function);
 	ENGINEAPI void SetCollisionEnd(std::function<void(UCollision*, UCollision*)> _Function);
 
+	ENGINEAPI void DebugRender(UEngineCamera* _Camera, float _DeltaTime);
+
 	bool IsEvent()
 	{
 		return Enter != nullptr || Stay != nullptr || End != nullptr;

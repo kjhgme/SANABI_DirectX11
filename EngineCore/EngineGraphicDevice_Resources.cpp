@@ -24,13 +24,25 @@ void UEngineGraphicDevice::DefaultResourcesInit()
 
 void UEngineGraphicDevice::DepthStencilInit()
 {
-	D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
-	Desc.DepthEnable = true;
-	Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	Desc.DepthFunc = D3D11_COMPARISON_LESS;
-	Desc.StencilEnable = false;
+	{
+		D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
+		Desc.DepthEnable = true;
+		Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		Desc.DepthFunc = D3D11_COMPARISON_LESS;
+		Desc.StencilEnable = false;
 
-	UEngineDepthStencilState::Create("BaseDepth", Desc);
+		UEngineDepthStencilState::Create("BaseDepth", Desc);
+	}
+
+	{
+		D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
+		Desc.DepthEnable = true;
+		Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		Desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+		Desc.StencilEnable = false;
+
+		UEngineDepthStencilState::Create("CollisionDebugDepth", Desc);
+	}
 }
 
 void UEngineGraphicDevice::MeshInit()
@@ -102,15 +114,34 @@ void UEngineGraphicDevice::MaterialInit()
 		Mat->SetVertexShader("EngineSpriteShader.fx");
 		Mat->SetPixelShader("EngineSpriteShader.fx");
 	}
+
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("CollisionDebugMaterial");
+		Mat->SetVertexShader("EngineDebugCollisionShader.fx");
+		Mat->SetPixelShader("EngineDebugCollisionShader.fx");
+
+		Mat->SetDepthStencilState("CollisionDebugDepth");
+		Mat->SetRasterizerState("CollisionDebugRas");
+	}
 }
 
 void UEngineGraphicDevice::RasterizerStateInit()
 {
-	D3D11_RASTERIZER_DESC Desc = {};
-	Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
-	Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+	{
+		D3D11_RASTERIZER_DESC Desc = {};
+		Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+		Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 
-	UEngineRasterizerState::Create("EngineBase", Desc);
+		UEngineRasterizerState::Create("EngineBase", Desc);
+	}
+
+	{
+		D3D11_RASTERIZER_DESC Desc = {};
+		Desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
+		Desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
+
+		UEngineRasterizerState::Create("CollisionDebugRas", Desc);
+	}
 }
 
 void UEngineGraphicDevice::TextureInit()

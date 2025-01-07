@@ -5,6 +5,7 @@ UEngineMaterial::UEngineMaterial()
 {
 	SetRasterizerState("EngineBase");
 	SetBlend("AlphaBlend");
+	SetDepthStencilState("BaseDepth");
 }
 
 UEngineMaterial::~UEngineMaterial()
@@ -67,6 +68,16 @@ std::shared_ptr<UEngineMaterial> UEngineMaterial::Create(std::string_view _Name)
 	std::shared_ptr<UEngineMaterial> NewRes = std::make_shared<UEngineMaterial>();
 	PushRes<UEngineMaterial>(NewRes, _Name, "");
 	return NewRes;
+}
+
+ENGINEAPI void UEngineMaterial::SetDepthStencilState(std::string_view _Name)
+{
+	DepthState = UEngineDepthStencilState::Find<UEngineDepthStencilState>(_Name);
+
+	if (nullptr == RasterizerState)
+	{
+		MSGASSERT("RasterizerState is nullptr.");
+	}
 }
 
 void UEngineMaterial::PrimitiveTopologySetting()

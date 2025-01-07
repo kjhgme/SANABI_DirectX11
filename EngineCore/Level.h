@@ -86,7 +86,7 @@ private:
 	std::list<std::shared_ptr<class AActor>> BeginPlayList;
 	std::list<std::shared_ptr<class AActor>> AllActorList;
 	std::map<int, std::shared_ptr<class ACameraActor>> Cameras;
-	std::map<std::string_view, std::list<std::shared_ptr<class UCollision>>> Collisions;
+	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> Collisions;
 	std::map<std::string, std::list<std::shared_ptr<class UCollision>>> CheckCollisions;
 	std::map<std::string, std::list<std::string>> CollisionLinks;
 };

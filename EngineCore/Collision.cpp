@@ -41,15 +41,17 @@ void UCollision::SetCollisionProfileName(std::string_view _ProfileName)
 
 bool UCollision::CollisionCheck(std::string_view _OtherName, std::vector<UCollision*>& _Vector)
 {
-	std::map<std::string_view, std::list<std::shared_ptr<class UCollision>>>& Collision = GetWorld()->Collisions;
+	std::string UpperName = UEngineString::ToUpper(_OtherName);
 
-	if (false == Collision.contains(_OtherName))
+	std::map<std::string, std::list<std::shared_ptr<class UCollision>>>& Collision = GetWorld()->Collisions;
+
+	if (false == Collision.contains(UpperName))
 	{
-		MSGASSERT(std::string(_OtherName) + " is not collision group's name");
+		MSGASSERT(std::string(UpperName) + " is not collision group's name");
 		return false;
 	}
 
-	std::list<std::shared_ptr<class UCollision>>& Group = Collision[_OtherName];
+	std::list<std::shared_ptr<class UCollision>>& Group = Collision[UpperName];
 
 	for (std::shared_ptr<class UCollision>& OtherCol : Group)
 	{
@@ -164,5 +166,28 @@ void UCollision::SetCollisionEnd(std::function<void(UCollision*, UCollision*)> _
 	ULevel* Level = GetActor()->GetWorld();
 	std::shared_ptr<UCollision> ThisPtr = GetThis<UCollision>();
 	Level->CheckCollisions[GetCollisionProfileName()].push_back(ThisPtr);
+}
+
+
+void UCollision::DebugRender(UEngineCamera* _Camera, float _DeltaTime)
+{
+	URenderUnit Unit;
+
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+
+	RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+
+	Unit.SetMesh("Rect");
+	Unit.SetMaterial("CollisionDebugMaterial");
+
+
+	Unit.ConstantBufferLinkData("FTransform", GetTransformRef());
+	FVector Color = { 0.0f, 1.0f, 0.0f };
+	Unit.ConstantBufferLinkData("OutColor", Color);
+
+	Unit.Render(_Camera, _DeltaTime);
 
 }

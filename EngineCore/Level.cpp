@@ -83,6 +83,25 @@ void ULevel::Render(float _DeltaTime)
 		Camera.second->GetCameraComponent()->Render(_DeltaTime);
 	}
 
+	{
+		std::shared_ptr<class ACameraActor> Camera = GetMainCamera();
+
+		for (std::pair<const std::string, std::list<std::shared_ptr<UCollision>>>& Group : Collisions)
+		{
+			std::list<std::shared_ptr<UCollision>>& List = Group.second;
+
+			for (std::shared_ptr<UCollision>& _Collision : List)
+			{
+				if (false == _Collision->IsActive())
+				{
+					continue;
+				}
+
+				_Collision->DebugRender(Camera->GetCameraComponent().get(), _DeltaTime);
+			}
+		}
+	}
+
 	UEngineCore::GetDevice().RenderEnd();
 }
 
@@ -139,7 +158,7 @@ void ULevel::ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::share
 
 void ULevel::ChangeCollisionProfileName(std::string_view _ProfileName, std::string_view _PrevProfileName, std::shared_ptr<class UCollision> _Collision)
 {
-	if (false == Collisions.contains(_ProfileName))
+	if (false == Collisions.contains(_ProfileName.data()))
 	{
 		MSGASSERT(std::string(_ProfileName) + " is not Collision Group.");
 		return;
@@ -149,7 +168,7 @@ void ULevel::ChangeCollisionProfileName(std::string_view _ProfileName, std::stri
 
 	if (_PrevProfileName != "")
 	{
-		std::list<std::shared_ptr<UCollision>>& PrevCollisionGroup = Collisions[_PrevProfileName];
+		std::list<std::shared_ptr<UCollision>>& PrevCollisionGroup = Collisions[PrevUpperName];
 		PrevCollisionGroup.remove(_Collision);
 	}
 
@@ -186,7 +205,7 @@ void ULevel::Release(float _DeltaTime)
 	}
 
 	{
-		for (std::pair<const std::string_view, std::list<std::shared_ptr<UCollision>>>& Group : Collisions)
+		for (std::pair<const std::string, std::list<std::shared_ptr<UCollision>>>& Group : Collisions)
 		{
 			std::list<std::shared_ptr<UCollision>>& List = Group.second;
 

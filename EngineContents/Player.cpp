@@ -64,6 +64,7 @@ void APlayer::Tick(float _DeltaTime)
 		PlayerRenderer->ChangeAnimation("Jumping");
 		ArmRenderer->ChangeAnimation("ArmJumping");
 	}
+
 	/*if (UEngineInput::IsDown('Q'))
 	{
 		PlayerText = GetWorld()->SpawnActor<ATextBubble>();
@@ -84,14 +85,17 @@ void APlayer::InitPlayerAnimation()
 {
 	PlayerRenderer->CreateAnimation("Idle", "SNB_Idle");
 	ArmRenderer->CreateAnimation("ArmIdle", "SNB_Arm_Idle");
+
 	PlayerRenderer->CreateAnimation("Walking", "SNB_Walking");
 	ArmRenderer->CreateAnimation("ArmWalking", "SNB_Arm_Walking");
+
 	PlayerRenderer->CreateAnimation("RunStart", "SNB_RunStart");
 	ArmRenderer->CreateAnimation("ArmRunStart", "SNB_Arm_RunStart");
 	PlayerRenderer->CreateAnimation("Running", "SNB_Running");
 	ArmRenderer->CreateAnimation("ArmRunning", "SNB_Arm_Running");
 	PlayerRenderer->CreateAnimation("RunStop", "SNB_RunStop");
 	ArmRenderer->CreateAnimation("ArmRunStop", "SNB_Arm_RunStop");
+
 	PlayerRenderer->CreateAnimation("Jumping", "SNB_Jumping");
 	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Jumping");
 	PlayerRenderer->CreateAnimation("Jumping", "SNB_FallStart");
@@ -100,8 +104,10 @@ void APlayer::InitPlayerAnimation()
 	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Falling");
 	PlayerRenderer->CreateAnimation("Jumping", "SNB_Landing");
 	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Landing");
+
 	PlayerRenderer->CreateAnimation("Jumping", "SNB_Land2Run");
 	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Land2Run");
+
 	PlayerRenderer->CreateAnimation("Swing", "SNB_Swing");
 	PlayerRenderer->CreateAnimation("SwingJump", "SNB_SwingJump");
 	ArmRenderer->CreateAnimation("ArmJSwingJump", "SNB_Arm_SwingJump");
@@ -186,10 +192,10 @@ void APlayer::SetArmPosition()
 	}
 	else if (IsRunning == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ -8.f, 7.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation({ -8.f, 8.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 8.f, 7.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation({ 8.f, 8.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 	}
 	else if (IsJumping == true) {
@@ -197,7 +203,7 @@ void APlayer::SetArmPosition()
 			ArmRenderer->SetRelativeLocation({ 8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 8.f, 7.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation({ 8.f, 8.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 	}
 }
