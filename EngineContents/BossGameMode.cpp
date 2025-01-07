@@ -13,7 +13,8 @@
 ABossGameMode::ABossGameMode()
 {
 	GetWorld()->CreateCollisionProfile("Player");
-	GetWorld()->CreateCollisionProfile("Monster");
+	GetWorld()->CreateCollisionProfile("Arm");
+	GetWorld()->CreateCollisionProfile("Boss");
 	GetWorld()->CreateCollisionProfile("BossPlatform");
 	GetWorld()->LinkCollisionProfile("Player", "BossPlatform");
 

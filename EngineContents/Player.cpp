@@ -46,11 +46,11 @@ void APlayer::BeginPlay()
 	Collision->SetRelativeLocation({ { 0.0f, 20.0f, 0.0f } });
 	Collision->SetScale3D({ 18.0f, 38.0f });
 
-	/*Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
+	Collision->SetCollisionEnter([this](UCollision* _This, UCollision* _Other)
 		{
-			_Other->GetActor()->Destroy();
+			Gravity = 0.0f;
 			UEngineDebug::OutPutString("Enter");
-		});*/
+		});
 }
 
 void APlayer::Tick(float _DeltaTime)
@@ -96,40 +96,50 @@ void APlayer::Tick(float _DeltaTime)
 
 void APlayer::InitPlayerAnimation()
 {
-	PlayerRenderer->CreateAnimation("Idle", "SNB_Idle");
-	ArmRenderer->CreateAnimation("ArmIdle", "SNB_Arm_Idle");
+	// Base
+	{
+		PlayerRenderer->CreateAnimation("Idle", "SNB_Idle");
+		ArmRenderer->CreateAnimation("ArmIdle", "SNB_Arm_Idle");
 
-	PlayerRenderer->CreateAnimation("Walking", "SNB_Walking");
-	ArmRenderer->CreateAnimation("ArmWalking", "SNB_Arm_Walking");
+		PlayerRenderer->CreateAnimation("Walking", "SNB_Walking");
+		ArmRenderer->CreateAnimation("ArmWalking", "SNB_Arm_Walking");
 
-	PlayerRenderer->CreateAnimation("RunStart", "SNB_RunStart");
-	ArmRenderer->CreateAnimation("ArmRunStart", "SNB_Arm_RunStart");
-	PlayerRenderer->CreateAnimation("Running", "SNB_Running");
-	ArmRenderer->CreateAnimation("ArmRunning", "SNB_Arm_Running");
-	PlayerRenderer->CreateAnimation("RunStop", "SNB_RunStop");
-	ArmRenderer->CreateAnimation("ArmRunStop", "SNB_Arm_RunStop");
+		PlayerRenderer->CreateAnimation("RunStart", "SNB_RunStart");
+		ArmRenderer->CreateAnimation("ArmRunStart", "SNB_Arm_RunStart");
+		PlayerRenderer->CreateAnimation("Running", "SNB_Running");
+		ArmRenderer->CreateAnimation("ArmRunning", "SNB_Arm_Running");
+		PlayerRenderer->CreateAnimation("RunStop", "SNB_RunStop");
+		ArmRenderer->CreateAnimation("ArmRunStop", "SNB_Arm_RunStop");
 
-	PlayerRenderer->CreateAnimation("Jumping", "SNB_Jumping");
-	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Jumping");
-	PlayerRenderer->CreateAnimation("Jumping", "SNB_FallStart");
-	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_FallStart");
-	PlayerRenderer->CreateAnimation("Jumping", "SNB_Falling");
-	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Falling");
-	PlayerRenderer->CreateAnimation("Jumping", "SNB_Landing");
-	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Landing");
+		PlayerRenderer->CreateAnimation("Jumping", "SNB_Jumping");
+		ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Jumping");
+		PlayerRenderer->CreateAnimation("FallStart", "SNB_FallStart");
+		ArmRenderer->CreateAnimation("ArmFallStart", "SNB_Arm_FallStart");
+		PlayerRenderer->CreateAnimation("Falling", "SNB_Falling");
+		ArmRenderer->CreateAnimation("ArmFalling", "SNB_Arm_Falling");
+		PlayerRenderer->CreateAnimation("Landing", "SNB_Landing");
+		ArmRenderer->CreateAnimation("ArmLanding", "SNB_Arm_Landing");
+		PlayerRenderer->CreateAnimation("Land2Run", "SNB_Land2Run");
+		ArmRenderer->CreateAnimation("ArmLand2Run", "SNB_Arm_Land2Run");
 
-	PlayerRenderer->CreateAnimation("Jumping", "SNB_Land2Run");
-	ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Land2Run");
+		PlayerRenderer->CreateAnimation("Swing", "SNB_Swing");
+		PlayerRenderer->CreateAnimation("SwingJump", "SNB_SwingJump");
+		ArmRenderer->CreateAnimation("ArmJSwingJump", "SNB_Arm_SwingJump");
+		PlayerRenderer->CreateAnimation("SwingJumpUp", "SNB_SwingJumpUp");
+		ArmRenderer->CreateAnimation("ArmSwingJumpUp", "SNB_Arm_SwingJumpUp");
+	}
+	// BossAnim
+	{
 
-	PlayerRenderer->CreateAnimation("Swing", "SNB_Swing");
-	PlayerRenderer->CreateAnimation("SwingJump", "SNB_SwingJump");
-	ArmRenderer->CreateAnimation("ArmJSwingJump", "SNB_Arm_SwingJump");
-	PlayerRenderer->CreateAnimation("SwingJumpUp", "SNB_SwingJumpUp");
-	ArmRenderer->CreateAnimation("ArmSwingJumpUp", "SNB_Arm_SwingJumpUp");
+	}
 }
 
 void APlayer::PlayerMove(float _DeltaTime)
 {
+	PlayerRenderer->AddRelativeLocation({ 0.0f, _DeltaTime * -Gravity, 0.0f });
+	ArmRenderer->AddRelativeLocation({ 0.0f, _DeltaTime * -Gravity, 0.0f });
+	Collision->AddRelativeLocation({ 0.0f, _DeltaTime * -Gravity, 0.0f });
+
 	if (UEngineInput::IsPress('A'))
 	{
 		IsRight = false;

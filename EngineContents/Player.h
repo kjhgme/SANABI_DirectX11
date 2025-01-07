@@ -35,6 +35,8 @@ private:
 	bool IsRunning = false;
 	bool IsJumping = false;
 
+	float Gravity = 9.8f;
+
 	void SetArmPosition();
 };
 

@@ -23,7 +23,6 @@ UContentsCore::UContentsCore()
 
 		InstallFont(Font);
 	}
-
 }
 
 UContentsCore::~UContentsCore()
@@ -78,19 +77,27 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	}
 	// SNB
 	{
-		LoadFolder("SNB/SNB_Idle");
-		LoadFolder("SNB/SNB_Walking");
-		LoadFolder("SNB/SNB_RunStart");
-		LoadFolder("SNB/SNB_Running");
-		LoadFolder("SNB/SNB_RunStop");
-		LoadFolder("SNB/SNB_Jumping");
-		LoadFolder("SNB/SNB_FallStart");
-		LoadFolder("SNB/SNB_Falling");
-		LoadFolder("SNB/SNB_Landing");
-		LoadFolder("SNB/SNB_Land2Run");
-		LoadFolder("SNB/SNB_Swing");
-		LoadFolder("SNB/SNB_SwingJump");
-		LoadFolder("SNB/SNB_SwingJumpUp");
+		// Base
+		{
+			LoadFolder("SNB/SNB_Idle");
+			LoadFolder("SNB/SNB_Walking");
+			LoadFolder("SNB/SNB_RunStart");
+			LoadFolder("SNB/SNB_Running");
+			LoadFolder("SNB/SNB_RunStop");
+			LoadFolder("SNB/SNB_Jumping");
+			LoadFolder("SNB/SNB_FallStart");
+			LoadFolder("SNB/SNB_Falling");
+			LoadFolder("SNB/SNB_Landing");
+			LoadFolder("SNB/SNB_Land2Run");
+			LoadFolder("SNB/SNB_Swing");
+			LoadFolder("SNB/SNB_SwingJump");
+			LoadFolder("SNB/SNB_SwingJumpUp");
+		}
+
+		// BossAnim
+		{
+
+		}
 	}
 	//SNB Arm
 	{
