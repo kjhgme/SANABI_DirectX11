@@ -28,6 +28,7 @@ private:
 
 	float4 LastPlayerPosition;
 
-	int SceneTakeNum = 0;
+	int SceneTakeNum = 1;
+	bool bPlayNextAnimation = false;
 };
 

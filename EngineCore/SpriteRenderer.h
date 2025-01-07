@@ -94,7 +94,7 @@ public:
 	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, std::vector<float> _Frame, bool _Loop = true);
 	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, std::vector<int> _Indexs, float _Frame, bool _Loop = true);
 	
-	ENGINEAPI void ChangeAnimation(std::string_view _AnimationName, bool _Force = false);
+	ENGINEAPI bool ChangeAnimation(std::string_view _AnimationName, bool _Force = false);
 	
 	ENGINEAPI FrameAnimation* FindAnimation(std::string_view _AnimationName);
 

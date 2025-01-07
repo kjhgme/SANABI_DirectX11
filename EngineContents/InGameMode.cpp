@@ -9,12 +9,15 @@
 
 AInGameMode::AInGameMode()
 {
+	GetWorld()->CreateCollisionProfile("Player");
+	GetWorld()->CreateCollisionProfile("Arm");
+
 	BackGround = GetWorld()->SpawnActor<ABackGround>();
 	Player = GetWorld()->SpawnActor<APlayer>();
 	Daughter = GetWorld()->SpawnActor<ADaughter>();
 
 	MainCamera = GetWorld()->GetMainCamera();
-	MainCamera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
+	MainCamera->SetActorLocation({ 0.0f, 0.0f, -500.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 
 }

@@ -62,8 +62,9 @@ void APlayer::Tick(float _DeltaTime)
 	if (false == SceneMode)
 	{
 		PlayerMove(_DeltaTime);
-		SetArmPosition();
 	}
+
+	SetArmPosition();
 
 	if (UEngineInput::IsPress(VK_SHIFT))
 	{
@@ -138,6 +139,8 @@ void APlayer::InitPlayerAnimation()
 		PlayerRenderer->CreateAnimation("SNB_Boss_004_LookBackgroundStart", "SNB_Boss_004_LookBackgroundStart", false);
 		PlayerRenderer->CreateAnimation("SNB_Boss_005_LookBackgroundLoop", "SNB_Boss_005_LookBackgroundLoop");
 		PlayerRenderer->CreateAnimation("SNB_Boss_006_LookBackgroundEnd", "SNB_Boss_006_LookBackgroundEnd", false);
+
+		ArmRenderer->CreateAnimation("SNB_Arm_NoImage", "SNB_Arm_NoImage");
 	}
 }
 
@@ -206,41 +209,46 @@ void APlayer::SetAnimation(std::string_view _Anim)
 {
 	PlayerRenderer->ChangeAnimation(_Anim);
 
-	ArmRenderer->ChangeAnimation(_Anim);
+	if (false == ArmRenderer->ChangeAnimation("Arm" + std::string(_Anim)))
+	{
+		ArmRenderer->ChangeAnimation("SNB_Arm_NoImage");
+	}
 }
 
 void APlayer::SetArmPosition()
 {
+	FVector PlayerRenPos = PlayerRenderer->GetTransformRef().Location;
+
 	if (IsIdle == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ -8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(-8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
 		}
 		else if(IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
 		}
 	}
 	else if (IsWalking == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ 8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ -8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(-8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
 		}
 	}
 	else if (IsRunning == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ -8.f, 8.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(-8.f, 8.f, static_cast<float>(ERenderOrder::ARM)));
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 8.f, 8.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 8.f, static_cast<float>(ERenderOrder::ARM)));
 		}
 	}
 	else if (IsJumping == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ 8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 8.f, 8.f, static_cast<float>(ERenderOrder::ARM) });
+			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 8.f, static_cast<float>(ERenderOrder::ARM)));
 		}
 	}
 }

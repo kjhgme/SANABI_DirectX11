@@ -17,7 +17,22 @@ public:
 
 	void PlayerMove(float _DeltaTime);
 
+	std::shared_ptr<class USpriteRenderer> GetPlayerRenderer()
+	{
+		return PlayerRenderer;
+	}
+
 	void SetAnimation(std::string_view _Anim);
+
+	bool GetSceneMode()
+	{
+		return SceneMode;
+	}
+
+	void SetSceneMode(bool _Mode)
+	{
+		SceneMode = _Mode;
+	}
 
 protected:
 	void BeginPlay() override;

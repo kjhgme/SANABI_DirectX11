@@ -251,21 +251,21 @@ void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::stri
 
 }
 
-void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _Force /*= false*/)
+bool USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _Force /*= false*/)
 {
 	std::string UpperName = UEngineString::ToUpper(_AnimationName);
 
 	if (false == FrameAnimations.contains(UpperName))
 	{
-		// MSGASSERT(UpperName + " is not exists.");
-		return;
+		// MSGASSERT(UpperName + " is not exists."); // 이 때 Arm만 받는 어떤 리턴값
+		return false;
 	}
 
 	FrameAnimation* ChangeAnimation = &FrameAnimations[UpperName];
 
 	if (CurAnimation == ChangeAnimation && false == _Force)
 	{
-		return;
+		return true;
 	}
 
 	CurAnimation = &FrameAnimations[UpperName];
@@ -283,6 +283,8 @@ void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 		Scale.Z = 1.0f;
 		SetRelativeScale3D(Scale * AutoScaleRatio);
 	}
+
+	return true;
 }
 
 void USpriteRenderer::SetAnimationEvent(std::string_view _AnimationName, int _Frame, std::function<void()> _Function)
