@@ -93,6 +93,22 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			LoadFolder("SNB/SNB_SwingJump");
 			LoadFolder("SNB/SNB_SwingJumpUp");
 		}
+		//SNB Arm
+		{
+			LoadFolder("SNB/SNB_Arm_NoImage");
+			LoadFolder("SNB/SNB_Arm_Idle");
+			LoadFolder("SNB/SNB_Arm_Walking");
+			LoadFolder("SNB/SNB_Arm_RunStart");
+			LoadFolder("SNB/SNB_Arm_Running");
+			LoadFolder("SNB/SNB_Arm_RunStop");
+			LoadFolder("SNB/SNB_Arm_Jumping");
+			LoadFolder("SNB/SNB_Arm_FallStart");
+			LoadFolder("SNB/SNB_Arm_Falling");
+			LoadFolder("SNB/SNB_Arm_Landing");
+			LoadFolder("SNB/SNB_Arm_Land2Run");
+			LoadFolder("SNB/SNB_Arm_SwingJump");
+			LoadFolder("SNB/SNB_Arm_SwingJumpUp");
+		}
 		// BossAnimation
 		{
 			LoadFolder("SNB/BossStage/SNB_Boss_001_TrainOnLoop");
@@ -100,23 +116,15 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			LoadFolder("SNB/BossStage/SNB_Boss_004_LookBackgroundStart");
 			LoadFolder("SNB/BossStage/SNB_Boss_005_LookBackgroundLoop");
 			LoadFolder("SNB/BossStage/SNB_Boss_006_LookBackgroundEnd");
-		}
+		}	
 	}
-	//SNB Arm
+	// Mari
 	{
-		LoadFolder("SNB/SNB_Arm_NoImage");
-		LoadFolder("SNB/SNB_Arm_Idle");
-		LoadFolder("SNB/SNB_Arm_Walking");
-		LoadFolder("SNB/SNB_Arm_RunStart");
-		LoadFolder("SNB/SNB_Arm_Running");
-		LoadFolder("SNB/SNB_Arm_RunStop");
-		LoadFolder("SNB/SNB_Arm_Jumping");
-		LoadFolder("SNB/SNB_Arm_FallStart");
-		LoadFolder("SNB/SNB_Arm_Falling");
-		LoadFolder("SNB/SNB_Arm_Landing");
-		LoadFolder("SNB/SNB_Arm_Land2Run");
-		LoadFolder("SNB/SNB_Arm_SwingJump");
-		LoadFolder("SNB/SNB_Arm_SwingJumpUp");
+		// BossAnimation
+		{
+			LoadFolder("Mari/BossStage/001_TrainOnHarmonicaPlay");
+
+		}
 	}
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");

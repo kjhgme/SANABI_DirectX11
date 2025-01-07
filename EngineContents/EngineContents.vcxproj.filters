@@ -45,6 +45,9 @@
     <ClInclude Include="BossPlatform.h">
       <Filter>Boss</Filter>
     </ClInclude>
+    <ClInclude Include="Mari.h">
+      <Filter>Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -87,6 +90,9 @@
     </ClCompile>
     <ClCompile Include="BossPlatform.cpp">
       <Filter>Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Mari.cpp">
+      <Filter>Global</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
