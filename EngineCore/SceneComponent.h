@@ -14,14 +14,21 @@ public:
 	USceneComponent& operator=(const USceneComponent& _Other) = delete;
 	USceneComponent& operator=(USceneComponent&& _Other) noexcept = delete;
 
+	ENGINEAPI void ComponentTick(float _DeltaTime) override;
+
 	// GetFunction
 	FTransform& GetTransformRef()
 	{
 		return Transform;
 	}
+
+	FVector GetWorldScale3D()
+	{
+		return Transform.WorldScale;
+	}
 	
 	// SetFunction
-	void SetLocation(const FVector& _Value)
+	void SetWorldLocation(const FVector& _Value)
 	{
 		IsAbsolute = true;
 		Transform.Location = _Value;
@@ -50,6 +57,7 @@ public:
 	void SetRelativeScale3D(const FVector& _Scale)
 	{
 		Transform.Scale = _Scale;
+		Transform.Scale.W = 0.0f;
 		TransformUpdate();
 	}
 

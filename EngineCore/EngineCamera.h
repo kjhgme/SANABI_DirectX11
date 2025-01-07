@@ -21,6 +21,7 @@ public:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime);
 	void Render(float _DeltaTime);
+	ENGINEAPI void Release(float _DeltaTime);
 
 	// SetFunction
 	ENGINEAPI void SetFar(float _Value)

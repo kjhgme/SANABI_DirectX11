@@ -110,6 +110,9 @@
     <ClInclude Include="EngineDepthStencilState.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Object\Component\Collision</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -215,6 +218,9 @@
     <ClCompile Include="EngineDepthStencilState.cpp">
       <Filter>Resources</Filter>
     </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Object\Component\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
@@ -279,6 +285,9 @@
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{31a032ba-6073-4574-8b3f-54a5afd0dc1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Component\Collision">
+      <UniqueIdentifier>{868b02a2-68c2-4ce7-9149-843cdf7482dc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,20 @@ void USceneComponent::BeginPlay()
 	}
 }
 
+ENGINEAPI void USceneComponent::ComponentTick(float _DeltaTime)
+{
+	UActorComponent::ComponentTick(_DeltaTime);
+
+	for (std::shared_ptr<USceneComponent> Child : Childs)
+	{
+		if (false == Child->IsActive())
+		{
+			continue;
+		}
+
+		Child->ComponentTick(_DeltaTime);
+	}
+}
  void USceneComponent::SetupAttachment(std::shared_ptr<USceneComponent> _Parent)
 {
 	SetupAttachment(_Parent.get());
