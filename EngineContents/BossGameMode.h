@@ -27,5 +27,7 @@ private:
 	std::shared_ptr<class ACameraActor> MainCamera;
 
 	float4 LastPlayerPosition;
+
+	int SceneTakeNum = 0;
 };
 

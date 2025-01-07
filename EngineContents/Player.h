@@ -17,6 +17,8 @@ public:
 
 	void PlayerMove(float _DeltaTime);
 
+	void SetAnimation(std::string_view _Anim);
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -34,6 +36,8 @@ private:
 	bool IsWalking = true;
 	bool IsRunning = false;
 	bool IsJumping = false;
+
+	bool SceneMode = true;
 
 	float Gravity = 9.8f;
 

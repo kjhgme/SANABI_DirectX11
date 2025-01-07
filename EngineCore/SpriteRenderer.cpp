@@ -158,7 +158,7 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 	}
 }
 
-void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, float Time /*= 0.1f*/, bool _Loop /*= true*/)
+void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, bool _Loop /*= true*/, float Time /*= 0.1f*/)
 {
 	std::shared_ptr<UEngineSprite> FindSprite = UEngineSprite::Find<UEngineSprite>(_SpriteName);
 	
@@ -257,7 +257,7 @@ void USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 
 	if (false == FrameAnimations.contains(UpperName))
 	{
-		MSGASSERT(UpperName + " is not exists.");
+		// MSGASSERT(UpperName + " is not exists.");
 		return;
 	}
 

@@ -59,8 +59,11 @@ void APlayer::Tick(float _DeltaTime)
 
 	UEngineCore::GetMainWindow().GetMousePos();
 
-	PlayerMove(_DeltaTime);
-	SetArmPosition();
+	if (false == SceneMode)
+	{
+		PlayerMove(_DeltaTime);
+		SetArmPosition();
+	}
 
 	if (UEngineInput::IsPress(VK_SHIFT))
 	{
@@ -130,7 +133,11 @@ void APlayer::InitPlayerAnimation()
 	}
 	// BossAnim
 	{
-
+		PlayerRenderer->CreateAnimation("SNB_Boss_001_TrainOnLoop", "SNB_Boss_001_TrainOnLoop");
+		PlayerRenderer->CreateAnimation("SNB_Boss_002_TrainOn2Idle", "SNB_Boss_002_TrainOn2Idle", false);
+		PlayerRenderer->CreateAnimation("SNB_Boss_004_LookBackgroundStart", "SNB_Boss_004_LookBackgroundStart", false);
+		PlayerRenderer->CreateAnimation("SNB_Boss_005_LookBackgroundLoop", "SNB_Boss_005_LookBackgroundLoop");
+		PlayerRenderer->CreateAnimation("SNB_Boss_006_LookBackgroundEnd", "SNB_Boss_006_LookBackgroundEnd", false);
 	}
 }
 
@@ -193,6 +200,13 @@ void APlayer::PlayerMove(float _DeltaTime)
 		PlayerRenderer->ChangeAnimation("Idle");
 		ArmRenderer->ChangeAnimation("ArmIdle");
 	}	
+}
+
+void APlayer::SetAnimation(std::string_view _Anim)
+{
+	PlayerRenderer->ChangeAnimation(_Anim);
+
+	ArmRenderer->ChangeAnimation(_Anim);
 }
 
 void APlayer::SetArmPosition()

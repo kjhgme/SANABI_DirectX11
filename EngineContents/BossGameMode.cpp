@@ -45,6 +45,7 @@ void ABossGameMode::BeginPlay()
 	AActor::BeginPlay();
 
 	LastPlayerPosition = Player.get()->GetActorTransform().Location;
+	Player->SetAnimation("SNB_Boss_001_TrainOnLoop");
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
@@ -62,11 +63,6 @@ void ABossGameMode::Tick(float _DeltaTime)
 
 	LastPlayerPosition = CurrentPlayerPosition;
 
-	Scene(_DeltaTime);
-}
-
-void ABossGameMode::Scene(float _DeltaTime)
-{
 	if (UEngineInput::IsPress('Q'))
 	{
 		MainCamera->AddRelativeLocation({ 0.0f, 0.0f, -100.0f * _DeltaTime, 1.0f });
@@ -74,5 +70,26 @@ void ABossGameMode::Scene(float _DeltaTime)
 	if (UEngineInput::IsPress('E'))
 	{
 		MainCamera->AddRelativeLocation({ 0.0f, 0.0f, 100.0f * _DeltaTime, 1.0f });
+	}
+	if (UEngineInput::IsPress(VK_SPACE))
+	{
+		SceneTakeNum++;
+		Scene(_DeltaTime);
+	}
+}
+
+void ABossGameMode::Scene(float _DeltaTime)
+{
+	switch(SceneTakeNum)
+	{
+	case 0:
+		break;	
+	case 1:
+	{
+		Player->SetAnimation("SNB_Boss_002_TrainOn2Idle");
+		break;
+	}
+	default:
+		break;
 	}
 }

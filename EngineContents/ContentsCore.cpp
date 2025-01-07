@@ -93,14 +93,18 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			LoadFolder("SNB/SNB_SwingJump");
 			LoadFolder("SNB/SNB_SwingJumpUp");
 		}
-
-		// BossAnim
+		// BossAnimation
 		{
-
+			LoadFolder("SNB/BossStage/SNB_Boss_001_TrainOnLoop");
+			LoadFolder("SNB/BossStage/SNB_Boss_002_TrainOn2Idle");
+			LoadFolder("SNB/BossStage/SNB_Boss_004_LookBackgroundStart");
+			LoadFolder("SNB/BossStage/SNB_Boss_005_LookBackgroundLoop");
+			LoadFolder("SNB/BossStage/SNB_Boss_006_LookBackgroundEnd");
 		}
 	}
 	//SNB Arm
 	{
+		LoadFolder("SNB/SNB_Arm_NoImage");
 		LoadFolder("SNB/SNB_Arm_Idle");
 		LoadFolder("SNB/SNB_Arm_Walking");
 		LoadFolder("SNB/SNB_Arm_RunStart");
