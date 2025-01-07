@@ -17,7 +17,7 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-	std::shared_ptr<class USpriteRenderer> PlatformBoosterRenderer;
 	std::shared_ptr<class USpriteRenderer> PlatformBoxRenderer;
+	std::shared_ptr<class USpriteRenderer> PlatformBoosterRenderer;
 };
 

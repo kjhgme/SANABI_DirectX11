@@ -18,14 +18,11 @@ ABossPlatform::ABossPlatform()
 	PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_Idle");
 	PlatformBoosterRenderer->ChangeAnimation("BossPlatform_A_BoosterLoop");
 
-	PlatformBoxRenderer->SetRelativeLocation({ 0.0f, -100.0f, 2.0f });
-	PlatformBoosterRenderer->SetRelativeLocation({ 0.0f, -120.0f, 1.0f });
+	PlatformBoxRenderer->SetRelativeLocation({ 0.0f, -100.0f, 1.0f });
+	PlatformBoosterRenderer->SetRelativeLocation({ 4.0f, -142.0f, 2.0f });
 
 	PlatformBoxRenderer->SetupAttachment(RootComponent);
 	PlatformBoosterRenderer->SetupAttachment(RootComponent);
-
-	PlatformBoxRenderer->SetAutoScaleRatio(1.0f);
-	PlatformBoosterRenderer->SetAutoScaleRatio(1.0f);
 }
 
 ABossPlatform::~ABossPlatform()

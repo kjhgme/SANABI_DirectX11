@@ -13,7 +13,14 @@
 ABossGameMode::ABossGameMode()
 {
 	BackGround = GetWorld()->SpawnActor<ABossBackGround>();
-	Platforms = GetWorld()->SpawnActor<ABossPlatform>();
+	
+	Platforms.resize(7);
+	for (int i = 0; i < Platforms.size(); ++i)
+	{
+		Platforms[i] = GetWorld()->SpawnActor<ABossPlatform>();
+		Platforms[i].get()->AddRelativeLocation({ 235.0f * (i - 3), -27.0f, 2.0f * i });
+	}
+
 	Player = GetWorld()->SpawnActor<APlayer>();
 	
 	BackGround->AttachToActor(Player.get());
@@ -49,13 +56,17 @@ void ABossGameMode::Tick(float _DeltaTime)
 
 	LastPlayerPosition = CurrentPlayerPosition;
 
-	Scene();
+	Scene(_DeltaTime);
 }
 
-void ABossGameMode::Scene()
+void ABossGameMode::Scene(float _DeltaTime)
 {
-	if (UEngineInput::IsPress(VK_SPACE))
+	if (UEngineInput::IsPress('Q'))
 	{
-
+		MainCamera->AddRelativeLocation({ 0.0f, 0.0f, -100.0f * _DeltaTime, 1.0f });
+	}
+	if (UEngineInput::IsPress('E'))
+	{
+		MainCamera->AddRelativeLocation({ 0.0f, 0.0f, 100.0f * _DeltaTime, 1.0f });
 	}
 }

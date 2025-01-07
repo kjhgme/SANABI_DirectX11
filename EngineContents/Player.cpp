@@ -19,19 +19,13 @@ APlayer::APlayer()
 	InitPlayerAnimation();
 
 	PlayerRenderer->ChangeAnimation("Idle");
-	PlayerRenderer->SetOrder(static_cast<int>(ERenderOrder::PLAYER));
-
-	PlayerRenderer->SetRelativeScale3D({ 1.0f, 1.0f, 1.0f });
-	PlayerRenderer->SetupAttachment(RootComponent);
-
 	ArmRenderer->ChangeAnimation("ArmIdle");
-	ArmRenderer->SetOrder(static_cast<int>(ERenderOrder::PLAYER));
 
-	ArmRenderer->SetRelativeScale3D({ 1.0f, 1.0f, 1.0f });
+	PlayerRenderer->SetupAttachment(RootComponent);
 	ArmRenderer->SetupAttachment(RootComponent);
 
-	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, 0.0f });
-	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
+	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::PLAYER) });
+	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) });
 
 	PlayerCamera = GetWorld()->GetCamera(0);
 	PlayerCamera->AttachToActor(this);
@@ -70,10 +64,10 @@ void APlayer::Tick(float _DeltaTime)
 		PlayerRenderer->ChangeAnimation("Jumping");
 		ArmRenderer->ChangeAnimation("ArmJumping");
 	}
-	if (UEngineInput::IsDown('Q'))
+	/*if (UEngineInput::IsDown('Q'))
 	{
 		PlayerText = GetWorld()->SpawnActor<ATextBubble>();
-	}
+	}*/
 	/*if (UEngineInput::IsDown('E'))
 	{
 		PlayerText->Destroy();
@@ -176,34 +170,34 @@ void APlayer::SetArmPosition()
 {
 	if (IsIdle == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ -16.f, 8.f, -1.f });
+			ArmRenderer->SetRelativeLocation({ -8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 		else if(IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 8.f, -1.f });
+			ArmRenderer->SetRelativeLocation({ 8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 	}
 	else if (IsWalking == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 8.f, -1.f });
+			ArmRenderer->SetRelativeLocation({ 8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ -16.f, 8.f, -1.f });
+			ArmRenderer->SetRelativeLocation({ -8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 	}
 	else if (IsRunning == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ -16.f, 15.f, -1.f });
+			ArmRenderer->SetRelativeLocation({ -8.f, 7.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 15.f, -1.f });
+			ArmRenderer->SetRelativeLocation({ 8.f, 7.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 	}
 	else if (IsJumping == true) {
 		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 8.f, -1.f });
+			ArmRenderer->SetRelativeLocation({ 8.f, 4.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation({ 16.f, 15.f, -1.f });
+			ArmRenderer->SetRelativeLocation({ 8.f, 7.f, static_cast<float>(ERenderOrder::ARM) });
 		}
 	}
 }

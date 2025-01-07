@@ -16,13 +16,13 @@ public:
 
 	void Tick(float _DeltaTime) override;
 
-	void Scene();
+	void Scene(float _DeltaTime);
 
 protected:
 
 private:
 	std::shared_ptr<class APlayer> Player;
-	std::shared_ptr<class ABossPlatform> Platforms;
+	std::vector<std::shared_ptr<class ABossPlatform>> Platforms;
 	std::shared_ptr<class ABossBackGround> BackGround;
 	std::shared_ptr<class ACameraActor> MainCamera;
 
