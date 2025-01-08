@@ -6,6 +6,7 @@
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/SpriteRenderer.h>
 #include "Player.h"
+#include "Mari.h"
 #include "BossBackGround.h"
 #include "BossPlatform.h"
 #include "TextBubble.h"
@@ -30,6 +31,8 @@ ABossGameMode::ABossGameMode()
 	Player = GetWorld()->SpawnActor<APlayer>();
 	Player->AddRelativeLocation({ 0.0f, -35.0f, 0.0f });
 	
+	Mari = GetWorld()->SpawnActor<AMari>();
+
 	BackGround->AttachToActor(Player.get());
 
 	MainCamera = GetWorld()->GetMainCamera();
@@ -76,6 +79,10 @@ void ABossGameMode::Tick(float _DeltaTime)
 	{
 		SceneTakeNum++;
 		Scene(_DeltaTime);
+	}
+	if (UEngineInput::IsDown(VK_F1))
+	{
+		GetWorld()->GetMainCamera()->FreeCameraSwitch();
 	}
 
 	if (true == bPlayNextAnimation && true == Player->GetPlayerRenderer().get()->IsCurAnimationEnd())

@@ -28,7 +28,7 @@ APlayer::APlayer()
 	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::PLAYER) });
 	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) });
 
-	PlayerCamera = GetWorld()->GetCamera(0);
+	PlayerCamera = GetWorld()->GetMainCamera();
 	PlayerCamera->AttachToActor(this);
 }
 

@@ -11,17 +11,6 @@
 ULevel::ULevel()
 {
 	SpawnCamera(0);
-
-	//D3D11_VIEWPORT ViewPortInfo;
-
-	//ViewPortInfo.Width = UEngineCore::GetScreenScale().X;
-	//ViewPortInfo.Height = UEngineCore::GetScreenScale().Y;
-	//ViewPortInfo.TopLeftX = 0.0f;
-	//ViewPortInfo.TopLeftY = 0.0f;
-	//ViewPortInfo.MinDepth = 0.0f;
-	//ViewPortInfo.MaxDepth = 1.0f;
-
-	//UEngineCore::GetDevice().GetContext()->RSSetViewports(1, &ViewPortInfo);
 }
 
 ULevel::~ULevel()
@@ -43,6 +32,11 @@ void ULevel::LevelChangeEnd()
 
 void ULevel::Tick(float _DeltaTime)
 {
+	if (GetMainCamera()->IsFreeCamera())
+	{
+		return;
+	}
+
 	std::list<std::shared_ptr<class AActor>>::iterator StartIter = BeginPlayList.begin();
 	std::list<std::shared_ptr<class AActor>>::iterator EndIter = BeginPlayList.end();
 	

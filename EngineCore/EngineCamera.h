@@ -7,6 +7,7 @@
 class UEngineCamera : public USceneComponent
 {
 	friend class ULevel;
+	friend class ACameraActor;
 
 public:
 	UEngineCamera();
@@ -41,7 +42,7 @@ public:
 
 	ENGINEAPI void SetProjectionType(EProjectionType _Type)
 	{
-		Type = _Type;
+		ProjectionType = _Type;
 	}
 
 	ENGINEAPI void SetZSort(int _Order, bool _Value);
@@ -56,7 +57,8 @@ private:
 	float Near = 1.0f;
 	float Far = 5000.0f;
 	float FOV = 60.0f;
-	EProjectionType Type = EProjectionType::Perspective;
+
+	EProjectionType ProjectionType = EProjectionType::Perspective;
 
 	FVector ProjectionScale = { 0.0f, 0.0f };
 	D3D11_VIEWPORT ViewPortInfo;

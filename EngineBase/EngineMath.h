@@ -792,6 +792,35 @@ public:
 
 	ENGINEAPI void Decompose();
 
+	FVector GetWorldFoward()
+	{
+		return World.GetForward();;
+	}
+
+	FVector GetWorldRight()
+	{
+		return World.GetRight();
+	}
+
+	FVector GetWorldUp()
+	{
+		return World.GetUp();
+	}
+
+	FVector GetLocalFoward()
+	{
+		return LocalWorld.GetForward();;
+	}
+
+	FVector GetLocalRight()
+	{
+		return LocalWorld.GetRight();
+	}
+
+	FVector GetLocalUp()
+	{
+		return LocalWorld.GetUp();
+	}
 private:
 	friend class CollisionFunctionInit;
 
