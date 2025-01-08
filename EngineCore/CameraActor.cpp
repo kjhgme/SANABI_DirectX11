@@ -87,6 +87,8 @@ void ACameraActor::Tick(float _DeltaTime)
 		{
 			AddActorRotation({ -ScreenDir.Y * RotSpeed * _DeltaTime, -ScreenDir.X * RotSpeed * _DeltaTime });
 		}
+
+		
 	}
 
 	CameraComponent->CalculateViewAndProjection();

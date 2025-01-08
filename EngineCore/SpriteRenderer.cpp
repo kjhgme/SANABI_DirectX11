@@ -160,7 +160,6 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 		}
 
 		CurIndex = Indexes[CurAnimation->CurIndex];
-
 		if (nullptr != EventAnimation)
 		{
 			if (EventAnimation->Events.contains(CurIndex))

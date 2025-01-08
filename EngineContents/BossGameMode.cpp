@@ -51,6 +51,7 @@ void ABossGameMode::BeginPlay()
 
 	LastPlayerPosition = Player.get()->GetActorTransform().Location;
 	Player->SetAnimation("SNB_Boss_001_TrainOnLoop");
+	Mari->ChangeToNextAnim();
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
@@ -81,10 +82,10 @@ void ABossGameMode::Tick(float _DeltaTime)
 		SceneTakeNum++;
 		Scene(_DeltaTime);
 	}
-	if (UEngineInput::IsDown(VK_F1))
+	/*if (UEngineInput::IsDown(VK_F1))
 	{
 		GetWorld()->GetMainCamera()->FreeCameraSwitch();
-	}
+	}*/
 
 	if (true == bPlayNextAnimation && true == Player->GetPlayerRenderer().get()->IsCurAnimationEnd())
 	{
@@ -103,41 +104,88 @@ void ABossGameMode::Scene(float _DeltaTime)
 		break;	
 	case 2:
 	{
-		Player->SetAnimation("SNB_Boss_002_TrainOn2Idle");
-		bPlayNextAnimation = true;
+		Mari->ChangeToNextAnim();
+		//Player->SetAnimation("SNB_Boss_002_TrainOn2Idle");
+		//bPlayNextAnimation = true;
 		break;
 	}
 	case 3:
 	{
-		Player->GetPlayerRenderer().get()->AddRelativeLocation({ 2.0f, 14.0f, 0.0f });
-		Player->SetAnimation("Idle");
+		Mari->ChangeToNextAnim();
+		//Player->GetPlayerRenderer().get()->AddRelativeLocation({ 2.0f, 14.0f, 0.0f });
+		//Player->SetAnimation("Idle");
 		break;
 	}
 	case 4:
 	{
+		Mari->ChangeToNextAnim();
 		Player->SetAnimation("SNB_Boss_004_LookBackgroundStart");
-		bPlayNextAnimation = true;
+		//bPlayNextAnimation = true;
 		break;
 	}
 	case 5:
 	{
+		Mari->ChangeToNextAnim();
 		Player->SetAnimation("SNB_Boss_005_LookBackgroundLoop");
 		break;
 	}
 	case 6:
 	{
+		Mari->ChangeToNextAnim();
 		Player->SetAnimation("SNB_Boss_006_LookBackgroundEnd");
-		bPlayNextAnimation = true;
+		//bPlayNextAnimation = true;
 		break;
 	}
 	case 7:
 	{
+		Mari->ChangeToNextAnim();
 		Player->SetAnimation("Idle");
 		break;
 	}
 	case 8:
 	{
-		Player->SetSceneMode(false);
+		Mari->ChangeToNextAnim();
+		// Player->SetSceneMode(false);
+		break;
+	}
+	case 9:
+	{
+		Mari->ChangeToNextAnim();
+		break;
+	}
+	case 10:
+	{
+		Mari->ChangeToNextAnim();
+		break;
+	}
+	case 11:
+	{
+		Mari->ChangeToNextAnim();
+		break;
+	}
+	case 12:
+	{
+		Mari->ChangeToNextAnim();
+		break;
+	}
+	case 13:
+	{
+		Mari->ChangeToNextAnim();
+		break;
+	}
+	case 14:
+	{
+		Mari->ChangeToNextAnim();
+		break;
+	}
+	case 15:
+	{
+		Mari->ChangeToNextAnim();
+		break;
+	}
+	case 16:
+	{
+		Mari->ChangeToNextAnim();
 		break;
 	}
 	default:

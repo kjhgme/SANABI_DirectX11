@@ -211,7 +211,7 @@ void APlayer::SetAnimation(std::string_view _Anim)
 	{
 		ArmRenderer->ChangeAnimation("SNB_Arm_NoImage");
 	}
-
+	
 	PlayerRenderer->ChangeAnimation(_Anim);
 }
 
