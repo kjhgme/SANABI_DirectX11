@@ -155,6 +155,7 @@ void ABossGameMode::Scene(float _DeltaTime)
 	}
 	case 10:
 	{
+		Mari->AddActorLocation({ -1.0f, 9.0f,0.0f });
 		Mari->ChangeToNextAnim();
 		break;
 	}
@@ -175,7 +176,8 @@ void ABossGameMode::Scene(float _DeltaTime)
 	}
 	case 14:
 	{
-		Mari->ChangeToNextAnim();
+		Mari->MufinOn();
+		// Mari->ChangeToNextAnim();
 		break;
 	}
 	case 15:

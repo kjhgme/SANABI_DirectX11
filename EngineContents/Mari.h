@@ -18,10 +18,13 @@ public:
 	void SetAnimation(std::string_view _Anim);
 	void ChangeToNextAnim();
 
+	void MufinOn();
+
 protected:
 
 private:
 	std::shared_ptr<class USpriteRenderer> MariRenderer;
+	std::shared_ptr<class USpriteRenderer> MufinRenderer;
 	std::queue<std::string> AnimQueue;
 };
 

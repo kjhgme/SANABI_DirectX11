@@ -122,6 +122,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	{
 		// BossAnimation
 		{
+			LoadFolder("Mari/BossStage/Mufin_NoImage");
 			LoadFolder("Mari/BossStage/001_TrainOnHarmonicaPlay");
 			LoadFolder("Mari/BossStage/002_TrainOnHarmonicaPlayEndLoop");
 			LoadFolder("Mari/BossStage/003_TrainOnHarmonicaEnd");
