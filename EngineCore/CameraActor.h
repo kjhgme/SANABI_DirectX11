@@ -40,6 +40,11 @@ public:
 		FreeSpeed = _Speed;
 	}
 
+	void Zoom(float _Value)
+	{
+		this->AddRelativeLocation({ 0.0f, 0.0f, _Value });
+	}
+
 protected:
 
 private:

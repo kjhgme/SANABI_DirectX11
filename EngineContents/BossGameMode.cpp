@@ -80,6 +80,11 @@ void ABossGameMode::Tick(float _DeltaTime)
 		SceneTakeNum++;
 		Scene(_DeltaTime);
 	}
+	// test
+	if (UEngineInput::IsDown('X'))
+	{
+		MainCamera->Zoom(-100.0f);
+	}
 	/*if (UEngineInput::IsDown(VK_F1))
 	{
 		GetWorld()->GetMainCamera()->FreeCameraSwitch();
