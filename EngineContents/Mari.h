@@ -19,6 +19,7 @@ public:
 	void ChangeToNextAnim();
 
 	void MufinOn();
+	void MufinOff();
 
 protected:
 

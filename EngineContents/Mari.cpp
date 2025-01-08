@@ -17,7 +17,8 @@ AMari::AMari()
 	MariRenderer->ChangeAnimation("001_TrainOnHarmonicaPlay");
 	MariRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::PLAYER) - 1 });
 
-	MufinRenderer->ChangeAnimation("Mufin_NoImage");
+	MufinRenderer->ChangeAnimation("Mufin_NoImage"); 
+	MufinRenderer->AddRelativeLocation({ 1.0f, 29.0f, 1.0f });
 
 	MariRenderer->SetupAttachment(RootComponent);
 	MufinRenderer->SetupAttachment(RootComponent);
@@ -42,11 +43,11 @@ void AMari::InitMariAnimation()
 	MariRenderer->CreateAnimation("011_LookBackgroundLoop", "011_LookBackgroundLoop");
 	MariRenderer->CreateAnimation("012_LookBackgroundEnd", "012_LookBackgroundEnd", false);
 	MariRenderer->CreateAnimation("013_Idle", "013_Idle");
-	MariRenderer->CreateAnimation("014_AltDroneCloakEnd", "014_AltDroneCloakEnd", false);
 	MariRenderer->CreateAnimation("015_AltDroneRideStart", "015_AltDroneRideStart", false);
 	MariRenderer->CreateAnimation("016_AltDroneRideCloakStart", "016_AltDroneRideCloakStart", false);
 
 	MufinRenderer->CreateAnimation("Mufin_NoImage", "Mufin_NoImage");
+	MufinRenderer->CreateAnimation("014_AltDroneCloakEnd", "014_AltDroneCloakEnd", false);
 
 	AnimQueue.push("001_TrainOnHarmonicaPlay");
 	AnimQueue.push("002_TrainOnHarmonicaPlayEndLoop");
@@ -84,4 +85,9 @@ void AMari::ChangeToNextAnim()
 void AMari::MufinOn()
 {
 	MufinRenderer->ChangeAnimation("014_AltDroneCloakEnd");
+}
+
+void AMari::MufinOff()
+{
+	MufinRenderer->ChangeAnimation("Mufin_NoImage");
 }
