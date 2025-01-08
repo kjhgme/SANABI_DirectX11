@@ -34,8 +34,6 @@ ABossGameMode::ABossGameMode()
 	Mari = GetWorld()->SpawnActor<AMari>();
 	Mari->AddRelativeLocation({ { 30.0f, -28.0f, 0.0f } });
 
-	BackGround->AttachToActor(Player.get());
-
 	MainCamera = GetWorld()->GetMainCamera();
 	MainCamera->SetActorLocation({ 0.0f, 0.0f, -200.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
@@ -100,6 +98,7 @@ void ABossGameMode::Tick(float _DeltaTime)
 		Platforms[i].get()->AddActorLocation({ { 300.0f * _DeltaTime, 0.0f, 0.0f } });
 	}
 	Mari->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
+	BackGround->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
 }
 
 void ABossGameMode::Scene(float _DeltaTime)
