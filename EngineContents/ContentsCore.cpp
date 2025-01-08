@@ -134,7 +134,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			LoadFolder("Mari/BossStage/011_LookBackgroundLoop");
 			LoadFolder("Mari/BossStage/012_LookBackgroundEnd");
 			LoadFolder("Mari/BossStage/013_Idle");
-			LoadFolder("Mari/BossStage/014_AltDrone »ý±è");
+			LoadFolder("Mari/BossStage/014_AltDroneCloakEnd");
 			LoadFolder("Mari/BossStage/015_AltDroneRideStart");
 			LoadFolder("Mari/BossStage/016_AltDroneRideCloakStart");
 		}

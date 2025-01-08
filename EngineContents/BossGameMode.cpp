@@ -32,6 +32,7 @@ ABossGameMode::ABossGameMode()
 	Player->AddRelativeLocation({ 0.0f, -35.0f, 0.0f });
 	
 	Mari = GetWorld()->SpawnActor<AMari>();
+	Mari->AddRelativeLocation({ { 30.0f, -28.0f, 0.0f } });
 
 	BackGround->AttachToActor(Player.get());
 

@@ -12,7 +12,7 @@ public:
 	AMari& operator=(const AMari& _Other) = delete;
 	AMari& operator=(AMari&& _Other) noexcept = delete;
 
-	void InitPlayerAnimation();
+	void InitMariAnimation();
 
 protected:
 
