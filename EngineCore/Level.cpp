@@ -237,3 +237,10 @@ void ULevel::Release(float _DeltaTime)
 		}
 	}
 }
+
+void ULevel::InitLevel(AGameMode* _GameMode, APawn* _Pawn)
+{
+	GameMode = _GameMode;
+
+	MainPawn = _Pawn;
+}

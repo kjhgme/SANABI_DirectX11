@@ -94,6 +94,12 @@ void ABossGameMode::Tick(float _DeltaTime)
 
 		bPlayNextAnimation = false;
 	}
+
+	Player->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
+	for (int i = 0; i < Platforms.size(); ++i) {
+		Platforms[i].get()->AddActorLocation({ { 300.0f * _DeltaTime, 0.0f, 0.0f } });
+	}
+	Mari->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
 }
 
 void ABossGameMode::Scene(float _DeltaTime)

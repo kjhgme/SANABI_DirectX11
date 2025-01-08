@@ -1,7 +1,7 @@
 #pragma once
-#include <EngineCore/Actor.h>
+#include <EngineCore/GameMode.h>
 
-class AInGameMode : public AActor
+class AInGameMode : public AGameMode
 {
 public:
 	AInGameMode();
