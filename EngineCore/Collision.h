@@ -18,6 +18,14 @@ public:
 	ENGINEAPI void SetCollisionProfileName(std::string_view _ProfileName);
 	ENGINEAPI void BeginPlay() override;
 	
+	bool IsColliding()
+	{
+		if (CollisionCheckSet.empty())
+			return false;
+		else
+			return true;
+	}
+
 	std::string GetCollisionProfileName()
 	{
 		return ProfileName;

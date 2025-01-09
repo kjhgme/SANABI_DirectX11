@@ -47,10 +47,17 @@ void APlayer::BeginPlay()
 	Collision->SetScale3D({ 18.0f, 38.0f });
 
 	Collision->SetCollisionEnter([this](UCollision* _This, UCollision* _Other)
-		{
-			Gravity = 0.0f;
-			UEngineDebug::OutPutString("Enter");
-		});
+	{/*
+		Gravity = 0.0f;
+		GravityVelocity = 0.0f;*/
+		UEngineDebug::OutPutString("Enter");
+	});
+
+	Collision->SetCollisionEnd([this](UCollision* _This, UCollision* _Other)
+	{/*
+		Gravity = -9.8f;*/
+		UEngineDebug::OutPutString("End");
+	});
 }
 
 void APlayer::Tick(float _DeltaTime)
@@ -63,40 +70,45 @@ void APlayer::Tick(float _DeltaTime)
 	{
 		PlayerMove(_DeltaTime);
 
+		if (UEngineInput::IsPress(VK_SHIFT))
+		{
+			IsWalking = false;
+			IsRunning = true;
+		}
+		if (UEngineInput::IsDown('T'))
+		{
+			IsIdle = false;
+			IsWalking = false;
+			IsRunning = false;
+			IsJumping = true;
+
+			PlayerRenderer->ChangeAnimation("Jumping");
+			ArmRenderer->ChangeAnimation("ArmJumping");
+		}
+		if (UEngineInput::IsDown(VK_SPACE))
+		{
+			this->AddRelativeLocation({ 0.0f, 100.0f, 0.0f });
+		}
 	}
 
 	SetArmPosition();
 
-	if (UEngineInput::IsPress(VK_SHIFT))
-	{
-		IsWalking = false;
-		IsRunning = true;
-	}
-	if (UEngineInput::IsDown('T'))
-	{
-		IsIdle = false;
-		IsWalking = false;
-		IsRunning = false;
-		IsJumping = true;
 
-		PlayerRenderer->ChangeAnimation("Jumping");
-		ArmRenderer->ChangeAnimation("ArmJumping");
-	}
 
-	/*if (UEngineInput::IsDown('Q'))
-	{
-		PlayerText = GetWorld()->SpawnActor<ATextBubble>();
-	}*/
-	/*if (UEngineInput::IsDown('E'))
-	{
-		PlayerText->Destroy();
-		PlayerText = nullptr;
-	}*/
-
-	if (PlayerText != nullptr)
-	{
-		PlayerText->AttachToActor(this);
-	}
+	//if (UEngineInput::IsDown('Q'))
+	//{
+	//	PlayerText = GetWorld()->SpawnActor<ATextBubble>();
+	//}
+	//if (UEngineInput::IsDown('E'))
+	//{
+	//	PlayerText->Destroy();
+	//	PlayerText = nullptr;
+	//}
+	//if (PlayerText != nullptr)
+	//{
+	// 
+	//	PlayerText->AttachToActor(this);
+	//}
 }
 
 void APlayer::InitPlayerAnimation()
@@ -147,8 +159,16 @@ void APlayer::InitPlayerAnimation()
 
 void APlayer::PlayerMove(float _DeltaTime)
 {
-	GravityVelocity += Gravity * _DeltaTime;
-	GravityVelocity = UEngineMath::Clamp(GravityVelocity, MaxFallSpeed, 0.0f);
+	if (Collision->IsColliding())
+	{
+		GravityVelocity = 0;
+		Gravity = 0;
+	}
+	else {
+		Gravity = -9.8f;
+		GravityVelocity += Gravity * _DeltaTime;
+		GravityVelocity = UEngineMath::Clamp(GravityVelocity, MaxFallSpeed, 0.0f);
+	}
 
 	this->AddActorLocation({ 0.0f, _DeltaTime * GravityVelocity, 0.0f });
 
