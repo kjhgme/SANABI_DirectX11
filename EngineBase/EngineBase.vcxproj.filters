@@ -32,6 +32,9 @@
     <ClCompile Include="EngineTimer.cpp">
       <Filter>Time</Filter>
     </ClCompile>
+    <ClCompile Include="FSMStateManager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PreCompile.h" />
@@ -67,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="EngineTimer.h">
       <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="FSMStateManager.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

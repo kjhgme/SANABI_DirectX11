@@ -20,6 +20,7 @@ AInGameMode::AInGameMode()
 	MainCamera->SetActorLocation({ 0.0f, 0.0f, -500.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 
+	Player->SetSceneMode(false);
 }
 
 AInGameMode::~AInGameMode()

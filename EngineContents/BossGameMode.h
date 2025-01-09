@@ -16,7 +16,7 @@ public:
 
 	void Tick(float _DeltaTime) override;
 
-	void Scene(float _DeltaTime);
+	void InitScenes();
 
 protected:
 
@@ -27,9 +27,11 @@ private:
 	std::shared_ptr<class ABossBackGround> BackGround;
 	std::shared_ptr<class ACameraActor> MainCamera;
 
+	std::vector<std::function<void()>> Scenes;
+
 	float4 LastPlayerPosition;
 
-	int SceneTakeNum = 1;
+	int SceneTakeNum = 0;
 	bool bPlayNextAnimation = false;
 };
 

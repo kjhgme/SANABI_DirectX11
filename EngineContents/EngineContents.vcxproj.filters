@@ -27,9 +27,6 @@
     <ClInclude Include="EndingPlayer.h">
       <Filter>Ending</Filter>
     </ClInclude>
-    <ClInclude Include="Daughter.h">
-      <Filter>InGame</Filter>
-    </ClInclude>
     <ClInclude Include="TextBubble.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -46,6 +43,9 @@
       <Filter>Boss</Filter>
     </ClInclude>
     <ClInclude Include="Mari.h">
+      <Filter>Global</Filter>
+    </ClInclude>
+    <ClInclude Include="Daughter.h">
       <Filter>Global</Filter>
     </ClInclude>
   </ItemGroup>
@@ -73,9 +73,6 @@
     <ClCompile Include="EndingPlayer.cpp">
       <Filter>Ending</Filter>
     </ClCompile>
-    <ClCompile Include="Daughter.cpp">
-      <Filter>InGame</Filter>
-    </ClCompile>
     <ClCompile Include="TextBubble.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -92,6 +89,9 @@
       <Filter>Boss</Filter>
     </ClCompile>
     <ClCompile Include="Mari.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="Daughter.cpp">
       <Filter>Global</Filter>
     </ClCompile>
   </ItemGroup>
