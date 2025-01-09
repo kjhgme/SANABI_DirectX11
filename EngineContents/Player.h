@@ -34,6 +34,8 @@ public:
 		SceneMode = _Mode;
 	}
 
+	void AddPlayerRendererLocation(FVector _Loc);
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;

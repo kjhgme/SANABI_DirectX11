@@ -135,7 +135,7 @@ void APlayer::InitPlayerAnimation()
 	}
 	// BossAnim
 	{
-		PlayerRenderer->CreateAnimation("SNB_Boss_001_TrainOnLoop", "SNB_Boss_001_TrainOnLoop");
+		PlayerRenderer->CreateAnimation("SNB_Boss_001_TrainOnLoop", "SNB_Boss_001_TrainOnLoop",false );
 		PlayerRenderer->CreateAnimation("SNB_Boss_002_TrainOn2Idle", "SNB_Boss_002_TrainOn2Idle", false);
 		PlayerRenderer->CreateAnimation("SNB_Boss_004_LookBackgroundStart", "SNB_Boss_004_LookBackgroundStart", false);
 		PlayerRenderer->CreateAnimation("SNB_Boss_005_LookBackgroundLoop", "SNB_Boss_005_LookBackgroundLoop");
@@ -253,4 +253,10 @@ void APlayer::SetArmPosition()
 			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 8.f, static_cast<float>(ERenderOrder::ARM)));
 		}
 	}
+}
+
+void APlayer::AddPlayerRendererLocation(FVector _Loc)
+{
+	PlayerRenderer->AddRelativeLocation(_Loc);
+	ArmRenderer->AddRelativeLocation(_Loc);
 }

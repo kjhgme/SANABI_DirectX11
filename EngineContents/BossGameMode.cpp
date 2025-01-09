@@ -117,7 +117,7 @@ void ABossGameMode::InitScenes()
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Player->SetAnimation("SNB_Boss_002_TrainOn2Idle"); });
-	Scenes.push_back([this]() {	Player->AddRelativeLocation({0.0f, 16.0f, 0.0f}); Player->SetAnimation("Idle"); });
+	Scenes.push_back([this]() {	Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f }); Player->SetAnimation("Idle"); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Player->SetAnimation("SNB_Boss_004_LookBackgroundStart"); });
