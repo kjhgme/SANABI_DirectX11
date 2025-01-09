@@ -54,7 +54,9 @@ private:
 
 	bool SceneMode = true;
 
-	float Gravity = 9.8f;
+	float Gravity = -9.8f;
+	float GravityVelocity = 0.0f;
+	const float MaxFallSpeed = -5000.0f;
 
 	void SetArmPosition();
 };

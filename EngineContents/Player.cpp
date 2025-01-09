@@ -62,6 +62,7 @@ void APlayer::Tick(float _DeltaTime)
 	if (false == SceneMode)
 	{
 		PlayerMove(_DeltaTime);
+
 	}
 
 	SetArmPosition();
@@ -146,9 +147,10 @@ void APlayer::InitPlayerAnimation()
 
 void APlayer::PlayerMove(float _DeltaTime)
 {
-	PlayerRenderer->AddRelativeLocation({ 0.0f, _DeltaTime * -Gravity, 0.0f });
-	ArmRenderer->AddRelativeLocation({ 0.0f, _DeltaTime * -Gravity, 0.0f });
-	Collision->AddRelativeLocation({ 0.0f, _DeltaTime * -Gravity, 0.0f });
+	GravityVelocity += Gravity * _DeltaTime;
+	GravityVelocity = UEngineMath::Clamp(GravityVelocity, MaxFallSpeed, 0.0f);
+
+	this->AddActorLocation({ 0.0f, _DeltaTime * GravityVelocity, 0.0f });
 
 	if (UEngineInput::IsPress('A'))
 	{
