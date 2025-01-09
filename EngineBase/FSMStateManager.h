@@ -6,8 +6,8 @@
 class UFSMStateManager
 {
 public:
-	UFSMStateManager() {}
-	~UFSMStateManager() {}
+	ENGINEAPI UFSMStateManager() {}
+	ENGINEAPI ~UFSMStateManager() {}
 
 	UFSMStateManager(const UFSMStateManager& _Other) = delete;
 	UFSMStateManager(UFSMStateManager&& _Other) noexcept = delete;
