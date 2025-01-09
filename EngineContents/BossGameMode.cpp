@@ -83,7 +83,7 @@ void ABossGameMode::Tick(float _DeltaTime)
 	// test
 	if (UEngineInput::IsDown('X'))
 	{
-		MainCamera->Zoom(-100.0f);
+		MainCamera->Zoom(-300.0f, 2.0f);
 	}
 	/*if (UEngineInput::IsDown(VK_F1))
 	{

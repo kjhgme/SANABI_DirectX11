@@ -40,15 +40,13 @@ public:
 		FreeSpeed = _Speed;
 	}
 
-	void Zoom(float _Value)
-	{
-		this->AddRelativeLocation({ 0.0f, 0.0f, _Value });
-	}
-
+	ENGINEAPI void Zoom(float _Value, float _Duration);
+	
 protected:
 
 private:
 	std::shared_ptr<class UEngineCamera> CameraComponent = nullptr;
+	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 
 	bool IsFreeCameraValue = false;
 	ENGINEAPI void FreeCameraCheck();

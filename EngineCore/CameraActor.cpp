@@ -2,11 +2,14 @@
 #include "CameraActor.h"
 
 #include <EnginePlatform/EngineInput.h>
+#include <EngineCore/TimeEventComponent.h>
 #include "EngineCamera.h"
 
 ACameraActor::ACameraActor()
 {
 	CameraComponent = CreateDefaultSubObject<UEngineCamera>();
+	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
+
 	RootComponent = CameraComponent;
 }
 
@@ -132,6 +135,22 @@ void ACameraActor::FreeCameraSwitch()
 {
 	IsFreeCameraValue = !IsFreeCameraValue;
 	FreeCameraCheck();
+}
+
+void ACameraActor::Zoom(float _Value, float _Duration)
+{
+	const FVector TotalOffset = FVector(0.0f, 0.0f, _Value);
+	const FVector DeltaOffsetPerSecond = TotalOffset / _Duration;
+
+	TimeEventComponent->AddUpdateEvent(_Duration, [this, DeltaOffsetPerSecond](float DeltaTime, float CurTime)
+	{
+		FVector DeltaMove = DeltaOffsetPerSecond * DeltaTime;
+
+		this->AddRelativeLocation(DeltaMove);
+	},
+
+		false
+	);
 }
 
 void ACameraActor::FreeCameraCheck()
