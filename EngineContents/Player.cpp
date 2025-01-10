@@ -437,6 +437,11 @@ void APlayer::RunStop(float _DeltaTime)
 		FSM.ChangeState(PlayerState::RunStart);
 		return;
 	}
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		FSM.ChangeState(PlayerState::Jumping);
+		return;
+	}
 
 	/*if (false == bIsRight)
 	{
@@ -560,6 +565,11 @@ void APlayer::Landing(float _DeltaTime)
 
 	bCanJump = true;
 
+	if (UEngineInput::IsPress('A') || UEngineInput::IsPress('D'))
+	{
+		FSM.ChangeState(PlayerState::RunStart);
+		return;
+	}
 	if (UEngineInput::IsDown(VK_SPACE))
 	{
 		FSM.ChangeState(PlayerState::Jumping);
