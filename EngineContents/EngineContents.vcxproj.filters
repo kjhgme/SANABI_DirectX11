@@ -48,6 +48,9 @@
     <ClInclude Include="Daughter.h">
       <Filter>Global</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerVfx.h">
+      <Filter>Global</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -92,6 +95,9 @@
       <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="Daughter.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerVfx.cpp">
       <Filter>Global</Filter>
     </ClCompile>
   </ItemGroup>

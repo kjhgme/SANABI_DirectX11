@@ -84,7 +84,8 @@ private:
 
 	bool SceneMode = true;
 	bool bIsRight = true;
-	bool bCanJump = true;
+	bool bCanJump = true; 
+	bool bHasSpawnedVfx = false;
 
 	float Gravity = -98.0f;
 	float GravityVelocity = 0.0f;

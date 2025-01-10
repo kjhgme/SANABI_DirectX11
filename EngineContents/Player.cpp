@@ -8,6 +8,7 @@
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/Collision.h>
 #include "TextBubble.h"
+#include "PlayerVfx.h"
 
 APlayer::APlayer()
 {
@@ -15,7 +16,7 @@ APlayer::APlayer()
 	RootComponent = Default;
 
 	PlayerRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	ArmRenderer = CreateDefaultSubObject< USpriteRenderer>();
+	ArmRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	InitPlayerAnimation(); 
 	InitPlayerState();
@@ -280,7 +281,7 @@ void APlayer::InitPlayerAnimation()
 		PlayerRenderer->CreateAnimation("SNB_Boss_006_LookBackgroundEnd", "SNB_Boss_006_LookBackgroundEnd", false);
 
 		ArmRenderer->CreateAnimation("SNB_Arm_NoImage", "SNB_Arm_NoImage", false);
-	}
+	}	
 }
 
 void APlayer::InitPlayerState()
@@ -457,6 +458,14 @@ void APlayer::Jumping(float _DeltaTime)
 	PlayerRenderer->ChangeAnimation("Jumping");
 	ArmRenderer->ChangeAnimation("ArmJumping");
 
+	if (!bHasSpawnedVfx)
+	{
+		std::shared_ptr<APlayerVfx> Vfx = GetWorld()->SpawnActor<APlayerVfx>();
+		Vfx->InitVfx("Vfx_Jump");
+		Vfx->InitPos(this->GetActorLocation());
+		bHasSpawnedVfx = true;
+	}
+
 	if (true == bCanJump)
 	{
 		bCanJump = false;
@@ -476,6 +485,7 @@ void APlayer::Jumping(float _DeltaTime)
 	}
 	if (PlayerRenderer->IsCurAnimationEnd())
 	{
+		bHasSpawnedVfx = false;
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
@@ -519,11 +529,6 @@ void APlayer::Falling(float _DeltaTime)
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
 
-	if (PlayerRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(PlayerState::Landing);
-		return;
-	}
 	if (Collision->IsColliding())
 	{
 		if (UEngineInput::IsPress('A') || UEngineInput::IsPress('D'))
@@ -545,6 +550,14 @@ void APlayer::Landing(float _DeltaTime)
 	PlayerRenderer->ChangeAnimation("Landing");
 	ArmRenderer->ChangeAnimation("ArmLanding");
 
+	if (!bHasSpawnedVfx)
+	{
+		std::shared_ptr<APlayerVfx> Vfx = GetWorld()->SpawnActor<APlayerVfx>();
+		Vfx->InitVfx("Vfx_Landing");
+		Vfx->InitPos(this->GetActorLocation());
+		bHasSpawnedVfx = true;
+	}
+
 	bCanJump = true;
 
 	if (UEngineInput::IsDown(VK_SPACE))
@@ -553,7 +566,8 @@ void APlayer::Landing(float _DeltaTime)
 		return;
 	}
 	if (PlayerRenderer->IsCurAnimationEnd())
-	{
+	{  
+		bHasSpawnedVfx = false; 
 		FSM.ChangeState(PlayerState::Idle);
 		return;
 	}
@@ -563,6 +577,14 @@ void APlayer::Land2Run(float _DeltaTime)
 {
 	PlayerRenderer->ChangeAnimation("Land2Run");
 	ArmRenderer->ChangeAnimation("ArmLand2Run");
+	
+	if (!bHasSpawnedVfx)
+	{
+		std::shared_ptr<APlayerVfx> Vfx = GetWorld()->SpawnActor<APlayerVfx>();
+		Vfx->InitVfx("Vfx_Landing");
+		Vfx->InitPos(this->GetActorLocation());
+		bHasSpawnedVfx = true;
+	}
 
 	bCanJump = true;
 
@@ -578,17 +600,20 @@ void APlayer::Land2Run(float _DeltaTime)
 	}
 	if (UEngineInput::IsDown(VK_SPACE))
 	{
+		bHasSpawnedVfx = false;
 		FSM.ChangeState(PlayerState::Jumping);
 		return;
 	}
 	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D'))
 	{
+		bHasSpawnedVfx = false;
 		FSM.ChangeState(PlayerState::RunStop);
 		return;
 	}
 
 	if (PlayerRenderer->IsCurAnimationEnd())
 	{
+		bHasSpawnedVfx = false;
 		FSM.ChangeState(PlayerState::Running);
 		return;
 	}

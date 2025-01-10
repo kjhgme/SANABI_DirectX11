@@ -140,6 +140,12 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			LoadFolder("Mari/BossStage/016_AltDroneRideCloakStart");
 		}
 	}
+	// Vfx
+	{
+		LoadFolder("Vfx/Vfx_NoImage");
+		LoadFolder("Vfx/Vfx_Jump");
+		LoadFolder("Vfx/Vfx_Landing");
+	}
 
 	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
 	UEngineCore::CreateLevel<AInGameMode, APawn>("InGameLevel");
