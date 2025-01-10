@@ -75,7 +75,10 @@ void APlayer::Tick(float _DeltaTime)
 		SetArmPosition();
 		CheckRightDir();
 	}
-
+	if (UEngineInput::IsDown('G'))
+	{
+		FSM.ChangeState(PlayerState::Death);
+	}
 	//if (UEngineInput::IsDown('Q'))
 	//{
 	//	PlayerText = GetWorld()->SpawnActor<ATextBubble>();
@@ -271,6 +274,8 @@ void APlayer::InitPlayerAnimation()
 		ArmRenderer->CreateAnimation("ArmJSwingJump", "SNB_Arm_SwingJump");
 		PlayerRenderer->CreateAnimation("SwingJumpUp", "SNB_SwingJumpUp");
 		ArmRenderer->CreateAnimation("ArmSwingJumpUp", "SNB_Arm_SwingJumpUp");
+
+		PlayerRenderer->CreateAnimation("Death", "SNB_Death", false);
 	}
 	// BossAnim
 	{
@@ -296,6 +301,7 @@ void APlayer::InitPlayerState()
 	FSM.CreateState(PlayerState::Falling, std::bind(&APlayer::Falling, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Landing, std::bind(&APlayer::Landing, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Land2Run, std::bind(&APlayer::Land2Run, this, std::placeholders::_1), [this]() {});
+	FSM.CreateState(PlayerState::Death, std::bind(&APlayer::Death, this, std::placeholders::_1), [this]() {});
 
 }
 
@@ -627,5 +633,11 @@ void APlayer::Land2Run(float _DeltaTime)
 		FSM.ChangeState(PlayerState::Running);
 		return;
 	}
+}
+
+void APlayer::Death(float _DeltaTime)
+{
+	PlayerRenderer->ChangeAnimation("Death");
+	ArmRenderer->ChangeAnimation("SNB_Arm_NoImage");
 }
 

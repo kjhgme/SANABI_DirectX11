@@ -92,6 +92,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 			LoadFolder("SNB/SNB_Swing");
 			LoadFolder("SNB/SNB_SwingJump");
 			LoadFolder("SNB/SNB_SwingJumpUp");
+			LoadFolder("SNB/SNB_Death");
 		}
 		//SNB Arm
 		{
