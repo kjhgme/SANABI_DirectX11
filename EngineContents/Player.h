@@ -10,7 +10,11 @@ enum class PlayerState
 	RunStart,
 	Running,
 	RunStop,
-	Jump,
+	Jumping,
+	FallStart,
+	Falling,
+	Landing,
+	Land2Run,
 };
 
 class APlayer : public APawn
@@ -60,7 +64,11 @@ public:
 	void RunStart(float _DeltaTime);
 	void Running(float _DeltaTime);
 	void RunStop(float _DeltaTime);
-	void Jump(float _DeltaTime);
+	void Jumping(float _DeltaTime);
+	void FallStart(float _DeltaTime);
+	void Falling(float _DeltaTime);
+	void Landing(float _DeltaTime);
+	void Land2Run(float _DeltaTime);
 
 protected:
 	void BeginPlay() override;
@@ -74,13 +82,15 @@ private:
 	std::shared_ptr<class ACameraActor> PlayerCamera;
 	std::shared_ptr<class ATextBubble> PlayerText;
 
-	bool bIsRight = true;
 	bool SceneMode = true;
+	bool bIsRight = true;
+	bool bCanJump = true;
 
-	float Gravity = -9.8f;
+	float Gravity = -98.0f;
 	float GravityVelocity = 0.0f;
 
-	float MoveVelocity = 0.0f;
+	float MoveVelocity = 300.0f;
+	float JumpVelocity = 3.0f;
 	const float MaxFallSpeed = -5000.0f;
 
 	UFSMStateManager FSM;

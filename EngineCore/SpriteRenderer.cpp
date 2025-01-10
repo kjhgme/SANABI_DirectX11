@@ -99,6 +99,72 @@ void USpriteRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	URenderer::Render(_Camera, _DeltaTime);
 }
 
+//void USpriteRenderer::ComponentTick(float _DeltaTime)
+//{
+//	URenderer::ComponentTick(_DeltaTime);
+//
+//	if (nullptr != CurAnimation)
+//	{
+//		CurAnimation->IsEnd = false;
+//		FrameAnimation* EventAnimation = nullptr;
+//		int EventFrame = -1;
+//
+//		std::vector<int>& Indexes = CurAnimation->FrameIndex;
+//		std::vector<float>& Times = CurAnimation->FrameTime;
+//
+//		Sprite = CurAnimation->Sprite;
+//
+//
+//		CurAnimation->CurTime += _DeltaTime * CurAnimationSpeed;
+//
+//		float CurFrameTime = Times[CurAnimation->CurIndex];
+//
+//		if (CurAnimation->CurTime > CurFrameTime)
+//		{
+//
+//			CurAnimation->CurTime = 0.0f;
+//			++CurAnimation->CurIndex;
+//
+//			if (CurAnimation->Events.contains(CurIndex))
+//			{
+//				EventAnimation = CurAnimation;
+//				EventFrame = CurIndex;
+//			}
+//
+//
+//			if (CurAnimation->CurIndex >= Indexes.size())
+//			{
+//				CurAnimation->IsEnd = true;
+//				if (true == CurAnimation->Loop)
+//				{
+//					CurAnimation->CurIndex = 0;
+//
+//					if (CurAnimation->Events.contains(CurIndex))
+//					{
+//						EventAnimation = CurAnimation;
+//						EventFrame = CurIndex;
+//					}
+//				}
+//				else
+//				{
+//					--CurAnimation->CurIndex;
+//				}
+//			}
+//		}
+//
+//
+//
+//		CurIndex = Indexes[CurAnimation->CurIndex];
+//		if (nullptr != EventAnimation)
+//		{
+//			if (EventAnimation->Events.contains(CurIndex))
+//			{
+//				EventAnimation->Events[CurIndex]();
+//			}
+//		}
+//	}
+//}
+
 void USpriteRenderer::ComponentTick(float _DeltaTime)
 {
 	URenderer::ComponentTick(_DeltaTime);
@@ -108,12 +174,10 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 		FrameAnimation* EventAnimation = nullptr;
 		int EventFrame = -1;
 
-		CurAnimation->IsEnd = false;
 		std::vector<int>& Indexes = CurAnimation->FrameIndex;
 		std::vector<float>& Times = CurAnimation->FrameTime;
 
 		Sprite = CurAnimation->Sprite;
-
 
 		CurAnimation->CurTime += _DeltaTime * CurAnimationSpeed;
 
@@ -121,7 +185,6 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 
 		if (CurAnimation->CurTime > CurFrameTime)
 		{
-
 			CurAnimation->CurTime -= CurFrameTime;
 			++CurAnimation->CurIndex;
 
@@ -133,15 +196,7 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 
 			if (CurAnimation->CurIndex >= Indexes.size())
 			{
-				CurAnimation->IsEnd = true;
-			}
-			else {
-				CurAnimation->IsEnd = false;
-			}
-
-			if (CurAnimation->CurIndex >= Indexes.size())
-			{
-				if (true == CurAnimation->Loop)
+				if (CurAnimation->Loop)
 				{
 					CurAnimation->CurIndex = 0;
 
@@ -153,16 +208,16 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 				}
 				else
 				{
-					CurAnimation->IsEnd = true;
-					--CurAnimation->CurIndex;
+					CurAnimation->CurIndex = Indexes.size() - 1;  // 마지막 인덱스 유지
+					CurAnimation->IsEnd = true;  // 즉시 IsEnd 설정
 				}
 			}
 		}
 
-		CurIndex = Indexes[CurAnimation->CurIndex];
-		if (nullptr != EventAnimation)
+		if (false == CurAnimation->IsEnd)
 		{
-			if (EventAnimation->Events.contains(CurIndex))
+			CurIndex = Indexes[CurAnimation->CurIndex];
+			if (nullptr != EventAnimation && EventAnimation->Events.contains(CurIndex))
 			{
 				EventAnimation->Events[CurIndex]();
 			}

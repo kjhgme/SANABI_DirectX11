@@ -28,6 +28,7 @@ APlayer::APlayer()
 
 	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::PLAYER) });
 	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) });
+	ArmRenderer->AddRelativeLocation({ 100.0f, 100.0f, 0.0f });
 
 	PlayerCamera = GetWorld()->GetMainCamera();
 	PlayerCamera->AttachToActor(this);
@@ -228,7 +229,7 @@ void APlayer::ApplyGravity(float _DeltaTime)
 		Gravity = 0;
 	}
 	else {
-		Gravity = -9.8f;
+		Gravity = -98.0f * 2.0f;
 		GravityVelocity += Gravity * _DeltaTime;
 		GravityVelocity = UEngineMath::Clamp(GravityVelocity, MaxFallSpeed, 0.0f);
 	}
@@ -253,16 +254,16 @@ void APlayer::InitPlayerAnimation()
 		PlayerRenderer->CreateAnimation("RunStop", "SNB_RunStop", false);
 		ArmRenderer->CreateAnimation("ArmRunStop", "SNB_Arm_RunStop", false);
 
-		PlayerRenderer->CreateAnimation("Jumping", "SNB_Jumping");
-		ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Jumping");
-		PlayerRenderer->CreateAnimation("FallStart", "SNB_FallStart" ,false);
+		PlayerRenderer->CreateAnimation("Jumping", "SNB_Jumping", false);
+		ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Jumping", false);
+		PlayerRenderer->CreateAnimation("FallStart", "SNB_FallStart" , false);
 		ArmRenderer->CreateAnimation("ArmFallStart", "SNB_Arm_FallStart", false);
 		PlayerRenderer->CreateAnimation("Falling", "SNB_Falling");
 		ArmRenderer->CreateAnimation("ArmFalling", "SNB_Arm_Falling");
-		PlayerRenderer->CreateAnimation("Landing", "SNB_Landing");
-		ArmRenderer->CreateAnimation("ArmLanding", "SNB_Arm_Landing");
-		PlayerRenderer->CreateAnimation("Land2Run", "SNB_Land2Run");
-		ArmRenderer->CreateAnimation("ArmLand2Run", "SNB_Arm_Land2Run");
+		PlayerRenderer->CreateAnimation("Landing", "SNB_Landing", false);
+		ArmRenderer->CreateAnimation("ArmLanding", "SNB_Arm_Landing", false);
+		PlayerRenderer->CreateAnimation("Land2Run", "SNB_Land2Run", false);
+		ArmRenderer->CreateAnimation("ArmLand2Run", "SNB_Arm_Land2Run", false);
 
 		PlayerRenderer->CreateAnimation("Swing", "SNB_Swing");
 		PlayerRenderer->CreateAnimation("SwingJump", "SNB_SwingJump");
@@ -289,7 +290,12 @@ void APlayer::InitPlayerState()
 	FSM.CreateState(PlayerState::RunStart, std::bind(&APlayer::RunStart, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Running, std::bind(&APlayer::Running, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::RunStop, std::bind(&APlayer::RunStop, this, std::placeholders::_1), [this]() {});
-	FSM.CreateState(PlayerState::Jump, std::bind(&APlayer::Jump, this, std::placeholders::_1), [this]() {});
+	FSM.CreateState(PlayerState::Jumping, std::bind(&APlayer::Jumping, this, std::placeholders::_1), [this]() {});
+	FSM.CreateState(PlayerState::FallStart, std::bind(&APlayer::FallStart, this, std::placeholders::_1), [this]() {});
+	FSM.CreateState(PlayerState::Falling, std::bind(&APlayer::Falling, this, std::placeholders::_1), [this]() {});
+	FSM.CreateState(PlayerState::Landing, std::bind(&APlayer::Landing, this, std::placeholders::_1), [this]() {});
+	FSM.CreateState(PlayerState::Land2Run, std::bind(&APlayer::Land2Run, this, std::placeholders::_1), [this]() {});
+
 }
 
 void APlayer::Idle(float _DeltaTime)
@@ -301,71 +307,58 @@ void APlayer::Idle(float _DeltaTime)
 	{
 		bIsRight = false;
 		FSM.ChangeState(PlayerState::RunStart);
+		return;
 	}
 	if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 		FSM.ChangeState(PlayerState::RunStart);
+		return;
 	}
 	if (UEngineInput::IsPress('R'))
 	{
 		FSM.ChangeState(PlayerState::Walking);
+		return;
 	}
 	if (UEngineInput::IsDown(VK_SPACE))
 	{
-		FSM.ChangeState(PlayerState::Jump);
+		FSM.ChangeState(PlayerState::Jumping);
+		return;
 	}
 }
 
 void APlayer::Walking(float _DeltaTime)
 {
-	UEngineDebug::OutPutString("Walking.");
 	PlayerRenderer->ChangeAnimation("Walking");
 	ArmRenderer->ChangeAnimation("Walking");
 
-	MoveVelocity = 100.0f;
+	float WalkVelocity = 100.0f;
 
-
-	if (UEngineInput::IsPress('R'))
-	{
-
-		if (bIsRight == false)
-		{
-			AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-		}
-		if (bIsRight == true)
-		{
-			AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-		}
-	}
 	if (UEngineInput::IsPress('A'))
 	{
 		bIsRight = false;
 
-		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+		AddRelativeLocation(FVector{ -WalkVelocity * _DeltaTime, 0.0f, 0.0f });
 	}	
 	if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 
-		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+		AddRelativeLocation(FVector{ WalkVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
 	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D') &&
 		true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S') &&
 		true == UEngineInput::IsFree('R'))
 	{
 		FSM.ChangeState(PlayerState::Idle);
+		return;
 	}
 }
 
 void APlayer::RunStart(float _DeltaTime)
 {
-	UEngineDebug::OutPutString("RunStart.");
 	PlayerRenderer->ChangeAnimation("RunStart");
 	ArmRenderer->ChangeAnimation("ArmRunStart");
-
-	MoveVelocity += _DeltaTime * 500.0f;
-	MoveVelocity = UEngineMath::Clamp(MoveVelocity, 0.0f, 300.0f);
 
 	if (UEngineInput::IsPress('A'))
 	{
@@ -377,84 +370,227 @@ void APlayer::RunStart(float _DeltaTime)
 		bIsRight = true;
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		FSM.ChangeState(PlayerState::Jumping);
+		return;
+	}
 	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D') &&
 		true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S'))
 	{
 		FSM.ChangeState(PlayerState::RunStop);
+		return;
 	}
 	if (PlayerRenderer->IsCurAnimationEnd())
 	{
 		FSM.ChangeState(PlayerState::Running);
+		return;
 	}
 }
 
 void APlayer::Running(float _DeltaTime)
 {
-	UEngineDebug::OutPutString("Running.");
-
 	PlayerRenderer->ChangeAnimation("Running");
 	ArmRenderer->ChangeAnimation("ArmRunning");
-
-	MoveVelocity = 300.0f;
 
 	if (UEngineInput::IsPress('A'))
 	{
 		bIsRight = false;
-
 		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
 	if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;		
-		
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		FSM.ChangeState(PlayerState::Jumping);
+		return;
 	}
 	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D') &&
 		true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S'))
 	{
 		FSM.ChangeState(PlayerState::RunStop);
+		return;
 	}
 }
 
 void APlayer::RunStop(float _DeltaTime)
 {
-	UEngineDebug::OutPutString("RunStop.");
 	PlayerRenderer->ChangeAnimation("RunStop");
 	ArmRenderer->ChangeAnimation("ArmRunStop");
 
-	MoveVelocity -= _DeltaTime * 500.0f;
-	MoveVelocity = UEngineMath::Clamp(MoveVelocity, 0.0f, 300.0f);
+	//float StopVelocity = 300.0f - _DeltaTime * 1000.0f;
+	//StopVelocity = UEngineMath::Clamp(StopVelocity, 0.0f, 300.0f);
 
 	if (UEngineInput::IsPress('A'))
 	{
 		bIsRight = false;
 		FSM.ChangeState(PlayerState::RunStart);
+		return;
 	}
 	if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 		FSM.ChangeState(PlayerState::RunStart);
+		return;
 	}
 
-	if (false == bIsRight)
+	/*if (false == bIsRight)
 	{
-		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+		AddRelativeLocation(FVector{ -StopVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
 	if (true == bIsRight)
 	{
+		AddRelativeLocation(FVector{ StopVelocity * _DeltaTime, 0.0f, 0.0f });
+	}*/
+	if (PlayerRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(PlayerState::Idle);
+		return;
+	}
+}
+
+void APlayer::Jumping(float _DeltaTime)
+{
+	PlayerRenderer->ChangeAnimation("Jumping");
+	ArmRenderer->ChangeAnimation("ArmJumping");
+
+	if (true == bCanJump)
+	{
+		bCanJump = false;
+	}
+
+	this->AddActorLocation({ 0.0f, JumpVelocity, 0.0f });
+		
+	if (UEngineInput::IsPress('A'))
+	{
+		bIsRight = false;
+		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsPress('D'))
+	{
+		bIsRight = true;
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
 	if (PlayerRenderer->IsCurAnimationEnd())
 	{
-		MoveVelocity = 0.0f;
-		FSM.ChangeState(PlayerState::Idle);
+		FSM.ChangeState(PlayerState::FallStart);
+		return;
 	}
 }
 
-void APlayer::Jump(float _DeltaTime)
+void APlayer::FallStart(float _DeltaTime)
 {
-	UEngineDebug::OutPutString("Jump.");
+	PlayerRenderer->ChangeAnimation("FallStart");
+	ArmRenderer->ChangeAnimation("ArmFallStart");
 
+	if (UEngineInput::IsPress('A'))
+	{
+		bIsRight = false;
+		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsPress('D'))
+	{
+		bIsRight = true;
+		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (PlayerRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(PlayerState::Falling);
+		return;
+	}
+}
 
+void APlayer::Falling(float _DeltaTime)
+{
+	PlayerRenderer->ChangeAnimation("Falling");
+	ArmRenderer->ChangeAnimation("ArmFalling");
+
+	if (UEngineInput::IsPress('A'))
+	{
+		bIsRight = false;
+		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsPress('D'))
+	{
+		bIsRight = true;
+		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+
+	if (PlayerRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(PlayerState::Landing);
+		return;
+	}
+	if (Collision->IsColliding())
+	{
+		if (UEngineInput::IsPress('A') || UEngineInput::IsPress('D'))
+		{
+			FSM.ChangeState(PlayerState::Land2Run);
+			return;
+		}
+		else
+		{
+			FSM.ChangeState(PlayerState::Landing);
+			return;
+		}
+	}
+
+}
+
+void APlayer::Landing(float _DeltaTime)
+{
+	PlayerRenderer->ChangeAnimation("Landing");
+	ArmRenderer->ChangeAnimation("ArmLanding");
+
+	bCanJump = true;
+
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		FSM.ChangeState(PlayerState::Jumping);
+		return;
+	}
+	if (PlayerRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(PlayerState::Idle);
+		return;
+	}
+}
+
+void APlayer::Land2Run(float _DeltaTime)
+{
+	PlayerRenderer->ChangeAnimation("Land2Run");
+	ArmRenderer->ChangeAnimation("ArmLand2Run");
+
+	bCanJump = true;
+
+	if (UEngineInput::IsPress('A'))
+	{
+		bIsRight = false;
+		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsPress('D'))
+	{
+		bIsRight = true;
+		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		FSM.ChangeState(PlayerState::Jumping);
+		return;
+	}
+	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D'))
+	{
+		FSM.ChangeState(PlayerState::RunStop);
+		return;
+	}
+
+	if (PlayerRenderer->IsCurAnimationEnd())
+	{
+		FSM.ChangeState(PlayerState::Running);
+		return;
+	}
 }
 
