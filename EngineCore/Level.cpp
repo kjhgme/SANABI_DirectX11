@@ -4,6 +4,7 @@
 #include "Actor.h"
 #include "Renderer.h"
 #include "Collision.h"
+#include "EngineGUI.h"
 #include "EngineCore.h"
 #include "CameraActor.h"
 #include "EngineCamera.h"
@@ -94,6 +95,11 @@ void ULevel::Render(float _DeltaTime)
 				_Collision->DebugRender(Camera->GetCameraComponent().get(), _DeltaTime);
 			}
 		}
+	}
+
+	if (true == UEngineWindow::IsApplicationOn())
+	{
+		UEngineGUI::GUIRender(this);
 	}
 
 	UEngineCore::GetDevice().RenderEnd();

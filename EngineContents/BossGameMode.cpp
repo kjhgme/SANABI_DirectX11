@@ -11,6 +11,26 @@
 #include "BossPlatform.h"
 #include "TextBubble.h"
 
+#include <EngineCore/EngineGUIWindow.h>
+#include <EngineCore/EngineGUI.h>
+#include "ContentsEditorGUI.h"
+
+class TestWindow : public UEngineGUIWindow
+{
+public:
+	void OnGUI() override
+	{
+		if (true == ImGui::Button("FreeCameraOn"))
+		{
+			GetWorld()->GetMainCamera()->FreeCameraSwitch();
+		}
+
+		ImGui::SameLine();
+		ImGui::Text("test");
+
+	}
+};
+
 ABossGameMode::ABossGameMode()
 {
 	GetWorld()->CreateCollisionProfile("Player");
@@ -136,4 +156,31 @@ void ABossGameMode::InitScenes()
 	Scenes.push_back([this]() {	Mari->MufinOff(); Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->AddActorLocation({ -1.0f, 14.0f, 0.0f });	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Player->SetSceneMode(false); });
+}
+
+void ABossGameMode::LevelChangeStart()
+{
+	UEngineGUI::AllWindowOff();
+
+	{
+		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+		}
+
+		Window->SetActive(true);
+	}
+
+	{
+		std::shared_ptr<TestWindow> Window = UEngineGUI::FindGUIWindow<TestWindow>("TestWindow");
+
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
+		}
+
+		Window->SetActive(true);
+	}
 }

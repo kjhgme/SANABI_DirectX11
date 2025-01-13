@@ -45,11 +45,11 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::CreateLevel<AEndingGameMode, APawn>("EndingGameLevel");
 	UEngineCore::OpenLevel("BossGameLevel");
 
-	//UEngineGUI::AllWindowOff();
-	//
-	//UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-	//std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-	//Window->SetActive(true);
+	UEngineGUI::AllWindowOff();
+	
+	UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+	std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+	Window->SetActive(true);
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

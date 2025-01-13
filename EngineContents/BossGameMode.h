@@ -19,6 +19,7 @@ public:
 	void InitScenes();
 
 protected:
+	void LevelChangeStart() override;
 
 private:
 	std::shared_ptr<class APlayer> Player;

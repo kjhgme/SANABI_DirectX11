@@ -1,8 +1,9 @@
 #pragma once
-
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
+
+#include <EngineBase/EngineString.h>
 
 class UEngineGUI
 {
@@ -27,16 +28,16 @@ public:
 	template<typename WindowType>
 	static std::shared_ptr<WindowType> CreateGUIWindow(std::string_view _Text)
 	{
-		// std::string UpperName = UEngineString::ToUpper(_Text);
+		std::string UpperName = UEngineString::ToUpper(_Text);
 
-		if (nullptr != FindGUIWindow(_Text))
+		if (nullptr != FindGUIWindow(UpperName))
 		{
-			MSGASSERT("이미 만들어진 윈도우를 또 만들수는 없습니다.");
+			MSGASSERT(UpperName + " is already created.");
 			return nullptr;
 		}
 
 		std::shared_ptr<WindowType> Window = std::make_shared<WindowType>();
-		Window->SetName(_Text);
+		Window->SetName(UpperName);
 		PushGUIWindow(Window);
 		return Window;
 	}
