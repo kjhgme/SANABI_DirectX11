@@ -116,6 +116,36 @@
     <ClInclude Include="TimeEventComponent.h">
       <Filter>Object\Component\Contents</Filter>
     </ClInclude>
+    <ClInclude Include="EngineGUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineGUIWindow.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>GUI\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx11.h">
+      <Filter>GUI\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>GUI\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>GUI\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>GUI\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>GUI\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>GUI\IMGUI\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>GUI\IMGUI\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -227,6 +257,30 @@
     <ClCompile Include="TimeEventComponent.cpp">
       <Filter>Object\Component\Contents</Filter>
     </ClCompile>
+    <ClCompile Include="EngineGUI.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGUIWindow.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>GUI\IMGUI\Cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>GUI\IMGUI\Cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>GUI\IMGUI\Cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>GUI\IMGUI\Cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>GUI\IMGUI\Cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>GUI\IMGUI\Cpp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
@@ -294,6 +348,18 @@
     </Filter>
     <Filter Include="Object\Component\Collision">
       <UniqueIdentifier>{868b02a2-68c2-4ce7-9149-843cdf7482dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{f3d98a38-10d2-4f53-9cd7-c7394bfb3d94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\IMGUI">
+      <UniqueIdentifier>{ba6d1699-a828-415c-bbbd-d1f59dacc082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\IMGUI\Cpp">
+      <UniqueIdentifier>{adfb292b-bad0-491b-b285-820fbb82c2ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI\IMGUI\Header">
+      <UniqueIdentifier>{ed9a7835-3724-4c8b-93c8-889cc322527a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
