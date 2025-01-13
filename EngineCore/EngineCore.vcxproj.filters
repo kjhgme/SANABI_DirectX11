@@ -146,6 +146,12 @@
     <ClInclude Include="imconfig.h">
       <Filter>GUI\IMGUI\Header</Filter>
     </ClInclude>
+    <ClInclude Include="TileMapRenderer.h">
+      <Filter>Object\Component\Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformObject.h">
+      <Filter>Object\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -280,6 +286,12 @@
     </ClCompile>
     <ClCompile Include="imgui_widgets.cpp">
       <Filter>GUI\IMGUI\Cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMapRenderer.cpp">
+      <Filter>Object\Component\Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformObject.cpp">
+      <Filter>Object\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -33,11 +33,13 @@ public:
 	ENGINEAPI void ConstantBufferLinkData(std::string_view Name, void* _Data);
 
 	ENGINEAPI void SetTexture(std::string_view _Name, std::string_view _ResName);
+	ENGINEAPI void SetTexture(std::string_view _Name, std::shared_ptr<UEngineTexture> _Texture);
 	ENGINEAPI void SetSampler(std::string_view Name, std::string_view _ResName);
 
-private:
-	std::map<EShaderType, UEngineShaderResources> Resources;
+	ENGINEAPI void SetTexture(std::string_view _Name, UEngineTexture* _Texture);
 
+	std::map<EShaderType, UEngineShaderResources> Resources;
+private:
 	void InputLayOutCreate();
 };
 

@@ -167,6 +167,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ContentsEditorGUI.h" />
+    <ClInclude Include="MapMakerMode.h" />
     <ClInclude Include="PlayerVfx.h">
       <SubType>
       </SubType>
@@ -226,6 +228,9 @@
     <ClInclude Include="TitleLogo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ContentsCore_Resources.cpp" />
+    <ClCompile Include="ContentsEditorGUI.cpp" />
+    <ClCompile Include="MapMakerMode.cpp" />
     <ClCompile Include="PlayerVfx.cpp">
       <SubType>
       </SubType>

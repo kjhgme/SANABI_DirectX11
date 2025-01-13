@@ -66,7 +66,7 @@ int UEngineFile::GetFileSize()
 	return static_cast<int>(std::filesystem::file_size(Path));
 }
 
-ENGINEAPI std::string UEngineFile::GetAllFileText()
+std::string UEngineFile::GetAllFileText()
 {
 	UEngineSerializer Ser;
 	Read(Ser);

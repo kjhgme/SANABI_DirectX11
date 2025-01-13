@@ -51,6 +51,12 @@
     <ClInclude Include="PlayerVfx.h">
       <Filter>Global</Filter>
     </ClInclude>
+    <ClInclude Include="ContentsEditorGUI.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MapMakerMode.h">
+      <Filter>GameMode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -100,6 +106,13 @@
     <ClCompile Include="PlayerVfx.cpp">
       <Filter>Global</Filter>
     </ClCompile>
+    <ClCompile Include="ContentsEditorGUI.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MapMakerMode.cpp">
+      <Filter>GameMode</Filter>
+    </ClCompile>
+    <ClCompile Include="ContentsCore_Resources.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameMode">
@@ -122,6 +135,9 @@
     </Filter>
     <Filter Include="Boss">
       <UniqueIdentifier>{240d20f1-488a-4bc4-a526-33651fad464b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{4d31e018-cd7c-4067-abd4-49ab7f6fb4c5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
 #include <memory>
+#include "EngineSerializer.h"
 
-class UObject : public std::enable_shared_from_this<UObject>
+class UObject : public std::enable_shared_from_this<UObject>, public ISerializeObject
 {
 public:
 	ENGINEAPI UObject();
@@ -27,6 +28,11 @@ public:
 	std::string_view GetNameView() const
 	{
 		return Name.c_str();
+	}
+
+	bool& GetIsActiveValueRef()
+	{
+		return IsActiveValue;
 	}
 
 	ENGINEAPI virtual void SetName(std::string_view _Name)

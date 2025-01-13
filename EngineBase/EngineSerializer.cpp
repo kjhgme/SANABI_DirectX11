@@ -9,7 +9,7 @@ UEngineSerializer::~UEngineSerializer()
 {
 }
 
-void UEngineSerializer::Write(void* _Data, unsigned int _Size)
+void UEngineSerializer::Write(const void* _Data, unsigned int _Size)
 {
 	if (WriteOffset + _Size >= Data.size())
 	{
@@ -34,4 +34,15 @@ void UEngineSerializer::Read(void* _Data, unsigned int _Size)
 void UEngineSerializer::operator>>(ISerializeObject& _Data)
 {
 	_Data.DeSerialize(*this);
+}
+
+
+void ISerializeObject::Serialize(UEngineSerializer& _Ser)
+{
+
+}
+
+void ISerializeObject::DeSerialize(UEngineSerializer& _Ser)
+{
+
 }

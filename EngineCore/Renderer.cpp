@@ -74,3 +74,13 @@ URenderUnit& URenderer::CreateRenderUnit()
 	NewUnit.ParentRenderer = this;
 	return NewUnit;
 }
+
+ENGINEAPI void URenderer::RenderTransUpdate(UEngineCamera* _Camera)
+{
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+
+	RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
+}

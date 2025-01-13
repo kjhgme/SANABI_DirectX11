@@ -451,6 +451,14 @@ public:
 		return *this;
 	}
 
+	TVector& operator/=(const TVector& _Other)
+	{
+		X /= _Other.X;
+		Y /= _Other.Y;
+		Z /= _Other.Z;
+		return *this;
+	}
+
 	TVector& operator*=(float _Other)
 	{
 		X *= _Other;

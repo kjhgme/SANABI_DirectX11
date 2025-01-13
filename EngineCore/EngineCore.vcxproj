@@ -290,10 +290,12 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TileMapRenderer.h" />
     <ClInclude Include="TimeEventComponent.h">
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TransformObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor.cpp" />
@@ -419,10 +421,12 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TileMapRenderer.cpp" />
     <ClCompile Include="TimeEventComponent.cpp">
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TransformObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="ThirdParty\DirectxTex\Debug\DirectXTex_Debug.lib">

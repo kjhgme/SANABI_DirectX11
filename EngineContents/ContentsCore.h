@@ -23,5 +23,7 @@ private:
 
 	bool InstallFont(std::string_view _Font);
 	bool RemoveFont(std::string_view _Font);
+
+	void InitResources();
 };
 
