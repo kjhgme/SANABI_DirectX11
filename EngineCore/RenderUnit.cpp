@@ -15,7 +15,7 @@ void URenderUnit::MaterialResourcesCheck()
 {
 	if (nullptr == Material)
 	{
-		MSGASSERT("Material is nullptr.");
+		MSGASSERT("존재하지 않는 머티리얼의 리소스를 체크할 수 없습니다.");
 		return;
 	}
 
@@ -31,6 +31,11 @@ void URenderUnit::MaterialResourcesCheck()
 
 	if (nullptr != ParentRenderer)
 	{
+		TransformObject = ParentRenderer;
+	}
+
+	if (nullptr != TransformObject)
+	{
 		for (EShaderType i = EShaderType::VS; i < EShaderType::MAX; i = static_cast<EShaderType>(static_cast<int>(i) + 1))
 		{
 			if (false == Resources.contains(i))
@@ -42,7 +47,8 @@ void URenderUnit::MaterialResourcesCheck()
 			{
 				continue;
 			}
-			
+
+
 			FTransform& Ref = TransformObject->GetTransformRef();
 			Resources[i].ConstantBufferLinkData("FTransform", Ref);
 		}
@@ -146,7 +152,7 @@ void URenderUnit::SetMesh(std::string_view _Name)
 
 	if (nullptr == Mesh)
 	{
-		MSGASSERT("Mesh is nullptr.");
+		MSGASSERT("존재하지 않는 매쉬를 세팅하려고 했습니다.");
 	}
 
 	if (nullptr != Material)
@@ -161,35 +167,62 @@ void URenderUnit::SetMaterial(std::string_view _Name)
 
 	if (nullptr == Material)
 	{
-		MSGASSERT("Material is nullptr.");
+		MSGASSERT("존재하지 않는 머티리얼을를 세팅하려고 했습니다.");
 	}
 
 	MaterialResourcesCheck();
 
+	// UEngineConstantBufferRes Res;
+
 	if (nullptr != Mesh)
 	{
 		InputLayOutCreate();
+
 	}
+
+
 }
 
-void URenderUnit::Render(UEngineCamera* _Camera, float _DeltaTime)
+void URenderUnit::Render(class UEngineCamera* _Camera, float _DeltaTime)
 {
+	// 잇풋어셈블러 
+
+	// 쉐이더 리소스
+
+	//	ShaderResSetting();
+
+	//for (std::pair<EShaderType, UEngineShaderResources>& ShaderRes : Resources)
+	//{
+	//	UEngineShaderResources& Res = ShaderRes.second;
+	//	Res.Setting();
+	//}
+
+
 	for (std::pair<const EShaderType, UEngineShaderResources>& Pair : Resources)
 	{
 		Pair.second.Setting();
 	}
 
+	//	InputAssembler1Setting();
 	Mesh->GetVertexBuffer()->Setting();
+
+	//	VertexShaderSetting();
 	Material->GetVertexShader()->Setting();
 
+	//	InputAssembler2Setting();
 	Mesh->GetIndexBuffer()->Setting();
 	Material->PrimitiveTopologySetting();
 
 	UEngineCore::GetDevice().GetContext()->IASetInputLayout(InputLayOut.Get());
 
+	//	RasterizerSetting();
 	Material->GetRasterizerState()->Setting();
+
+	//	PixelShaderSetting();
 	Material->GetPixelShader()->Setting();
 
+	//	OutPutMergeSetting();
+	// 랜더타겟이라는 것을 바뀔겁니다.
 	Material->GetBlend()->Setting();
 
 	Material->GetDepthStencilState()->Setting();
@@ -209,4 +242,6 @@ void URenderUnit::InputLayOutCreate()
 		Blob->GetBufferPointer(),
 		Blob->GetBufferSize(),
 		&InputLayOut);
+
+	int a = 0;
 }
