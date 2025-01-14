@@ -49,7 +49,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	UEngineCore::CreateLevel<AMapMakerMode, APawn, AHUD>("MapMakerEditor");
 	UEngineCore::OpenLevel("BossGameLevel");
 
-	UEngineGUI::AllWindowOff();
+	// UEngineGUI::AllWindowOff();
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

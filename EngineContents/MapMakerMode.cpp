@@ -185,30 +185,30 @@ void AMapMakerMode::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 }
 
-//void AMapMakerMode::LevelChangeStart()
-//{
-//	UEngineGUI::AllWindowOff();
-//
-//	{
-//		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-//
-//		if (nullptr == Window)
-//		{
-//			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-//		}
-//
-//		Window->SetActive(true);
-//	}
-//
-//	{
-//		TileMapWindow = UEngineGUI::FindGUIWindow<UTileMapWindow>("TileMapWindow");
-//
-//		if (nullptr == TileMapWindow)
-//		{
-//			TileMapWindow = UEngineGUI::CreateGUIWindow<UTileMapWindow>("TileMapWindow");
-//		}
-//
-//		TileMapWindow->SetActive(true);
-//		TileMapWindow->TileMapRenderer = TileMapRenderer.get();
-//	}
-//}
+void AMapMakerMode::LevelChangeStart()
+{
+	UEngineGUI::AllWindowOff();
+
+	{
+		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+
+		if (nullptr == Window)
+		{
+			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+		}
+
+		Window->SetActive(true);
+	}
+
+	{
+		TileMapWindow = UEngineGUI::FindGUIWindow<UTileMapWindow>("TileMapWindow");
+
+		if (nullptr == TileMapWindow)
+		{
+			TileMapWindow = UEngineGUI::CreateGUIWindow<UTileMapWindow>("TileMapWindow");
+		}
+
+		TileMapWindow->SetActive(true);
+		TileMapWindow->TileMapRenderer = TileMapRenderer.get();
+	}
+}

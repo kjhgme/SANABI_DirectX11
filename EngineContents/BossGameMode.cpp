@@ -27,7 +27,6 @@ public:
 
 		ImGui::SameLine();
 		ImGui::Text("test");
-
 	}
 };
 
@@ -105,11 +104,11 @@ void ABossGameMode::Tick(float _DeltaTime)
 		Scenes[SceneTakeNum]();
 		SceneTakeNum++;
 	}
-	// test
 	if (UEngineInput::IsDown('X'))
 	{
 		MainCamera->Zoom(-300.0f, 2.0f);
 	}
+
 	/*if (UEngineInput::IsDown(VK_F1))
 	{
 		GetWorld()->GetMainCamera()->FreeCameraSwitch();

@@ -16,27 +16,56 @@ void UEngineWindow::SetCustomProc(std::function<bool(HWND, UINT, WPARAM, LPARAM)
 
 LRESULT CALLBACK UEngineWindow::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    if (nullptr != CustomProc)
+    {
+        if (true == CustomProc(hWnd, message, wParam, lParam))
+        {
+            return true;
+        }
+    }
+
     switch (message)
     {
     case WM_CREATE:
+    {
         ++WindowCount;
         break;
-
+    }
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
 
         EndPaint(hWnd, &ps);
+        break;
     }
-    break;
+    case WM_SETFOCUS:
+    {
+        if (true == AllWindows.contains(hWnd))
+        {
+            AllWindows[hWnd]->IsFocusValue = true;
+        }
+        UEngineDebug::OutPutString("F");
+        break;
+    }
+    case WM_KILLFOCUS:
+    {
+        if (true == AllWindows.contains(hWnd))
+        {
+            AllWindows[hWnd]->IsFocusValue = false;
+        }
+        UEngineDebug::OutPutString("K");
+        break;
+    }
     case WM_DESTROY:
+    {
         --WindowCount;
         if (0 >= WindowCount)
         {
             UEngineWindow::LoopActive = false;
         }
         break;
+    }
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
@@ -151,6 +180,8 @@ void UEngineWindow::Create(std::string_view _TitleName, std::string_view _ClassN
     }
 
     HDC WindowMainDC = GetDC(WindowHandle);
+
+    AllWindows.insert({ WindowHandle, this });
 }
 
 void UEngineWindow::Open(std::string_view _TitleName)

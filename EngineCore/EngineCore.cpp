@@ -152,7 +152,7 @@ std::map<std::string, std::shared_ptr<class ULevel>> UEngineCore::GetAllLevelMap
 
 void UEngineCore::EngineFrame()
 {
-	if (nullptr != GEngine->NextLevel)
+	if(nullptr != GEngine->NextLevel)
 	{
 		if (nullptr != GEngine->CurLevel)
 		{
@@ -179,7 +179,6 @@ void UEngineCore::EngineFrame()
 	GEngine->CurLevel->Tick(DeltaTime);
 	GEngine->CurLevel->Render(DeltaTime);
 	GEngine->CurLevel->Collision(DeltaTime);
-
 
 	GEngine->CurLevel->Release(DeltaTime);
 }
