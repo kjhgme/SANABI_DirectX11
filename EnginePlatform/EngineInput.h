@@ -71,22 +71,33 @@ public:
 	ENGINEAPI static void KeyCheck(float _DeltaTime);
 	ENGINEAPI static void KeyReset();
 
+	static bool IsDoubleClick(int _KeyIndex, float _Time)
+	{
+		if (false == GetInst().Keys.contains(_KeyIndex))
+		{
+			MSGASSERT("Entered keys that is not yet registered.(DoubleClick)");
+			return false;
+		}
+
+		return GetInst().Keys[_KeyIndex].IsDown && GetInst().Keys[_KeyIndex].FreeTime < _Time;
+	}
+
 	static bool IsDown(int _KeyIndex)
 	{
 		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
-			MSGASSERT("Entered keys that is not yet registered.(EngineInput)");
+			MSGASSERT("Entered keys that is not yet registered.(Down)");
 			return false;
 		}
 
 		return GetInst().Keys[_KeyIndex].IsDown;
 	}
 
-	bool IsUp(int _KeyIndex)
+	static bool IsUp(int _KeyIndex)
 	{
 		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
-			MSGASSERT("Entered keys that is not yet registered.(EngineInput)");
+			MSGASSERT("Entered keys that is not yet registered.(Up)");
 			return false;
 		}
 
@@ -97,7 +108,7 @@ public:
 	{
 		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
-			MSGASSERT("Entered keys that is not yet registered.(EngineInput)");
+			MSGASSERT("Entered keys that is not yet registered.(Press)");
 			return false;
 		}
 
@@ -119,7 +130,7 @@ public:
 	{
 		if (false == GetInst().Keys.contains(_KeyIndex))
 		{
-			MSGASSERT("Entered keys that is not yet registered.(EngineInput)");
+			MSGASSERT("Entered keys that is not yet registered.(Free)");
 			return false;
 		}
 
