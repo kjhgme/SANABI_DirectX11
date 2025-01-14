@@ -9,7 +9,10 @@ UCollision::UCollision()
 
 UCollision::~UCollision()
 {
-
+	for (UCollision* Other : CollisionCheckSet)
+	{
+		Other->CollisionCheckSet.erase(this);
+	}
 }
 
 void UCollision::BeginPlay()
@@ -22,14 +25,6 @@ void UCollision::SetRadius(float _Value)
 	FVector Scale = GetWorldScale3D();
 	Scale.X = _Value * 2.0f;
 	SetScale3D(Scale);
-}
-
-void UCollision::Release()
-{
-	for (UCollision* Other : CollisionCheckSet)
-	{
-		Other->CollisionCheckSet.erase(this);
-	}
 }
 
 void UCollision::SetCollisionProfileName(std::string_view _ProfileName)
