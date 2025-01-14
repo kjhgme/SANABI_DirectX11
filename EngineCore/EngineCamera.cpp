@@ -2,6 +2,7 @@
 #include "EngineCamera.h"
 
 #include "Renderer.h"
+#include "EngineRenderTarget.h"
 
 UEngineCamera::UEngineCamera()
 {
@@ -14,6 +15,8 @@ UEngineCamera::~UEngineCamera()
 
 void UEngineCamera::BeginPlay()
 {
+	USceneComponent::BeginPlay();
+
 	FVector Scale = UEngineCore::GetScreenScale();
 
 	ProjectionScale = Scale;
@@ -24,10 +27,16 @@ void UEngineCamera::BeginPlay()
 	ViewPortInfo.TopLeftY = 0.0f;
 	ViewPortInfo.MinDepth = 0.0f;
 	ViewPortInfo.MaxDepth = 1.0f;
+
+	CameraTarget = std::make_shared<UEngineRenderTarget>();
+	CameraTarget->CreateTarget(UEngineCore::GetScreenScale());
+	CameraTarget->CreateDepth();
 }
 
 void UEngineCamera::Tick(float _DeltaTime)
-{	
+{
+	USceneComponent::ComponentTick(_DeltaTime);
+
 	Transform.View;
 	Transform.Projection;
 }
@@ -35,6 +44,9 @@ void UEngineCamera::Tick(float _DeltaTime)
 void UEngineCamera::Render(float _DeltaTime)
 {
 	UEngineCore::GetDevice().GetContext()->RSSetViewports(1, &ViewPortInfo);
+
+	CameraTarget->Clear();
+	CameraTarget->Setting();
 
 	for (std::pair<const int, std::list<std::shared_ptr<URenderer>>>& RenderGroup : Renderers)
 	{
@@ -51,12 +63,17 @@ void UEngineCamera::Render(float _DeltaTime)
 
 		for (std::shared_ptr<URenderer> Renderer : RenderList)
 		{
+			if (false == Renderer->IsActive())
+			{
+				continue;
+			}
+
 			Renderer->Render(this, _DeltaTime);
 		}
 	}
 }
 
-ENGINEAPI void UEngineCamera::Release(float _DeltaTime)
+void UEngineCamera::Release(float _DeltaTime)
 {
 	for (std::pair<const int, std::list<std::shared_ptr<URenderer>>>& RenderGroup : Renderers)
 	{

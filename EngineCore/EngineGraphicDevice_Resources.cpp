@@ -32,6 +32,16 @@ void UEngineGraphicDevice::DepthStencilInit()
 		Desc.StencilEnable = false;
 
 		UEngineDepthStencilState::Create("BaseDepth", Desc);
+	} 
+	
+	{
+		D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
+		Desc.DepthEnable = false;
+		Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		Desc.DepthFunc = D3D11_COMPARISON_LESS;
+		Desc.StencilEnable = false;
+
+		UEngineDepthStencilState::Create("UIDepth", Desc);
 	}
 
 	{
@@ -43,36 +53,58 @@ void UEngineGraphicDevice::DepthStencilInit()
 
 		UEngineDepthStencilState::Create("CollisionDebugDepth", Desc);
 	}
+
+	{
+		D3D11_DEPTH_STENCIL_DESC Desc = { 0 };
+		Desc.DepthEnable = true;
+		Desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+		Desc.DepthFunc = D3D11_COMPARISON_ALWAYS;
+		Desc.StencilEnable = false;
+
+		UEngineDepthStencilState::Create("TargetMerge", Desc);
+	}
 }
 
 void UEngineGraphicDevice::MeshInit()
 {
 	{
-		std::vector<FEngineVertex> Vertexs;
-		Vertexs.resize(4);
-		Vertexs[0] = FEngineVertex{ FVector(-0.5f, 0.5f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
-		Vertexs[1] = FEngineVertex{ FVector(0.5f, 0.5f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
-		Vertexs[2] = FEngineVertex{ FVector(-0.5f, -0.5f, 0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} };
-		Vertexs[3] = FEngineVertex{ FVector(0.5f, -0.5f, 0.0f), {1.0f , 1.0f } , {1.0f, 1.0f, 1.0f, 1.0f} };
+		std::vector<FEngineVertex> Vertexes;
+		Vertexes.resize(4);
+		Vertexes[0] = FEngineVertex{ FVector(-0.5f, 0.5f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
+		Vertexes[1] = FEngineVertex{ FVector(0.5f, 0.5f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
+		Vertexes[2] = FEngineVertex{ FVector(-0.5f, -0.5f, 0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} };
+		Vertexes[3] = FEngineVertex{ FVector(0.5f, -0.5f, 0.0f), {1.0f , 1.0f } , {1.0f, 1.0f, 1.0f, 1.0f} };
 
-		UEngineVertexBuffer::Create("Rect", Vertexs);
+		UEngineVertexBuffer::Create("Rect", Vertexes);
 	}
 
 	{
-		std::vector<unsigned int> Indexs;
+		std::vector<unsigned int> Indexes;
 
-		Indexs.push_back(0);
-		Indexs.push_back(1);
-		Indexs.push_back(2);
+		Indexes.push_back(0);
+		Indexes.push_back(1);
+		Indexes.push_back(2);
 
-		Indexs.push_back(1);
-		Indexs.push_back(3);
-		Indexs.push_back(2);
-		UEngineIndexBuffer::Create("Rect", Indexs);
+		Indexes.push_back(1);
+		Indexes.push_back(3);
+		Indexes.push_back(2);
+		UEngineIndexBuffer::Create("Rect", Indexes);
+	}
+
+	{
+		std::vector<FEngineVertex> Vertexes;
+		Vertexes.resize(4);
+		Vertexes[0] = FEngineVertex{ FVector(-1.0f, 1.0f, 0.0f), {0.0f , 0.0f }, {1.0f, 0.0f, 0.0f, 1.0f} };
+		Vertexes[1] = FEngineVertex{ FVector(1.0f, 1.0f, 0.0f), {1.0f , 0.0f } , {0.0f, 1.0f, 0.0f, 1.0f} };
+		Vertexes[2] = FEngineVertex{ FVector(-1.0f, -1.0f, 0.0f), {0.0f , 1.0f } , {0.0f, 0.0f, 1.0f, 1.0f} };
+		Vertexes[3] = FEngineVertex{ FVector(1.0f, -1.0f, 0.0f), {1.0f , 1.0f } , {1.0f, 1.0f, 1.0f, 1.0f} };
+
+		UEngineVertexBuffer::Create("FullRect", Vertexes);
 	}
 
 	{
 		UMesh::Create("Rect");
+		UMesh::Create("FullRect", "FullRect", "Rect");
 	}
 }
 
@@ -116,12 +148,32 @@ void UEngineGraphicDevice::MaterialInit()
 	}
 
 	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("WidgetMaterial");
+		Mat->SetVertexShader("EngineSpriteShader.fx");
+		Mat->SetPixelShader("EngineSpriteShader.fx");
+		Mat->SetDepthStencilState("UIDepth");
+	}
+
+	{
 		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("CollisionDebugMaterial");
 		Mat->SetVertexShader("EngineDebugCollisionShader.fx");
 		Mat->SetPixelShader("EngineDebugCollisionShader.fx");
 
 		Mat->SetDepthStencilState("CollisionDebugDepth");
 		Mat->SetRasterizerState("CollisionDebugRas");
+	}
+
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("TileMap");
+		Mat->SetVertexShader("EngineTileMapShader.fx");
+		Mat->SetPixelShader("EngineTileMapShader.fx");
+	}
+
+	{
+		std::shared_ptr<UEngineMaterial> Mat = UEngineMaterial::Create("TargetMerge");
+		Mat->SetVertexShader("EngineTargetMergeShader.fx");
+		Mat->SetPixelShader("EngineTargetMergeShader.fx");
+		Mat->SetDepthStencilState("TargetMerge");
 	}
 }
 

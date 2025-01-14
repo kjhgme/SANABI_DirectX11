@@ -12,8 +12,6 @@ UEngineMaterial::~UEngineMaterial()
 {
 }
 
-
-
 void UEngineMaterial::SetVertexShader(std::string_view _Name)
 {
 	VertexShader = UEngineVertexShader::Find<UEngineVertexShader>(_Name);
@@ -55,6 +53,16 @@ void UEngineMaterial::SetBlend(std::string_view _Name)
 	}
 }
 
+void UEngineMaterial::SetDepthStencilState(std::string_view _Name)
+{
+	DepthState = UEngineDepthStencilState::Find<UEngineDepthStencilState>(_Name);
+
+	if (nullptr == RasterizerState)
+	{
+		MSGASSERT("RasterizerState is nullptr.");
+	}
+}
+
 std::shared_ptr<UEngineMaterial> UEngineMaterial::Create(std::string_view _Name)
 {
 	std::string UpperName = ToUpperName(_Name);
@@ -68,16 +76,6 @@ std::shared_ptr<UEngineMaterial> UEngineMaterial::Create(std::string_view _Name)
 	std::shared_ptr<UEngineMaterial> NewRes = std::make_shared<UEngineMaterial>();
 	PushRes<UEngineMaterial>(NewRes, _Name, "");
 	return NewRes;
-}
-
-ENGINEAPI void UEngineMaterial::SetDepthStencilState(std::string_view _Name)
-{
-	DepthState = UEngineDepthStencilState::Find<UEngineDepthStencilState>(_Name);
-
-	if (nullptr == RasterizerState)
-	{
-		MSGASSERT("RasterizerState is nullptr.");
-	}
 }
 
 void UEngineMaterial::PrimitiveTopologySetting()

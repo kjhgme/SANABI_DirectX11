@@ -112,7 +112,9 @@
     <ClCompile Include="MapMakerMode.cpp">
       <Filter>GameMode</Filter>
     </ClCompile>
-    <ClCompile Include="ContentsCore_Resources.cpp" />
+    <ClCompile Include="ContentsCore_Resources.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameMode">

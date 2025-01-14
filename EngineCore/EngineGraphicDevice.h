@@ -49,14 +49,10 @@ public:
 		return Context.Get();
 	}
 
-	ENGINEAPI ID3D11RenderTargetView* GetRTV()
+	ENGINEAPI std::shared_ptr<class UEngineRenderTarget> GetBackBufferTarget()
 	{
-		return RTV.Get();
+		return BackBufferTarget;
 	}
-
-	ENGINEAPI HRESULT CreateD2DRenderTarget();
-
-	ENGINEAPI void RenderText(std::string_view text, float x, float y, float _FontSize = 24.0f);
 
 protected:
 
@@ -65,15 +61,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> Context = nullptr;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> SwapChain = nullptr;
 	Microsoft::WRL::ComPtr<IDXGIAdapter> MainAdapter = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> RTV = nullptr;
 
-	Microsoft::WRL::ComPtr<ID2D1Factory> d2dFactory;
-	Microsoft::WRL::ComPtr<ID2D1RenderTarget> d2dRenderTarget;
-	Microsoft::WRL::ComPtr<IDWriteFactory> dwriteFactory;
-	Microsoft::WRL::ComPtr<IDWriteTextFormat> textFormat;
-
-	std::shared_ptr<class UEngineTexture> DepthTex;
+	std::shared_ptr<class UEngineRenderTarget> BackBufferTarget;
 
 	ENGINEAPI void DefaultResourcesInit();
 	ENGINEAPI void MeshInit();

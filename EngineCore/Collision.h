@@ -33,6 +33,8 @@ public:
 
 	void SetRadius(float _Value);
 
+	void Release();
+
 	ENGINEAPI bool CollisionCheck(std::string_view _OtherName, std::vector<UCollision*>& _Vector);
 
 	void SetCollisionType(ECollisionType _Type)

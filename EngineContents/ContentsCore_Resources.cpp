@@ -31,6 +31,10 @@ void UContentsCore::InitResources()
 	{
 		LoadFolder("Title");
 	}
+	// PRLG
+	{
+		LoadFolder("PRLG/PRLG_TileSet");
+	}
 	// BOSS
 	{
 		LoadFolder("BOSS/BossPlatform/BossPlatform_A_Idle");

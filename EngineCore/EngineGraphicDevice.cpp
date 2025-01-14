@@ -3,6 +3,7 @@
 
 #include "EngineTexture.h"
 #include "EngineDepthStencilState.h"
+#include "EngineRenderTarget.h"
 
 UEngineGraphicDevice::UEngineGraphicDevice()
 {
@@ -16,11 +17,9 @@ UEngineGraphicDevice::~UEngineGraphicDevice()
 void UEngineGraphicDevice::Release()
 {
     MainAdapter = nullptr;
-    DXBackBufferTexture = nullptr;
     SwapChain = nullptr;
     Context = nullptr;
     Device = nullptr;
-    RTV = nullptr;
 }
 
 IDXGIAdapter* UEngineGraphicDevice::GetHighPerformanceAdapter()
@@ -138,15 +137,6 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
 
     Result = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
    
-    // Direct2D 팩토리 생성
-    Result = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, d2dFactory.ReleaseAndGetAddressOf());
-    // if (FAILED(hr)) return hr;
-
-    // DirectWrite 팩토리 생성
-    Result = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)dwriteFactory.ReleaseAndGetAddressOf());
-    // if (FAILED(hr)) return hr;
-
-
     if (Result != S_OK)
     {
         MSGASSERT("Thread has wrong something.");
@@ -159,24 +149,6 @@ void UEngineGraphicDevice::CreateDeviceAndContext()
 void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 {
     FVector Size = _Window.GetWindowSize();
-
-    D3D11_TEXTURE2D_DESC Desc = { 0 };
-    Desc.ArraySize = 1;
-    Desc.Width = Size.iX();
-    Desc.Height = Size.iY();
-    Desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-
-    Desc.SampleDesc.Count = 1;
-    Desc.SampleDesc.Quality = 0;
-
-    Desc.MipLevels = 1;
-    Desc.Usage = D3D11_USAGE_DEFAULT;
-    Desc.CPUAccessFlags = 0;
-    Desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
-
-    DepthTex = std::make_shared<UEngineTexture>();
-
-    DepthTex->ResCreate(Desc);
 
     DXGI_SWAP_CHAIN_DESC ScInfo = { 0 };
 
@@ -206,35 +178,24 @@ void UEngineGraphicDevice::CreateBackBuffer(const UEngineWindow& _Window)
 
     if (nullptr == SwapChain)
     {
-        MSGASSERT("스왑체인 제작에 실패했습니다.");
+        MSGASSERT("SwapChain is nullptr.");
     }
 
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> DXBackBufferTexture = nullptr;
     if (S_OK != SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &DXBackBufferTexture))
     {
-        MSGASSERT("백버퍼 텍스처를 얻어오는데 실패했습니다.");
+        MSGASSERT("GetBuffer failed.");
     };
-
-    if (S_OK != Device->CreateRenderTargetView(DXBackBufferTexture.Get(), nullptr, &RTV))
-    {
-        MSGASSERT("텍스처 수정권한 획득에 실패했습니다");
-    }
-
-    CreateD2DRenderTarget();
+    
+    BackBufferTarget = std::make_shared<UEngineRenderTarget>();
+    BackBufferTarget->CreateTarget(DXBackBufferTexture);
+    BackBufferTarget->CreateDepth();
 }
 
 void UEngineGraphicDevice::RenderStart()
 {
-    FVector ClearColor;
-
-    ClearColor = FVector(0.0f, 0.0f, 1.0f, 1.0f);
-
-    Context->ClearRenderTargetView(RTV.Get(), ClearColor.Arr1D);
-    Context->ClearDepthStencilView(DepthTex->GetDSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-    
-    ID3D11RenderTargetView* RTV = UEngineCore::GetDevice().GetRTV();
-    ID3D11RenderTargetView* ArrRtv[16] = { 0 };
-    ArrRtv[0] = RTV; // SV_Target0
-    Context->OMSetRenderTargets(1, &ArrRtv[0], DepthTex->GetDSV());
+    BackBufferTarget->Clear();
+    BackBufferTarget->Setting();    
 }
 
 void UEngineGraphicDevice::RenderEnd()
@@ -243,87 +204,7 @@ void UEngineGraphicDevice::RenderEnd()
 
     if (Result == DXGI_ERROR_DEVICE_REMOVED || Result == DXGI_ERROR_DEVICE_RESET)
     {
-        MSGASSERT("해상도 변경이나 디바이스 관련 설정이 런타임 도중 수정되었습니다");
+        MSGASSERT("해상도 변경이나 디바이스 관련 설정이 런타임 도중 수정되었습니다.");
         return;
     }
-}
-
-ENGINEAPI HRESULT UEngineGraphicDevice::CreateD2DRenderTarget()
-{ 
-    // SwapChain이 올바르게 초기화되었는지 확인
-    if (!SwapChain) {
-        MSGASSERT("SwapChain is not initialized.");
-        return E_FAIL;  // 또는 적절한 오류 코드 반환
-    }
-
-    Microsoft::WRL::ComPtr<IDXGISurface> dxgiSurface;
-    HRESULT hr = SwapChain->GetBuffer(0, __uuidof(IDXGISurface), (void**)dxgiSurface.ReleaseAndGetAddressOf());
-    if (FAILED(hr)) return hr;
-
-    // Direct2D 렌더 타겟 속성 설정
-    D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(
-        D2D1_RENDER_TARGET_TYPE_DEFAULT,
-        D2D1::PixelFormat(DXGI_FORMAT_R8G8B8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED)
-    );
-
-    // 렌더 타겟 생성
-    hr = d2dFactory->CreateDxgiSurfaceRenderTarget(dxgiSurface.Get(), &props, d2dRenderTarget.ReleaseAndGetAddressOf());
-    return hr;
-}
-
-void UEngineGraphicDevice::RenderText(std::string_view text, float x, float y, float _FontSize) {
-    // 멀티바이트 문자열 -> 유니코드 변환
-    int wlen = MultiByteToWideChar(CP_ACP, 0, text.data(), -1, nullptr, 0);
-    std::wstring wText(wlen, L'\0');
-    MultiByteToWideChar(CP_ACP, 0, text.data(), -1, &wText[0], wlen);
-
-    d2dRenderTarget->BeginDraw();
-
-    // 배경색 초기화
-    d2dRenderTarget->Clear(D2D1::ColorF(1.0f, 0.0f, 0.0f, 0.0f));
-
-    // 텍스트 출력
-    D2D1_RECT_F layoutRect = D2D1::RectF(x, y, x + 500, y + 100);
-    Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> textBrush;
-    HRESULT hr = d2dRenderTarget->CreateSolidColorBrush(
-        D2D1::ColorF(D2D1::ColorF::White), textBrush.ReleaseAndGetAddressOf()
-    );
-
-    if (FAILED(hr)) {
-        MessageBoxA(nullptr, "Failed to create text brush.", "Error", MB_OK);
-        return;
-    }
-    // 텍스트 형식 생성
-    hr = dwriteFactory->CreateTextFormat(
-        L"PFStardust", nullptr,
-        DWRITE_FONT_WEIGHT_REGULAR,
-        DWRITE_FONT_STYLE_NORMAL,
-        DWRITE_FONT_STRETCH_NORMAL,
-        _FontSize, L"ko", textFormat.ReleaseAndGetAddressOf()
-    );
-    if (FAILED(hr)) {
-        std::wcerr << L"폰트 생성 실패: HRESULT = " << hr << std::endl;
-    }
-    else {
-        std::wcout << L"폰트 생성 성공: PFStardust" << std::endl;
-    }
-
-    // 유니코드 문자열 출력
-    d2dRenderTarget->DrawText(
-        wText.c_str(),                     // 유니코드 문자열
-        static_cast<UINT32>(wText.length()), // 문자열 길이
-        textFormat.Get(),                  // 텍스트 포맷
-        &layoutRect,                       // 텍스트 레이아웃 영역
-        textBrush.Get()                    // 브러시
-    );
-
-    // 렌더 타겟 끝내기
-    hr = d2dRenderTarget->EndDraw();
-    if (FAILED(hr)) {
-        MessageBoxA(nullptr, "Failed to draw text.", "Error", MB_OK);
-        return;
-    }
-
-    // 스왑 체인 프레젠트
-    SwapChain->Present(1, 0);
 }

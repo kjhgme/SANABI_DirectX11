@@ -1,6 +1,6 @@
 #include "PreCompile.h"
 #include "MapMakerMode.h"
-#include "TitleLogo.h"
+
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
@@ -49,9 +49,9 @@ public:
 		if (true == ImGui::Button("Save"))
 		{
 			UEngineDirectory Dir;
-			if (false == Dir.MoveParentToDirectory("ContentsResources"))
+			if (false == Dir.MoveParentToDirectory("Resources"))
 			{
-				MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+				MSGASSERT("Dir is wrong Directory.");
 				return;
 			}
 			Dir.Append("Data");
@@ -78,9 +78,9 @@ public:
 		if (true == ImGui::Button("Load"))
 		{
 			UEngineDirectory Dir;
-			if (false == Dir.MoveParentToDirectory("ContentsResources"))
+			if (false == Dir.MoveParentToDirectory("Resources"))
 			{
-				MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+				MSGASSERT("Dir is wrong Directory.");
 				return;
 			}
 			Dir.Append("Data");
@@ -161,14 +161,13 @@ AMapMakerMode::AMapMakerMode()
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
-
 	PivotSpriteRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	PivotSpriteRenderer->SetupAttachment(RootComponent);
 	PivotSpriteRenderer->SetRelativeScale3D({ 50.0f, 50.0f, 1.0f });
 
 	TileMapRenderer = CreateDefaultSubObject<UTileMapRenderer>();
 	TileMapRenderer->SetupAttachment(RootComponent);
-	TileMapRenderer->SetTileSetting(ETileMapType::Iso, "TileMap.png", { 128.0f, 63.0f }, { 128.0f, 192.0f }, { 0.0f, 0.0f });
+	TileMapRenderer->SetTileSetting(ETileMapType::Rect, "PRLG_TileSet", {32.0f, 32.0f}, {32.0f, 32.0f}, {0.0f, 0.0f});
 
 	std::shared_ptr<ACameraActor> Camera = GetWorld()->GetMainCamera();
 	Camera->SetActorLocation({ 0.0f, 0.0f, -1000.0f, 1.0f });
@@ -186,30 +185,30 @@ void AMapMakerMode::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 }
 
-void AMapMakerMode::LevelChangeStart()
-{
-	UEngineGUI::AllWindowOff();
-
-	{
-		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-
-		if (nullptr == Window)
-		{
-			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-		}
-
-		Window->SetActive(true);
-	}
-
-	{
-		TileMapWindow = UEngineGUI::FindGUIWindow<UTileMapWindow>("TileMapWindow");
-
-		if (nullptr == TileMapWindow)
-		{
-			TileMapWindow = UEngineGUI::CreateGUIWindow<UTileMapWindow>("TileMapWindow");
-		}
-
-		TileMapWindow->SetActive(true);
-		TileMapWindow->TileMapRenderer = TileMapRenderer.get();
-	}
-}
+//void AMapMakerMode::LevelChangeStart()
+//{
+//	UEngineGUI::AllWindowOff();
+//
+//	{
+//		std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+//
+//		if (nullptr == Window)
+//		{
+//			Window = UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
+//		}
+//
+//		Window->SetActive(true);
+//	}
+//
+//	{
+//		TileMapWindow = UEngineGUI::FindGUIWindow<UTileMapWindow>("TileMapWindow");
+//
+//		if (nullptr == TileMapWindow)
+//		{
+//			TileMapWindow = UEngineGUI::CreateGUIWindow<UTileMapWindow>("TileMapWindow");
+//		}
+//
+//		TileMapWindow->SetActive(true);
+//		TileMapWindow->TileMapRenderer = TileMapRenderer.get();
+//	}
+//}

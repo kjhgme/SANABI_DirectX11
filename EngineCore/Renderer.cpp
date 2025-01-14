@@ -24,13 +24,7 @@ void URenderer::BeginPlay()
 
 void URenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 {
-	FTransform& CameraTrans = _Camera->GetTransformRef();
-	FTransform& RendererTrans = GetTransformRef();
-
-	RendererTrans.View = CameraTrans.View;
-	RendererTrans.Projection = CameraTrans.Projection;
-	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
-
+	this->CameraTransUpdate(_Camera);
 	for (size_t i = 0; i < Units.size(); i++)
 	{
 		Units[i].Render(_Camera, _DeltaTime);
@@ -73,14 +67,4 @@ URenderUnit& URenderer::CreateRenderUnit()
 	URenderUnit& NewUnit = Units.emplace_back();
 	NewUnit.ParentRenderer = this;
 	return NewUnit;
-}
-
-ENGINEAPI void URenderer::RenderTransUpdate(UEngineCamera* _Camera)
-{
-	FTransform& CameraTrans = _Camera->GetTransformRef();
-	FTransform& RendererTrans = GetTransformRef();
-
-	RendererTrans.View = CameraTrans.View;
-	RendererTrans.Projection = CameraTrans.Projection;
-	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
 }

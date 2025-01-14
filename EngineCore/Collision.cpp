@@ -24,6 +24,14 @@ void UCollision::SetRadius(float _Value)
 	SetScale3D(Scale);
 }
 
+void UCollision::Release()
+{
+	for (UCollision* Other : CollisionCheckSet)
+	{
+		Other->CollisionCheckSet.erase(this);
+	}
+}
+
 void UCollision::SetCollisionProfileName(std::string_view _ProfileName)
 {
 	if (_ProfileName == GetCollisionProfileName())

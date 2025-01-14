@@ -1,6 +1,8 @@
 #include "PreCompile.h"
 #include "TransformObject.h"
 
+#include "EngineCamera.h"
+
 UTransformObject::UTransformObject()
 {
 }
@@ -41,5 +43,15 @@ void UTransformObject::TransformUpdate()
 	}
 
 	IsAbsolute = false;
+}
+
+void UTransformObject::CameraTransUpdate(UEngineCamera* _Camera)
+{
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+
+	RendererTrans.View = CameraTrans.View;
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = RendererTrans.World * RendererTrans.View * RendererTrans.Projection;
 }
 

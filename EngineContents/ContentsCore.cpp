@@ -4,10 +4,12 @@
 #include <windows.h>
 #include <iostream>
 
+#include <EngineCore/HUD.h>
 #include <EngineCore/Level.h>
 #include <EngineCore/EngineGUI.h>
 #include <EngineCore/EngineGUIWindow.h>
 
+#include "MapMakerMode.h"
 #include "TitleGameMode.h"
 #include "InGameMode.h"
 #include "BossGameMode.h"
@@ -38,18 +40,16 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 	_Data.WindowSize = { 1280, 720 };
 
 	InitResources();
-	
-	UEngineCore::CreateLevel<ATitleGameMode, APawn>("TitleLevel");
-	UEngineCore::CreateLevel<AInGameMode, APawn>("InGameLevel");
-	UEngineCore::CreateLevel<ABossGameMode, APawn>("BossGameLevel");
-	UEngineCore::CreateLevel<AEndingGameMode, APawn>("EndingGameLevel");
+
+	UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("TitleLevel");
+	UEngineCore::CreateLevel<AInGameMode, APawn, AHUD>("InGameLevel");
+	UEngineCore::CreateLevel<ABossGameMode, APawn, AHUD>("BossGameLevel");
+	UEngineCore::CreateLevel<AEndingGameMode, APawn, AHUD>("EndingGameLevel");
+
+	UEngineCore::CreateLevel<AMapMakerMode, APawn, AHUD>("MapMakerEditor");
 	UEngineCore::OpenLevel("BossGameLevel");
 
 	UEngineGUI::AllWindowOff();
-	
-	UEngineGUI::CreateGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-	std::shared_ptr<UContentsEditorGUI> Window = UEngineGUI::FindGUIWindow<UContentsEditorGUI>("ContentsEditorGUI");
-	Window->SetActive(true);
 }
 
 void UContentsCore::EngineTick(float _DeltaTime)

@@ -52,7 +52,7 @@ void ATextBubble::Tick(float _DeltaTime)
 
 void ATextBubble::SetText()
 {
-	UEngineGraphicDevice& test = UEngineCore::GetDevice();
+	// UEngineGraphicDevice& test = UEngineCore::GetDevice();
 
-	test.RenderText("한글가능?", 100.f, 10.f, 10.0f);
+	// test.RenderText("한글가능?", 100.f, 10.f, 10.0f);
 }

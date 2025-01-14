@@ -84,7 +84,6 @@ void UEngineTexture::ResLoad()
 
 void UEngineTexture::Setting(EShaderType _Type, UINT _BindIndex)
 {
-	// 같은 상수버퍼를 
 	ID3D11ShaderResourceView* ArrPtr[1] = { SRV.Get() };
 
 	switch (_Type)
@@ -125,6 +124,40 @@ void UEngineTexture::ResCreate(const D3D11_TEXTURE2D_DESC& _Value)
 			return;
 		}
 	}
+}
 
+void UEngineTexture::ResCreate(Microsoft::WRL::ComPtr<ID3D11Texture2D> _Texture2D)
+{
+	Texture2D = _Texture2D;
+	// 크기가 얻어졌습니다.
+	Texture2D->GetDesc(&Desc);
+	Size.X = static_cast<float>(Desc.Width);
+	Size.Y = static_cast<float>(Desc.Height);
 
+	CreateRenderTargetView();
+}
+
+void UEngineTexture::CreateRenderTargetView()
+{
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateRenderTargetView(Texture2D.Get(), nullptr, &RTV))
+	{
+		MSGASSERT("CreateRenderTargetView failed.");
+	}
+}
+
+void UEngineTexture::CreateShaderResourceView()
+{
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateShaderResourceView(Texture2D.Get(), nullptr, &SRV))
+	{
+		MSGASSERT("CreateShaderResourceView failed.");
+		return;
+	}
+}
+void UEngineTexture::CreateDepthStencilView()
+{
+	if (S_OK != UEngineCore::GetDevice().GetDevice()->CreateDepthStencilView(Texture2D.Get(), nullptr, &DSV))
+	{
+		MSGASSERT("CreateDepthStencilView failed.");
+		return;
+	}
 }

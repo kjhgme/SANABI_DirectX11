@@ -1,6 +1,8 @@
 #include "PreCompile.h"
 #include "SpriteRenderer.h"
 
+#include "EngineCamera.h"
+
 USpriteRenderer::USpriteRenderer()
 {
 	CreateRenderUnit();
@@ -208,8 +210,8 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 				}
 				else
 				{
-					CurAnimation->CurIndex = Indexes.size() - 1;  // 마지막 인덱스 유지
-					CurAnimation->IsEnd = true;  // 즉시 IsEnd 설정
+					CurAnimation->CurIndex = Indexes.size() - 1; 
+					CurAnimation->IsEnd = true;
 				}
 			}
 		}
@@ -223,6 +225,18 @@ void USpriteRenderer::ComponentTick(float _DeltaTime)
 			}
 		}
 	}
+}
+
+void USpriteRenderer::CameraTransUpdate(UEngineCamera* _Camera)
+{
+	FTransform& CameraTrans = _Camera->GetTransformRef();
+	FTransform& RendererTrans = GetTransformRef();
+
+	RendererTrans.View = CameraTrans.View;
+	FMatrix CurWorld = RendererTrans.World;
+
+	RendererTrans.Projection = CameraTrans.Projection;
+	RendererTrans.WVP = CurWorld * RendererTrans.View * RendererTrans.Projection;
 }
 
 void USpriteRenderer::CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, bool _Loop /*= true*/, float Time /*= 0.1f*/)
@@ -324,7 +338,7 @@ bool USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 
 	if (false == FrameAnimations.contains(UpperName))
 	{
-		// MSGASSERT(UpperName + " is not exists."); // 이 때 Arm만 받는 어떤 리턴값
+		// MSGASSERT(UpperName + " is not exists.");
 		return false;
 	}
 

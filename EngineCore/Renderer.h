@@ -28,8 +28,6 @@ public:
 	
 	ENGINEAPI URenderUnit& CreateRenderUnit();
 
-	ENGINEAPI virtual void RenderTransUpdate(UEngineCamera* _Camera);
-
 private:
 
 public:

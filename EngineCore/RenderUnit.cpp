@@ -42,8 +42,8 @@ void URenderUnit::MaterialResourcesCheck()
 			{
 				continue;
 			}
-
-			FTransform& Ref = ParentRenderer->GetTransformRef();
+			
+			FTransform& Ref = TransformObject->GetTransformRef();
 			Resources[i].ConstantBufferLinkData("FTransform", Ref);
 		}
 

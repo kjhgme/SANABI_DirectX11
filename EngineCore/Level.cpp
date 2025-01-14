@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "Level.h"
 
+#include "HUD.h"
 #include "Actor.h"
 #include "Renderer.h"
 #include "Collision.h"
@@ -8,28 +9,70 @@
 #include "EngineCore.h"
 #include "CameraActor.h"
 #include "EngineCamera.h"
+#include "EngineRenderTarget.h"
+
+std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
+{
+	std::shared_ptr<ACameraActor> Camera = std::make_shared<ACameraActor>();
+
+	if (true == Cameras.contains(_Order))
+	{
+		MSGASSERT("It's already contained.");
+	}
+
+	Camera->BeginPlay();
+
+	Cameras.insert({ _Order , Camera });
+	return Camera;
+}
 
 ULevel::ULevel()
 {
-	SpawnCamera(0);
+	SpawnCamera(EEngineCameraType::MainCamera);
+
+	SpawnCamera(EEngineCameraType::UICamera);
+
+	LastRenderTarget = std::make_shared<UEngineRenderTarget>();
+	LastRenderTarget->CreateTarget(UEngineCore::GetScreenScale());
+	LastRenderTarget->CreateDepth();
 }
 
 ULevel::~ULevel()
 {
 	BeginPlayList.clear();
+
 	AllActorList.clear();
+
 	Cameras.clear();
 }
 
 void ULevel::LevelChangeStart()
 {
+	for (std::shared_ptr<class AActor> Actor : BeginPlayList)
+	{
+		Actor->LevelChangeStart();
+	}
 
+
+	for (std::shared_ptr<class AActor> Actor : AllActorList)
+	{
+		Actor->LevelChangeStart();
+	}
 }
 
 void ULevel::LevelChangeEnd()
 {
+	for (std::shared_ptr<class AActor> Actor : BeginPlayList)
+	{
+		Actor->LevelChangeEnd();
+	}
 
+	for (std::shared_ptr<class AActor> Actor : AllActorList)
+	{
+		Actor->LevelChangeEnd();
+	}
 }
+
 
 void ULevel::Tick(float _DeltaTime)
 {
@@ -40,8 +83,7 @@ void ULevel::Tick(float _DeltaTime)
 
 	std::list<std::shared_ptr<class AActor>>::iterator StartIter = BeginPlayList.begin();
 	std::list<std::shared_ptr<class AActor>>::iterator EndIter = BeginPlayList.end();
-	
-	for ( ; StartIter != EndIter; )
+	for (; StartIter != EndIter; )
 	{
 		std::shared_ptr<AActor> CurActor = *StartIter;
 
@@ -54,9 +96,15 @@ void ULevel::Tick(float _DeltaTime)
 		StartIter = BeginPlayList.erase(StartIter);
 
 		CurActor->BeginPlay();
+
+		if (nullptr != CurActor->Parent)
+		{
+			continue;
+		}
+
 		AllActorList.push_back(CurActor);
 	}
-		
+
 	for (std::shared_ptr<AActor> CurActor : AllActorList)
 	{
 		if (false == CurActor->IsActive())
@@ -72,11 +120,52 @@ void ULevel::Render(float _DeltaTime)
 {
 	UEngineCore::GetDevice().RenderStart();
 
+	LastRenderTarget->Clear();
+
 	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
 	{
+		if (Camera.first == static_cast<int>(EEngineCameraType::UICamera))
+		{
+			continue;
+		}
+
+		if (false == Camera.second->IsActive())
+		{
+			continue;
+		}
+
 		Camera.second->Tick(_DeltaTime);
-		Camera.second->GetCameraComponent()->Render(_DeltaTime);
+		Camera.second->GetCameraComponent()->Render(_DeltaTime);		
+		Camera.second->GetCameraComponent()->CameraTarget->MergeTo(LastRenderTarget);
 	}
+
+	if (true == Cameras.contains(static_cast<int>(EEngineCameraType::UICamera)))
+	{
+		std::shared_ptr<ACameraActor> CameraActor = Cameras[static_cast<int>(EEngineCameraType::UICamera)];
+		if (true == CameraActor->IsActive())
+		{
+			std::shared_ptr<UEngineCamera> CameraComponent = Cameras[static_cast<int>(EEngineCameraType::UICamera)]->GetCameraComponent();
+
+			CameraActor->Tick(_DeltaTime);
+			CameraComponent->CameraTarget->Clear();
+			CameraComponent->CameraTarget->Setting();
+
+			HUD->UIRender(CameraComponent.get(), _DeltaTime);
+
+			CameraComponent->CameraTarget->MergeTo(LastRenderTarget);
+		}
+
+	}
+	else
+	{
+		MSGASSERT("UI Camera is not exists.");
+	}
+
+	// LastRenderTarget->PostEffect();
+
+	std::shared_ptr<UEngineRenderTarget> BackBuffer = UEngineCore::GetDevice().GetBackBufferTarget();
+	LastRenderTarget->MergeTo(BackBuffer);
+
 
 	{
 		std::shared_ptr<class ACameraActor> Camera = GetMainCamera();
@@ -103,6 +192,63 @@ void ULevel::Render(float _DeltaTime)
 	}
 
 	UEngineCore::GetDevice().RenderEnd();
+}
+
+
+
+void ULevel::ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer)
+{
+	if (false == Cameras.contains(_CameraOrder))
+	{
+		MSGASSERT("Cameras is not contained.");
+		return;
+	}
+
+	std::shared_ptr<ACameraActor> Camera = Cameras[_CameraOrder];
+
+	Camera->GetCameraComponent()->ChangeRenderGroup(_PrevGroupOrder, _Renderer);
+}
+
+void ULevel::CreateCollisionProfile(std::string_view _ProfileName)
+{
+	std::string UpperName = UEngineString::ToUpper(_ProfileName);
+
+	Collisions[UpperName];
+}
+
+void ULevel::LinkCollisionProfile(std::string_view _LeftProfileName, std::string_view _RightProfileName)
+{
+	std::string LeftUpperName = UEngineString::ToUpper(_LeftProfileName);
+	std::string RightUpperName = UEngineString::ToUpper(_RightProfileName);
+
+	CollisionLinks[LeftUpperName].push_back(RightUpperName);
+}
+
+void ULevel::PushCollisionProfileEvent(std::shared_ptr<class URenderer> _Renderer)
+{
+
+}
+
+void ULevel::ChangeCollisionProfileName(std::string_view _ProfileName, std::string_view _PrevProfileName, std::shared_ptr<UCollision> _Collision)
+{
+	if (false == Collisions.contains(_ProfileName.data()))
+	{
+		MSGASSERT("CollisionsGroup is not contained.");
+		return;
+	}
+
+	std::string PrevUpperName = UEngineString::ToUpper(_PrevProfileName);
+
+	if (_PrevProfileName != "")
+	{
+		std::list<std::shared_ptr<UCollision>>& PrevCollisionGroup = Collisions[PrevUpperName];
+		PrevCollisionGroup.remove(_Collision);
+	}
+
+	std::string UpperName = UEngineString::ToUpper(_ProfileName);
+
+	std::list<std::shared_ptr<UCollision>>& CollisionGroup = Collisions[UpperName];
+	CollisionGroup.push_back(_Collision);
 }
 
 void ULevel::Collision(float _DeltaTime)
@@ -134,74 +280,6 @@ void ULevel::Collision(float _DeltaTime)
 	}
 }
 
-std::shared_ptr<class ACameraActor> ULevel::SpawnCamera(int _Order)
-{
-	std::shared_ptr<ACameraActor> Camera = std::make_shared<ACameraActor>();
-
-	if (true == Cameras.contains(_Order))
-	{
-		MSGASSERT("Camera is already exists.");
-	}
-
-	Camera->BeginPlay();
-
-	Cameras.insert({ _Order , Camera });
-	return Camera;
-}
-
-void ULevel::ChangeRenderGroup(int _CameraOrder, int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer)
-{
-	if (false == Cameras.contains(_CameraOrder))
-	{
-		MSGASSERT("Camera is not exists.");
-		return;
-	}
-	std::shared_ptr<ACameraActor> Camera = Cameras[_CameraOrder];
-
-	Camera->GetCameraComponent()->ChangeRenderGroup(_PrevGroupOrder, _Renderer);
-}
-
-void ULevel::ChangeCollisionProfileName(std::string_view _ProfileName, std::string_view _PrevProfileName, std::shared_ptr<class UCollision> _Collision)
-{
-	if (false == Collisions.contains(_ProfileName.data()))
-	{
-		MSGASSERT(std::string(_ProfileName) + " is not Collision Group.");
-		return;
-	}
-
-	std::string PrevUpperName = UEngineString::ToUpper(_PrevProfileName);
-
-	if (_PrevProfileName != "")
-	{
-		std::list<std::shared_ptr<UCollision>>& PrevCollisionGroup = Collisions[PrevUpperName];
-		PrevCollisionGroup.remove(_Collision);
-	}
-
-	std::string UpperName = UEngineString::ToUpper(_ProfileName);
-
-	std::list<std::shared_ptr<UCollision>>& CollisionGroup = Collisions[UpperName];
-	CollisionGroup.push_back(_Collision);
-}
-
-void ULevel::CreateCollisionProfile(std::string_view _ProfileName)
-{
-	std::string UpperName = UEngineString::ToUpper(_ProfileName);
-
-	Collisions[UpperName];
-}
-
-void ULevel::PushCollisionProfileEvent(std::shared_ptr<class URenderer> _Renderer)
-{
-}
-
-void ULevel::LinkCollisionProfile(std::string_view _LeftProfileName, std::string_view _RightProfileName)
-{
-	std::string LeftUpperName = UEngineString::ToUpper(_LeftProfileName);
-	std::string RightUpperName = UEngineString::ToUpper(_RightProfileName);
-
-	CollisionLinks[LeftUpperName].push_back(RightUpperName);
-}
-
 void ULevel::Release(float _DeltaTime)
 {
 	for (std::pair<const int, std::shared_ptr<ACameraActor>>& Camera : Cameras)
@@ -225,6 +303,8 @@ void ULevel::Release(float _DeltaTime)
 					continue;
 				}
 
+				(*StartIter)->Release();
+
 				StartIter = List.erase(StartIter);
 			}
 		}
@@ -238,6 +318,12 @@ void ULevel::Release(float _DeltaTime)
 
 		for (; StartIter != EndIter; )
 		{
+			if (nullptr != (*StartIter)->Parent)
+			{
+				StartIter = List.erase(StartIter);
+				continue;
+			}
+
 			if (false == (*StartIter)->IsDestroy())
 			{
 				++StartIter;
@@ -249,9 +335,9 @@ void ULevel::Release(float _DeltaTime)
 	}
 }
 
-void ULevel::InitLevel(AGameMode* _GameMode, APawn* _Pawn)
+void ULevel::InitLevel(AGameMode* _GameMode, APawn* _Pawn, AHUD* _HUD)
 {
 	GameMode = _GameMode;
-
 	MainPawn = _Pawn;
+	HUD = _HUD;
 }

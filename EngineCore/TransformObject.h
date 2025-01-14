@@ -90,6 +90,8 @@ public:
 
 	ENGINEAPI void TransformUpdate();
 
+	ENGINEAPI virtual void CameraTransUpdate(class UEngineCamera* _Camera);
+
 protected:
 	bool IsAbsolute = false;
 
@@ -98,8 +100,3 @@ protected:
 	UTransformObject* Parent = nullptr;
 	std::list<UTransformObject*> Childs;
 };
-
-class TransformObject
-{
-};
-

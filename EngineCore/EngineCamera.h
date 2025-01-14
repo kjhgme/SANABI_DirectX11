@@ -3,6 +3,7 @@
 #include <list>
 #include "Renderer.h"
 #include "SceneComponent.h"
+#include "EngineEnums.h"
 
 class UEngineCamera : public USceneComponent
 {
@@ -65,6 +66,8 @@ private:
 
 	std::map<int, std::list<std::shared_ptr<class URenderer>>> Renderers;
 	std::map<int, bool> RendererZSort;
+
+	std::shared_ptr<class UEngineRenderTarget> CameraTarget;
 
 	void ChangeRenderGroup(int _PrevGroupOrder, std::shared_ptr<URenderer> _Renderer);
 

@@ -6,6 +6,8 @@
 
 class UEngineTexture : public UEngineResources
 {
+	friend class UEngineRenderTarget;
+
 public:
 	ENGINEAPI UEngineTexture();
 	ENGINEAPI ~UEngineTexture();
@@ -49,7 +51,11 @@ public:
 	void Setting(EShaderType _Type, UINT _BindIndex);
 
 	ENGINEAPI void ResCreate(const D3D11_TEXTURE2D_DESC& _Value);
+	ENGINEAPI void ResCreate(Microsoft::WRL::ComPtr<ID3D11Texture2D> _Texture2D);
 
+	ENGINEAPI void CreateRenderTargetView();
+	ENGINEAPI void CreateShaderResourceView();
+	ENGINEAPI void CreateDepthStencilView();
 protected:
 
 private:
