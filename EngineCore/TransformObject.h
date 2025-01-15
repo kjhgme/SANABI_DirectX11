@@ -82,6 +82,16 @@ public:
 	{
 		return Transform;
 	}
+	
+	FVector GetRelativeLocation()
+	{
+		return Transform.RelativeLocation;
+	}
+
+	FVector GetWorldLocation()
+	{
+		return Transform.WorldLocation;
+	}
 
 
 	ENGINEAPI void SetupAttachment(std::shared_ptr<UTransformObject> _Parent);

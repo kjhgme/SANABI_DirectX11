@@ -23,6 +23,23 @@ std::string UEngineString::ToUpper(std::string_view _string)
 	return Result;
 }
 
+std::string UEngineString::InterString(const std::string& _Text, std::string_view _Start, std::string_view _End, size_t& _Offset)
+{
+	size_t DataStart = _Text.find(_Start, _Offset);
+	size_t DataEnd = _Text.find(_End, DataStart);
+
+	if (DataStart == std::string::npos || DataEnd == std::string::npos)
+	{
+		return "";
+	}
+
+
+	std::string Result = _Text.substr(DataStart + _Start.size(), (DataEnd - (DataStart + _Start.size()))).data();
+
+	_Offset = DataEnd + 1;
+	return Result;
+}
+
 std::wstring UEngineString::AnsiToUnicode(std::string_view _Name)
 {
 	int Size = MultiByteToWideChar(CP_ACP, 0, _Name.data(), static_cast<int>(_Name.size()), nullptr, 0);
@@ -47,21 +64,32 @@ std::wstring UEngineString::AnsiToUnicode(std::string_view _Name)
 	return Result;
 }
 
-
-
-std::string UEngineString::InterString(const std::string& _Text, std::string_view _Start, std::string_view _End, size_t& _Offset)
+std::string UEngineString::UniCodeToUTF8(std::wstring_view _Text)
 {
-	size_t DataStart = _Text.find(_Start, _Offset);
-	size_t DataEnd = _Text.find(_End, DataStart);
+	int Size = WideCharToMultiByte(CP_UTF8, 0, _Text.data(), static_cast<int>(_Text.size()), nullptr, 0, nullptr, nullptr);
 
-	if (DataStart == std::string::npos || DataEnd == std::string::npos)
+	if (0 == Size)
 	{
+		MSGASSERT("WideCharToMultiByte failed.");
 		return "";
 	}
 
+	std::string Result;
+	Result.resize(Size);
 
-	std::string Result = _Text.substr(DataStart + _Start.size(), (DataEnd - (DataStart + _Start.size()))).data();
+	Size = WideCharToMultiByte(CP_UTF8, 0, _Text.data(), static_cast<int>(_Text.size()), &Result[0], Size, nullptr, nullptr);
 
-	_Offset = DataEnd + 1;
+	if (0 == Size)
+	{
+		MSGASSERT("WideCharToMultiByte failed.");
+		return "";
+	}
+
 	return Result;
+}
+
+std::string UEngineString::AnsiToUTF8(std::string_view _Name)
+{
+	std::wstring WStr = AnsiToUnicode(_Name);
+	return UniCodeToUTF8(WStr.c_str());
 }

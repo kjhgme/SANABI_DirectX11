@@ -10,11 +10,11 @@ public:
 	ENGINEAPI UEngineSerializer();
 	ENGINEAPI ~UEngineSerializer();
 
-	UEngineSerializer(const UEngineSerializer& _Other) = delete;
-	UEngineSerializer(UEngineSerializer&& _Other) noexcept = delete;
-	UEngineSerializer& operator=(const UEngineSerializer& _Other) = delete;
-	UEngineSerializer& operator=(UEngineSerializer&& _Other) noexcept = delete;
-
+	//UEngineSerializer(const UEngineSerializer& _Other) = delete;
+	//UEngineSerializer(UEngineSerializer&& _Other) noexcept = delete;
+	//UEngineSerializer& operator=(const UEngineSerializer& _Other) = delete;
+	//UEngineSerializer& operator=(UEngineSerializer&& _Other) noexcept = delete;
+	
 	ENGINEAPI void Write(const void* _Data, unsigned int _Size);
 
 	void operator<<(const int& _Data)

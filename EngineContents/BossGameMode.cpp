@@ -13,6 +13,9 @@
 
 #include <EngineCore/EngineGUIWindow.h>
 #include <EngineCore/EngineGUI.h>
+#include <EngineCore/ImageWidget.h>
+#include <EngineCore/FontWidget.h>
+#include <EngineCore/HUD.h>
 #include "ContentsEditorGUI.h"
 
 class TestWindow : public UEngineGUIWindow
@@ -73,7 +76,7 @@ void ABossGameMode::BeginPlay()
 	InitScenes();
 
 	Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
-	Player->SetSceneMode(false);
+	Player->SetSceneMode(false);	
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
@@ -91,6 +94,10 @@ void ABossGameMode::Tick(float _DeltaTime)
 
 	LastPlayerPosition = CurrentPlayerPosition;
 
+	if (UEngineInput::IsDown('F'))
+	{
+		GetWorld()->GetCamera(EEngineCameraType::UICamera)->SetActiveSwitch();
+	}
 	if (UEngineInput::IsPress('Q'))
 	{
 		MainCamera->AddRelativeLocation({ 0.0f, 0.0f, -100.0f * _DeltaTime, 1.0f });

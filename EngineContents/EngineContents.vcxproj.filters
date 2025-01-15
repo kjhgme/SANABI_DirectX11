@@ -57,6 +57,9 @@
     <ClInclude Include="MapMakerMode.h">
       <Filter>GameMode</Filter>
     </ClInclude>
+    <ClInclude Include="BossGameHUD.h">
+      <Filter>HUD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -115,6 +118,9 @@
     <ClCompile Include="ContentsCore_Resources.cpp">
       <Filter>Global</Filter>
     </ClCompile>
+    <ClCompile Include="BossGameHUD.cpp">
+      <Filter>HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameMode">
@@ -140,6 +146,9 @@
     </Filter>
     <Filter Include="GUI">
       <UniqueIdentifier>{4d31e018-cd7c-4067-abd4-49ab7f6fb4c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HUD">
+      <UniqueIdentifier>{cb727549-5f0c-4494-8a6f-b15ec08f66ff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -68,6 +68,12 @@ public:
 	static const TVector FORWARD;
 	static const TVector BACK;
 
+	static const TVector WHITE;
+	static const TVector BLACK;
+	static const TVector RED;
+	static const TVector BLUE;
+	static const TVector GREEN;
+
 public:
 	union
 	{
@@ -512,6 +518,17 @@ const TVector<float> TVector<float>::FORWARD = TVector<float>(0.0f, 0.0f, 1.0f, 
 
 template<>
 const TVector<float> TVector<float>::BACK = TVector<float>(0.0f, 0.0f, -1.0f, 0.0f);
+
+template<>
+const TVector<float> TVector<float>::WHITE = TVector<float>(1.0f, 1.0f, 1.0f, 1.0f);
+template<>
+const TVector<float> TVector<float>::BLACK = TVector<float>(0.0f, 0.0f, 0.0f, 1.0f);
+template<>
+const TVector<float> TVector<float>::RED = TVector<float>(1.0f, 0.0f, 0.0f, 1.0f);
+template<>
+const TVector<float> TVector<float>::BLUE = TVector<float>(0.0f, 0.0f, 1.0f, 1.0f);
+template<>
+const TVector<float> TVector<float>::GREEN = TVector<float>(0.0f, 1.0f, 0.0f, 1.0f);;
 
 class FQuat
 {
@@ -972,15 +989,20 @@ public:
 };
 
 
-class UColor
+template<typename ValueType>
+class TColor
 {
 public:
-	static const UColor WHITE;
-	static const UColor BLACK;
+	static const TColor WHITE;
+	static const TColor BLACK;
+	static const TColor RED;
+	static const TColor BLUE;
+	static const TColor GREEN;
+
 
 	union
 	{
-		int Color;
+		unsigned int Color;
 		struct
 		{
 			unsigned char R;
@@ -990,21 +1012,39 @@ public:
 		};
 	};
 
-	UColor(unsigned long _Value)
+	TColor(unsigned long _Value)
 		:Color(_Value)
 	{
 
 	}
 
-	bool operator==(const UColor& _Other)
+	bool operator==(const TColor& _Other)
 	{
 		return R == _Other.R && G == _Other.G && B == _Other.B;
 	}
 
 
-	UColor(unsigned char _R, unsigned char _G, unsigned char _B, unsigned char _A)
+	TColor(unsigned char _R, unsigned char _G, unsigned char _B, unsigned char _A)
 		:R(_R), G(_G), B(_B), A(_A)
 	{
 
 	}
 };
+
+using UColor = TColor<unsigned char>;
+
+template<>
+const TColor<unsigned char> TColor<unsigned char>::WHITE = TColor<unsigned char>(255, 255, 255, 255);
+
+template<>
+const TColor<unsigned char> TColor<unsigned char>::BLACK = TColor<unsigned char>(0, 0, 0, 255);
+
+template<>
+const TColor<unsigned char> TColor<unsigned char>::RED = TColor<unsigned char>(255, 0, 0, 255);
+
+template<>
+const TColor<unsigned char> TColor<unsigned char>::BLUE = TColor<unsigned char>(0, 0, 255, 255);
+
+template<>
+const TColor<unsigned char> TColor<unsigned char>::GREEN = TColor<unsigned char>(0, 255, 0, 255);
+

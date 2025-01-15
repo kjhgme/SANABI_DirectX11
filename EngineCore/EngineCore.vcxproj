@@ -203,6 +203,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="EngineFont.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="EngineGraphicDevice.h">
       <SubType>
       </SubType>
@@ -253,6 +257,10 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="FontWidget.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="GameMode.h" />
     <ClInclude Include="HUD.h">
       <SubType>
@@ -260,6 +268,10 @@
     </ClInclude>
     <ClInclude Include="IContentsCore.h" />
     <ClInclude Include="EngineIndexBuffer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="ImageWidget.h">
       <SubType>
       </SubType>
     </ClInclude>
@@ -347,6 +359,10 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="EngineFont.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="EngineGraphicDevice.cpp">
       <SubType>
       </SubType>
@@ -397,12 +413,20 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="FontWidget.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="GameMode.cpp" />
     <ClCompile Include="EngineIndexBuffer.cpp">
       <SubType>
       </SubType>
     </ClCompile>
     <ClCompile Include="HUD.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="ImageWidget.cpp">
       <SubType>
       </SubType>
     </ClCompile>

@@ -9,6 +9,7 @@
 #include "EngineShader.h"
 #include "EngineVertex.h"
 #include "EngineBlend.h"
+#include "EngineFont.h"
 #include "Mesh.h"
 
 void UEngineGraphicDevice::DefaultResourcesInit()
@@ -20,6 +21,8 @@ void UEngineGraphicDevice::DefaultResourcesInit()
     RasterizerStateInit();
     ShaderInit();
     MaterialInit();
+
+	UEngineFont::Load("±Ã¼­", "±Ã¼­");
 }
 
 void UEngineGraphicDevice::DepthStencilInit()

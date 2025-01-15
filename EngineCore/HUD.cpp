@@ -42,5 +42,4 @@ void AHUD::UIRender(UEngineCamera* _Camera, float _DeltaTime)
 			Widget->Render(_Camera, _DeltaTime);
 		}
 	}
-
 }

@@ -7,6 +7,7 @@
 #include "Collision.h"
 #include "EngineGUI.h"
 #include "EngineCore.h"
+#include "EngineFont.h"
 #include "CameraActor.h"
 #include "EngineCamera.h"
 #include "EngineRenderTarget.h"

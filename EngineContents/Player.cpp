@@ -74,7 +74,7 @@ void APlayer::Tick(float _DeltaTime)
 		ApplyGravity(_DeltaTime);
 		SetArmPosition();
 		CheckRightDir();
-	}
+	}	
 	if (UEngineInput::IsDown('G'))
 	{
 		FSM.ChangeState(PlayerState::Death);
