@@ -35,6 +35,11 @@ public:
 		return MainPawn;
 	}
 
+	class AHUD* GetHUD()
+	{
+		return HUD;
+	}
+
 	std::shared_ptr<class ACameraActor> GetMainCamera()
 	{
 		return GetCamera(0);

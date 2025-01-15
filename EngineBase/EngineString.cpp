@@ -46,7 +46,7 @@ std::wstring UEngineString::AnsiToUnicode(std::string_view _Name)
 
 	if (0 == Size)
 	{
-		MSGASSERT("MultiByteToWideChar 문자열 변환에 실패했습니다" + std::string(_Name));
+		MSGASSERT(std::string(_Name) + "MultiByteToWideChar failed");
 		return L"";
 	}
 
@@ -57,7 +57,7 @@ std::wstring UEngineString::AnsiToUnicode(std::string_view _Name)
 
 	if (0 == Size)
 	{
-		MSGASSERT("MultiByteToWideChar 문자열 변환에 실패했습니다" + std::string(_Name));
+		MSGASSERT(std::string(_Name) + " MultiByteToWideChar failed.");
 		return L"";
 	}
 
