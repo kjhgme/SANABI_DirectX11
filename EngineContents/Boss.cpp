@@ -84,10 +84,12 @@ void ABoss::StareAtPlayer()
 	BossRenderer->SetRelativeLocation({ 20.0f, -600.0f, 100.0f });
 	BossWingRenderer->SetRelativeLocation({ 20.0f, -600.0f, 101.0f });
 
-	FVector TargetPosition1 = { 0.0f, 550.0f, 0.0f };
-	FVector TargetPosition2 = { 0.0f, 470.0f, 0.0f };
+	FVector TargetPosition1 = { 0.0f, 520.0f, 0.0f };
+	FVector TargetPosition2 = { 0.0f, -50.0f, 0.0f };
+	FVector TargetPosition3 = { 0.0f, 1500.0f, 0.0f };
 
-	TimeEventComponent->AddUpdateEvent(4.0f, [this, TargetPosition1, TargetPosition2](float DeltaTime, float CurTime)
+
+	TimeEventComponent->AddUpdateEvent(4.0f, [this, TargetPosition1](float DeltaTime, float CurTime)
 	{
 		auto Lerp = [](FVector A, FVector B, float Alpha)
 		{
@@ -98,6 +100,46 @@ void ABoss::StareAtPlayer()
 		FVector NewPosition = Lerp(FVector::ZERO, TargetPosition1, Alpha);
 
 		AddActorLocation(NewPosition);
+	},
+		false
+	);
+
+	TimeEventComponent->AddEndEvent(4.0f, [this, TargetPosition2]()
+	{
+		TimeEventComponent->AddUpdateEvent(1.0f, [this, TargetPosition2](float DeltaTime, float CurTime)
+		{
+			auto Lerp = [](FVector A, FVector B, float Alpha)
+			{
+				return A * (1 - Alpha) + B * Alpha;
+			};
+
+			float Alpha = UEngineMath::Clamp(DeltaTime / 1.0f, 0.0f, 1.0f);
+			FVector NewPosition = Lerp(FVector::ZERO, TargetPosition2, Alpha);
+
+			AddActorLocation(NewPosition);
+		},
+			false
+		);
+	},
+		false
+	);
+
+	TimeEventComponent->AddEndEvent(6.0f, [this, TargetPosition3]()
+	{
+		TimeEventComponent->AddUpdateEvent(5.0f, [this, TargetPosition3](float DeltaTime, float CurTime)
+		{
+			auto Lerp = [](FVector A, FVector B, float Alpha)
+			{
+				return A * (1 - Alpha) + B * Alpha;
+			};
+
+			float Alpha = UEngineMath::Clamp(DeltaTime / 5.0f, 0.0f, 1.0f);
+			FVector NewPosition = Lerp(FVector::ZERO, TargetPosition3, Alpha);
+
+			AddActorLocation(NewPosition);
+		},
+			false
+		);
 	},
 		false
 	);

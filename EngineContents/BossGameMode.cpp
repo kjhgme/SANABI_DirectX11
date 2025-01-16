@@ -178,12 +178,20 @@ void ABossGameMode::InitScenes()
 		Boss->SetActorLocation(Player->GetActorLocation());
 	}); 
 	Scenes.push_back([this]() {
-		MainCamera->Zoom(-50.0f, 10.0f);
+		MainCamera->Zoom(-200.0f, 6.0f);
 		Boss->State++;
 		Boss->SetActorLocation(Player->GetActorLocation());
 		Boss->StareAtPlayer();
 	});
-	Scenes.push_back([this]() {	Player->SetAnimation("SNB_Boss_006_LookBackgroundEnd"); });
+	// Boss disappeared.
+	Scenes.push_back([this]() {
+		MainCamera->Zoom(200.0f, 4.0f);
+	});
+
+	Scenes.push_back([this]() {	
+		MainCamera->Zoom(50.0f, 2.0f);
+		Player->SetAnimation("SNB_Boss_006_LookBackgroundEnd");
+	});
 	Scenes.push_back([this]() {	Player->SetAnimation("Idle"); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
