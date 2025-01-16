@@ -929,7 +929,7 @@ public:
 	float ZAxisCenterBottom() const
 	{
 		return Location.Y - Scale.hY();
-	}
+	}	
 };
 
 class FIntPoint

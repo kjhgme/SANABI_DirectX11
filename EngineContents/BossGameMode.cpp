@@ -57,7 +57,8 @@ ABossGameMode::ABossGameMode()
 	Mari->AddRelativeLocation({ { 30.0f, -28.0f, 0.0f } });
 
 	MainCamera = GetWorld()->GetMainCamera();
-	MainCamera->SetActorLocation({ 0.0f, 0.0f, -200.0f, 1.0f });
+	// MainCamera->SetActorLocation({ 0.0f, 0.0f, -200.0f, 1.0f });
+	MainCamera->SetActorLocation({ 0.0f, 0.0f, -700.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 }
 
@@ -115,6 +116,12 @@ void ABossGameMode::Tick(float _DeltaTime)
 	{
 		MainCamera->Zoom(-300.0f, 2.0f);
 	}
+	// test
+	if (UEngineInput::IsDown(VK_SHIFT))
+	{
+		Scenes[SceneTakeNum]();
+		SceneTakeNum++;
+	}
 
 	/*if (UEngineInput::IsDown(VK_F1))
 	{
@@ -140,6 +147,15 @@ void ABossGameMode::Tick(float _DeltaTime)
 
 void ABossGameMode::InitScenes()
 {
+	Scenes.push_back([this]() {
+		Platforms[0].get()->GoToPlace({ -300.0f, 0.0f, 0.0f });
+		Platforms[1].get()->GoToPlace({ -15.0f, 300.0f, 0.0f });
+		Platforms[2].get()->GoToPlace({ -255.0f, -300.0f, 0.0f });
+		Platforms[4].get()->GoToPlace({ 255.0f, 300.0f, 0.0f });
+		Platforms[5].get()->GoToPlace({ 10.0f, -300.0f, 0.0f });
+		Platforms[6].get()->GoToPlace({ 300.0f, 0.0f, 0.0f });
+	});
+
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
@@ -162,6 +178,10 @@ void ABossGameMode::InitScenes()
 	Scenes.push_back([this]() {	Mari->MufinOff(); Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->AddActorLocation({ -1.0f, 14.0f, 0.0f });	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Player->SetSceneMode(false); });
+	
+	// Boss Start.
+	
+
 }
 
 void ABossGameMode::LevelChangeStart()

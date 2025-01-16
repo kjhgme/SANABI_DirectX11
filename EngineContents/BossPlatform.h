@@ -12,6 +12,8 @@ public:
 	ABossPlatform& operator=(const ABossPlatform& _Other) = delete;
 	ABossPlatform& operator=(ABossPlatform&& _Other) noexcept = delete;
 
+	void GoToPlace(FVector _Pos);
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -19,6 +21,7 @@ protected:
 private:
 	std::shared_ptr<class USpriteRenderer> PlatformBoxRenderer;
 	std::shared_ptr<class USpriteRenderer> PlatformBoosterRenderer;
+	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 	std::shared_ptr<class UCollision> Collision;
 };
 
