@@ -174,6 +174,28 @@ void ACameraActor::Zoom(float _Value, float _Duration)
 	);
 }
 
+ENGINEAPI void ACameraActor::MoveCamera(FVector _Pos, float _Duration)
+{
+	FVector TargetPosition = _Pos;
+	float Duration = _Duration;
+
+	TimeEventComponent->AddUpdateEvent(_Duration, [this, TargetPosition, Duration](float DeltaTime, float CurTime)
+	{
+		auto Lerp = [](FVector A, FVector B, float Alpha)
+		{
+			return A * (1 - Alpha) + B * Alpha;
+		};
+
+		float Alpha = UEngineMath::Clamp(DeltaTime / Duration, 0.0f, 1.0f);
+		FVector NewPosition = Lerp(FVector::ZERO, TargetPosition, Alpha);
+
+		AddRelativeLocation(NewPosition);
+	},
+		false
+	);
+
+}
+
 void ACameraActor::FreeCameraCheck()
 {
 	if (true == IsFreeCameraValue)

@@ -37,8 +37,18 @@ void UContentsCore::InitResources()
 	}
 	// BOSS
 	{
-		LoadFolder("BOSS/BossPlatform/BossPlatform_A_Idle");
-		LoadFolder("BOSS/BossPlatform/BossPlatform_A_BoosterLoop");
+		// Body
+		{
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_Idle");
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_BoosterLoop");
+			LoadFolder("BOSS/Boss_Slap");
+			LoadFolder("BOSS/Boss_Body_Idle");
+		}
+		// Wing
+		{
+			LoadFolder("BOSS/Boss_Wing_NoImage");
+			LoadFolder("BOSS/Boss_Wing_Neu_Idle");
+		}
 	}
 	// Ending
 	{

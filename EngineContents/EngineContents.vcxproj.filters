@@ -60,6 +60,9 @@
     <ClInclude Include="BossGameHUD.h">
       <Filter>HUD</Filter>
     </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -120,6 +123,9 @@
     </ClCompile>
     <ClCompile Include="BossGameHUD.cpp">
       <Filter>HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

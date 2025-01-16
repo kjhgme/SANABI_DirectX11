@@ -45,6 +45,7 @@ public:
 	}
 
 	ENGINEAPI void Zoom(float _Value, float _Duration);
+	ENGINEAPI void MoveCamera(FVector _Pos, float _Duration);
 	
 protected:
 

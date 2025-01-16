@@ -49,14 +49,14 @@ void ABossPlatform::GoToPlace(FVector _Pos)
 {
 	FVector TargetPosition = _Pos;
 	
-	TimeEventComponent->AddUpdateEvent(2.0f, [this, TargetPosition](float DeltaTime, float CurTime)
+	TimeEventComponent->AddUpdateEvent(3.0f, [this, TargetPosition](float DeltaTime, float CurTime)
 	{
 		auto Lerp = [](FVector A, FVector B, float Alpha)
 		{
 			return A * (1 - Alpha) + B * Alpha;
 		};
 
-		float Alpha = UEngineMath::Clamp(DeltaTime / 2.0f, 0.0f, 1.0f);
+		float Alpha = UEngineMath::Clamp(DeltaTime / 3.0f, 0.0f, 1.0f);
 		FVector NewPosition = Lerp(FVector::ZERO, TargetPosition, Alpha);
 
 		AddActorLocation(NewPosition);

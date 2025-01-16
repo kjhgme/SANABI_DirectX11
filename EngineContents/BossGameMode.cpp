@@ -7,6 +7,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include "Player.h"
 #include "Mari.h"
+#include "Boss.h"
 #include "BossBackGround.h"
 #include "BossPlatform.h"
 #include "TextBubble.h"
@@ -57,8 +58,8 @@ ABossGameMode::ABossGameMode()
 	Mari->AddRelativeLocation({ { 30.0f, -28.0f, 0.0f } });
 
 	MainCamera = GetWorld()->GetMainCamera();
-	// MainCamera->SetActorLocation({ 0.0f, 0.0f, -200.0f, 1.0f });
-	MainCamera->SetActorLocation({ 0.0f, 0.0f, -700.0f, 1.0f });
+	MainCamera->SetActorLocation({ 0.0f, 50.0f, -200.0f, 1.0f });
+	// MainCamera->SetActorLocation({ 0.0f, 0.0f, -700.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 }
 
@@ -76,8 +77,8 @@ void ABossGameMode::BeginPlay()
 
 	InitScenes();
 
-	Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
-	Player->SetSceneMode(false);	
+	//Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
+	//Player->SetSceneMode(false);	
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
@@ -143,19 +144,13 @@ void ABossGameMode::Tick(float _DeltaTime)
 	}
 	Mari->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
 	BackGround->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
+
+	if(Boss != nullptr && Boss.get()->State >= 1)
+		Boss->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
 }
 
 void ABossGameMode::InitScenes()
 {
-	Scenes.push_back([this]() {
-		Platforms[0].get()->GoToPlace({ -300.0f, 0.0f, 0.0f });
-		Platforms[1].get()->GoToPlace({ -15.0f, 300.0f, 0.0f });
-		Platforms[2].get()->GoToPlace({ -255.0f, -300.0f, 0.0f });
-		Platforms[4].get()->GoToPlace({ 255.0f, 300.0f, 0.0f });
-		Platforms[5].get()->GoToPlace({ 10.0f, -300.0f, 0.0f });
-		Platforms[6].get()->GoToPlace({ 300.0f, 0.0f, 0.0f });
-	});
-
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
@@ -165,11 +160,29 @@ void ABossGameMode::InitScenes()
 	Scenes.push_back([this]() {	Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f }); Player->SetAnimation("Idle"); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
-	Scenes.push_back([this]() {	Player->SetAnimation("SNB_Boss_004_LookBackgroundStart"); });
+
+	Scenes.push_back([this]() {	
+		Player->SetAnimation("SNB_Boss_004_LookBackgroundStart");
+		MainCamera->Zoom(-100.0f, 10.0f);
+		MainCamera->MoveCamera({0.0f, 60.0f, 0.0f}, 10.0f);
+	});
 	Scenes.push_back([this]() {	Player->SetAnimation("SNB_Boss_005_LookBackgroundLoop"); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
-	Scenes.push_back([this]() {	Mari->AddActorLocation({ -1.0f, 9.0f,0.0f }); Mari->ChangeToNextAnim(); });
-	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
+	Scenes.push_back([this]() {	Mari->AddActorLocation({ -1.0f, 9.0f,0.0f }); Mari->ChangeToNextAnim(); });	
+	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); }); 
+	Scenes.push_back([this]() {	MainCamera->Zoom(-50.0f, 2.0f); }); 
+	
+	// Boss appeared.
+	Scenes.push_back([this]() {
+		Boss = GetWorld()->SpawnActor<ABoss>();
+		Boss->SetActorLocation(Player->GetActorLocation());
+	}); 
+	Scenes.push_back([this]() {
+		MainCamera->Zoom(-50.0f, 10.0f);
+		Boss->State++;
+		Boss->SetActorLocation(Player->GetActorLocation());
+		Boss->StareAtPlayer();
+	});
 	Scenes.push_back([this]() {	Player->SetAnimation("SNB_Boss_006_LookBackgroundEnd"); });
 	Scenes.push_back([this]() {	Player->SetAnimation("Idle"); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
@@ -179,9 +192,16 @@ void ABossGameMode::InitScenes()
 	Scenes.push_back([this]() {	Mari->AddActorLocation({ -1.0f, 14.0f, 0.0f });	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Player->SetSceneMode(false); });
 	
-	// Boss Start.
-	
-
+	// Boss fight start.
+	Scenes.push_back([this]() {
+		MainCamera->Zoom(-500.0f, 8.0f);
+		Platforms[0].get()->GoToPlace({ -300.0f, 0.0f, 0.0f });
+		Platforms[1].get()->GoToPlace({ -15.0f, 300.0f, 0.0f });
+		Platforms[2].get()->GoToPlace({ -255.0f, -300.0f, 0.0f });
+		Platforms[4].get()->GoToPlace({ 255.0f, 300.0f, 0.0f });
+		Platforms[5].get()->GoToPlace({ 10.0f, -300.0f, 0.0f });
+		Platforms[6].get()->GoToPlace({ 300.0f, 0.0f, 0.0f });
+	});
 }
 
 void ABossGameMode::LevelChangeStart()

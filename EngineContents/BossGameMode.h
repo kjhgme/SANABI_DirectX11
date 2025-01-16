@@ -24,6 +24,7 @@ protected:
 private:
 	std::shared_ptr<class APlayer> Player;
 	std::shared_ptr<class AMari> Mari;
+	std::shared_ptr<class ABoss> Boss;
 	std::vector<std::shared_ptr<class ABossPlatform>> Platforms;
 	std::shared_ptr<class ABossBackGround> BackGround;
 	std::shared_ptr<class ACameraActor> MainCamera;

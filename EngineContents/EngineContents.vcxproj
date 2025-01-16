@@ -167,6 +167,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Boss.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="BossGameHUD.h">
       <SubType>
       </SubType>
@@ -232,6 +236,10 @@
     <ClInclude Include="TitleLogo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Boss.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="BossGameHUD.cpp">
       <SubType>
       </SubType>
