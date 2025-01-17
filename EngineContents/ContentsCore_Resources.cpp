@@ -102,6 +102,8 @@ void UContentsCore::InitResources()
 			LoadFolder("SNB/SNB_SwingJump");
 			LoadFolder("SNB/SNB_SwingJumpUp");
 			LoadFolder("SNB/SNB_Death");
+
+			LoadFolder("SNB/SNB_Chain");
 		}
 		//SNB Arm
 		{
@@ -170,9 +172,11 @@ void UContentsCore::InitResources()
 		LoadFolder("Vfx/Vfx_Landing");
 		LoadFolder("Vfx/Vfx_RopeSliding");
 		LoadFolder("Vfx/Vfx_ShootGas");
+		LoadFolder("Vfx/Vfx_ShootMuzzleFire");		
 		LoadFolder("Vfx/Vfx_WallJump");
 		LoadFolder("Vfx/Vfx_WallSliding");
 		LoadFolder("Vfx/Vfx_WallSlidingWithWindingSmoke");
+		LoadFolder("Vfx/VfxSNB_GrabDust");
 	}
 }
 
