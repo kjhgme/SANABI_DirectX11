@@ -176,6 +176,9 @@
     <ClInclude Include="FontWidget.h">
       <Filter>Object\UI</Filter>
     </ClInclude>
+    <ClInclude Include="FontRenderer.h">
+      <Filter>Object\Component\Contents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -335,6 +338,9 @@
     <ClCompile Include="FontWidget.cpp">
       <Filter>Object\UI</Filter>
     </ClCompile>
+    <ClCompile Include="FontRenderer.cpp">
+      <Filter>Object\Component\Contents</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Interface">
@@ -455,10 +461,6 @@
     <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Release\FW1FontWrapper.dll">
       <Filter>ThirdParty\FW1FontWrapper\Release</Filter>
     </CopyFileToFolders>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="ThirdParty\FW1FontWrapper\Debug\FW1FontWrapper.lib">
-      <Filter>ThirdParty\FW1FontWrapper\Debug</Filter>
-    </Library>
+    <CopyFileToFolders Include="ThirdParty\FW1FontWrapper\Debug\FW1FontWrapper.lib" />
   </ItemGroup>
 </Project>

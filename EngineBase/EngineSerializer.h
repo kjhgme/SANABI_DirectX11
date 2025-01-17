@@ -127,6 +127,11 @@ public:
 	{
 		return Data.size();
 	}
+	
+	void ResetOffset()
+	{
+		ReadOffset = 0;
+	}
 
 protected:
 

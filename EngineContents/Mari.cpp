@@ -4,6 +4,7 @@
 
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/FontRenderer.h>
 
 AMari::AMari()
 {
@@ -22,6 +23,13 @@ AMari::AMari()
 
 	MariRenderer->SetupAttachment(RootComponent);
 	MufinRenderer->SetupAttachment(RootComponent);
+
+	std::shared_ptr<UFontRenderer> Font = CreateDefaultSubObject<UFontRenderer>();
+	Font->SetFont("궁서");
+	Font->SetText("폰트 랜더러에영");
+	Font->AddRelativeLocation({ 0.0f, 20.0f, static_cast<float>(ERenderOrder::PLAYER) - 50 });
+	Font->SetupAttachment(RootComponent);
+
 }
 
 AMari::~AMari()

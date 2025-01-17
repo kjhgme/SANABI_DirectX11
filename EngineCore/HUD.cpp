@@ -17,7 +17,7 @@ void AHUD::UIRender(UEngineCamera* _Camera, float _DeltaTime)
 	{
 		std::list<std::shared_ptr<class UWidget>>& WidgetList = WidgetPair.second;
 
-		for (std::shared_ptr<class UWidget> Widget : WidgetList)
+		for (std::shared_ptr<class UWidget>& Widget : WidgetList)
 		{
 			if (false == Widget->IsActive())
 			{
