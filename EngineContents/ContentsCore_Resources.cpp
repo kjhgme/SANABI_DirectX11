@@ -26,6 +26,11 @@ void UContentsCore::InitResources()
 	{
 		LoadFolder("UI/TextUI");
 		LoadFolder("UI/TextUI/BubbleSelectionMarker");
+		LoadFolder("UI/Aim_Idle");
+		LoadFolder("UI/Aimming");
+		LoadFolder("UI/AimStart");
+		LoadFolder("UI/GrabIcon_AttackGrab");
+		LoadFolder("UI/Grablcon_Grab");
 	}
 	// Title
 	{
@@ -114,6 +119,17 @@ void UContentsCore::InitResources()
 			LoadFolder("SNB/SNB_Arm_SwingJump");
 			LoadFolder("SNB/SNB_Arm_SwingJumpUp");
 		}
+		// Grab
+		{
+			LoadFolder("SNB/SNB_Grab/SNB_Grab_Flying");
+			LoadFolder("SNB/SNB_Grab/SNB_Grab_Grabbing");
+			LoadFolder("SNB/SNB_Grab/SNB_Grab_Grabed");
+			LoadFolder("SNB/SNB_Grab/SNB_Grab_Lower_Grabbed");
+			LoadFolder("SNB/SNB_Grab/SNB_Grab_Lower_Grabbing");
+			LoadFolder("SNB/SNB_Grab/SNB_Grab_Return");
+			LoadFolder("SNB/SNB_Grab/SNB_Grab_ReturnWithGrabbed");
+			LoadFolder("SNB/SNB_Grab/SNB_Grab_ReturnWithoutGrabbed");
+		}
 		// BossAnimation
 		{
 			LoadFolder("SNB/BossStage/SNB_Boss_001_TrainOnLoop");
@@ -149,7 +165,14 @@ void UContentsCore::InitResources()
 	{
 		LoadFolder("Vfx/Vfx_NoImage");
 		LoadFolder("Vfx/Vfx_Jump");
+		LoadFolder("Vfx/Vfx_AttackDonut");
+		LoadFolder("Vfx/Vfx_Grabhit");
 		LoadFolder("Vfx/Vfx_Landing");
+		LoadFolder("Vfx/Vfx_RopeSliding");
+		LoadFolder("Vfx/Vfx_ShootGas");
+		LoadFolder("Vfx/Vfx_WallJump");
+		LoadFolder("Vfx/Vfx_WallSliding");
+		LoadFolder("Vfx/Vfx_WallSlidingWithWindingSmoke");
 	}
 }
 
