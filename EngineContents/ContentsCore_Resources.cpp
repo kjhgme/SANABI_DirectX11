@@ -39,15 +39,35 @@ void UContentsCore::InitResources()
 	{
 		// Body
 		{
-			LoadFolder("BOSS/BossPlatform/BossPlatform_A_Idle");
-			LoadFolder("BOSS/BossPlatform/BossPlatform_A_BoosterLoop");
 			LoadFolder("BOSS/Boss_Slap");
 			LoadFolder("BOSS/Boss_Body_Idle");
+			LoadFolder("BOSS/Boss_Body_Broken_Idle");
 		}
 		// Wing
 		{
 			LoadFolder("BOSS/Boss_Wing_NoImage");
 			LoadFolder("BOSS/Boss_Wing_Neu_Idle");
+			LoadFolder("BOSS/Boss_Wing_Up1");
+			LoadFolder("BOSS/Boss_Wing_Up2");
+			LoadFolder("BOSS/Boss_Wing_Up3");
+			LoadFolder("BOSS/Boss_Wing_Up4");
+			LoadFolder("BOSS/Boss_Wing_Down1");
+			LoadFolder("BOSS/Boss_Wing_Down2");
+			LoadFolder("BOSS/Boss_Wing_Down3");
+			LoadFolder("BOSS/Boss_Wing_Down4");
+			LoadFolder("BOSS/Boss_Wing_Broken_Up1");
+			LoadFolder("BOSS/Boss_Wing_Broken_Up2");
+			LoadFolder("BOSS/Boss_Wing_Broken_Up3");
+			LoadFolder("BOSS/Boss_Wing_Broken_Up4");
+			LoadFolder("BOSS/Boss_Wing_Broken_Down1");
+			LoadFolder("BOSS/Boss_Wing_Broken_Down2");
+			LoadFolder("BOSS/Boss_Wing_Broken_Down3");
+			LoadFolder("BOSS/Boss_Wing_Broken_Down4");
+		}
+		// Platform
+		{
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_Idle");
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_BoosterLoop");
 		}
 	}
 	// Ending

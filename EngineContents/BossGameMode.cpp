@@ -55,7 +55,7 @@ ABossGameMode::ABossGameMode()
 	Player->AddRelativeLocation({ 0.0f, -35.0f, 0.0f });
 	
 	Mari = GetWorld()->SpawnActor<AMari>();
-	Mari->AddRelativeLocation({ { 30.0f, -28.0f, 0.0f } });
+	Mari->AddRelativeLocation({ { 30.0f, -28.0f, -2.0f } });
 
 	MainCamera = GetWorld()->GetMainCamera();
 	MainCamera->SetActorLocation({ 0.0f, 50.0f, -200.0f, 1.0f });
@@ -77,8 +77,8 @@ void ABossGameMode::BeginPlay()
 
 	InitScenes();
 
-	Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
-	Player->SetSceneMode(false);	
+	//Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
+	//Player->SetSceneMode(false);	
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
@@ -184,6 +184,7 @@ void ABossGameMode::InitScenes()
 		Boss->StareAtPlayer();
 	});
 	// Boss disappeared.
+
 	Scenes.push_back([this]() {
 		MainCamera->Zoom(200.0f, 4.0f);
 	});
@@ -198,17 +199,22 @@ void ABossGameMode::InitScenes()
 	Scenes.push_back([this]() {	Mari->MufinOn(); });
 	Scenes.push_back([this]() {	Mari->MufinOff(); Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->AddActorLocation({ -1.0f, 14.0f, 0.0f });	Mari->ChangeToNextAnim(); });
-	Scenes.push_back([this]() {	Player->SetSceneMode(false); });
-	
+	// Mari disappeared.
+		
 	// Boss fight start.
 	Scenes.push_back([this]() {
-		MainCamera->Zoom(-500.0f, 8.0f);
+		MainCamera->Zoom(-400.0f, 8.0f);
 		Platforms[0].get()->GoToPlace({ -300.0f, 0.0f, 0.0f });
 		Platforms[1].get()->GoToPlace({ -15.0f, 300.0f, 0.0f });
 		Platforms[2].get()->GoToPlace({ -255.0f, -300.0f, 0.0f });
 		Platforms[4].get()->GoToPlace({ 255.0f, 300.0f, 0.0f });
 		Platforms[5].get()->GoToPlace({ 10.0f, -300.0f, 0.0f });
 		Platforms[6].get()->GoToPlace({ 300.0f, 0.0f, 0.0f });
+	});
+
+	Scenes.push_back([this]() {	
+		Player->SetSceneMode(false);
+		Boss->StartBattle();
 	});
 }
 
