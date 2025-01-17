@@ -52,14 +52,13 @@ ABossGameMode::ABossGameMode()
 	}
 
 	Player = GetWorld()->SpawnActor<APlayer>();
-	Player->AddRelativeLocation({ 0.0f, -35.0f, 0.0f });
-	
+	Player->AddActorLocation({ 0.0f, -35.0f, 0.0f });
+
 	Mari = GetWorld()->SpawnActor<AMari>();
-	Mari->AddRelativeLocation({ { 30.0f, -28.0f, -2.0f } });
+	Mari->AddActorLocation({ { 30.0f, -28.0f, -2.0f } });
 
 	MainCamera = GetWorld()->GetMainCamera();
 	MainCamera->SetActorLocation({ 0.0f, 50.0f, -200.0f, 1.0f });
-	// MainCamera->SetActorLocation({ 0.0f, 0.0f, -700.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 }
 

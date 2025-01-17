@@ -178,6 +178,10 @@ void UContentsCore::InitResources()
 		LoadFolder("Vfx/Vfx_WallSlidingWithWindingSmoke");
 		LoadFolder("Vfx/VfxSNB_GrabDust");
 	}
+	// temp
+	{
+		LoadFolder("temp/Aim");
+	}
 }
 
 

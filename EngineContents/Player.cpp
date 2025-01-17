@@ -34,6 +34,10 @@ APlayer::APlayer()
 	PlayerCamera->AttachToActor(this);
 
 	FSM.ChangeState(PlayerState::Idle);
+
+	AimRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	AimRenderer->SetSprite("Aim", 0);
+	AimRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1000.0 });
 }
 
 APlayer::~APlayer()
@@ -66,6 +70,8 @@ void APlayer::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	UEngineCore::GetMainWindow().GetMousePos();
+
+	AimRenderer->SetRelativeLocation(PlayerCamera->ScreenMousePosToWorldPos());
 
 	if (false == SceneMode)
 	{
@@ -215,7 +221,7 @@ void APlayer::Idle(float _DeltaTime)
 		FSM.ChangeState(PlayerState::RunStart);
 		return;
 	}
-	if (UEngineInput::IsPress('D'))
+	else if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 		FSM.ChangeState(PlayerState::RunStart);
@@ -245,8 +251,8 @@ void APlayer::Walking(float _DeltaTime)
 		bIsRight = false;
 
 		AddRelativeLocation(FVector{ -WalkVelocity * _DeltaTime, 0.0f, 0.0f });
-	}	
-	if (UEngineInput::IsPress('D'))
+	}
+	else if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 
@@ -271,7 +277,7 @@ void APlayer::RunStart(float _DeltaTime)
 		bIsRight = false;
 		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
-	if (UEngineInput::IsPress('D'))
+	else if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
@@ -304,7 +310,7 @@ void APlayer::Running(float _DeltaTime)
 		bIsRight = false;
 		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
-	if (UEngineInput::IsPress('D'))
+	else if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;		
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
@@ -327,16 +333,13 @@ void APlayer::RunStop(float _DeltaTime)
 	PlayerRenderer->ChangeAnimation("RunStop");
 	ArmRenderer->ChangeAnimation("ArmRunStop");
 
-	//float StopVelocity = 300.0f - _DeltaTime * 1000.0f;
-	//StopVelocity = UEngineMath::Clamp(StopVelocity, 0.0f, 300.0f);
-
 	if (UEngineInput::IsPress('A'))
 	{
 		bIsRight = false;
 		FSM.ChangeState(PlayerState::RunStart);
 		return;
 	}
-	if (UEngineInput::IsPress('D'))
+	else if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 		FSM.ChangeState(PlayerState::RunStart);
@@ -347,15 +350,6 @@ void APlayer::RunStop(float _DeltaTime)
 		FSM.ChangeState(PlayerState::Jumping);
 		return;
 	}
-
-	/*if (false == bIsRight)
-	{
-		AddRelativeLocation(FVector{ -StopVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (true == bIsRight)
-	{
-		AddRelativeLocation(FVector{ StopVelocity * _DeltaTime, 0.0f, 0.0f });
-	}*/
 	if (PlayerRenderer->IsCurAnimationEnd())
 	{
 		FSM.ChangeState(PlayerState::Idle);
@@ -388,7 +382,7 @@ void APlayer::Jumping(float _DeltaTime)
 		bIsRight = false;
 		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
-	if (UEngineInput::IsPress('D'))
+	else if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
@@ -433,7 +427,7 @@ void APlayer::Falling(float _DeltaTime)
 		bIsRight = false;
 		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
-	if (UEngineInput::IsPress('D'))
+	else if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
@@ -508,7 +502,7 @@ void APlayer::Land2Run(float _DeltaTime)
 		bIsRight = false;
 		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
-	if (UEngineInput::IsPress('D'))
+	else if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
@@ -525,7 +519,6 @@ void APlayer::Land2Run(float _DeltaTime)
 		FSM.ChangeState(PlayerState::RunStop);
 		return;
 	}
-
 	if (PlayerRenderer->IsCurAnimationEnd())
 	{
 		bHasSpawnedVfx = false;

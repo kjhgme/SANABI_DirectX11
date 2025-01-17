@@ -3,6 +3,7 @@
 
 #include <EngineCore/ImageWidget.h>
 #include <EngineCore/FontWidget.h>
+#include <EngineCore/CameraActor.h>
 
 ABossGameHUD::ABossGameHUD()
 {
@@ -30,5 +31,7 @@ void ABossGameHUD::BeginPlay()
 void ABossGameHUD::Tick(float _DeltaTime)
 {
 	AHUD::Tick(_DeltaTime);
+
+	UEngineCore::GetMainWindow().GetMousePos(); 
 }
 
