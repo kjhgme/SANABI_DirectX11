@@ -29,7 +29,6 @@ APlayer::APlayer()
 
 	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::PLAYER) });
 	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) });
-	ArmRenderer->AddRelativeLocation({ 100.0f, 100.0f, 0.0f });
 
 	PlayerCamera = GetWorld()->GetMainCamera();
 	PlayerCamera->AttachToActor(this);
@@ -72,7 +71,6 @@ void APlayer::Tick(float _DeltaTime)
 	{
 		FSM.Update(_DeltaTime);
 		ApplyGravity(_DeltaTime);
-		SetArmPosition();
 		CheckRightDir();
 	}	
 	if (UEngineInput::IsDown('G'))
@@ -95,67 +93,6 @@ void APlayer::Tick(float _DeltaTime)
 	//}
 }
 
-void APlayer::PlayerInput(float _DeltaTime)
-{	
-	/*if (UEngineInput::IsPress('A'))
-	{
-		IsRight = false;
-		if (IsWalking == true) {
-			PlayerRenderer->ChangeAnimation("Walking");
-			ArmRenderer->ChangeAnimation("ArmWalking");
-			PlayerRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-			ArmRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-
-			AddRelativeLocation(FVector{ -100.0f * _DeltaTime, 0.0f, 0.0f });
-		}
-		else if (IsRunning == true) {
-			PlayerRenderer->ChangeAnimation("Running");
-			ArmRenderer->ChangeAnimation("ArmRunning");
-			PlayerRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-			ArmRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-
-			AddRelativeLocation(FVector{ -300.0f * _DeltaTime, 0.0f, 0.0f });
-		}
-		FSM.ChangeState(PlayerState::Run);
-	}
-	if (UEngineInput::IsPress('D'))
-	{
-		IsRight = true;
-		if (IsWalking == true) {
-			PlayerRenderer->ChangeAnimation("Walking");
-			ArmRenderer->ChangeAnimation("ArmWalking");
-			PlayerRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
-			ArmRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
-
-			AddRelativeLocation(FVector{ 100.0f * _DeltaTime, 0.0f, 0.0f });
-		}
-		else if (IsRunning == true) {
-			PlayerRenderer->ChangeAnimation("Running");
-			ArmRenderer->ChangeAnimation("ArmRunning");
-			PlayerRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
-			ArmRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
-
-			AddRelativeLocation(FVector{ 300.0f * _DeltaTime, 0.0f, 0.0f });
-		}
-		FSM.ChangeState(PlayerState::Run);
-	}
-	if (UEngineInput::IsPress(VK_SPACE))
-	{
-		PlayerRenderer->ChangeAnimation("Jumping");
-		ArmRenderer->ChangeAnimation("ArmJumping");
-	}
-	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D') &&
-		true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S') &&
-		true == UEngineInput::IsFree('T'))
-	{
-		IsIdle = true;
-		PlayerRenderer->ChangeAnimation("Idle");
-		ArmRenderer->ChangeAnimation("ArmIdle");
-
-		FSM.ChangeState(PlayerState::Idle);
-	}*/
-}
-
 void APlayer::SetAnimation(std::string_view _Anim)
 {
 	if (false == ArmRenderer->ChangeAnimation("Arm" + std::string(_Anim)))
@@ -164,44 +101,6 @@ void APlayer::SetAnimation(std::string_view _Anim)
 	}
 	
 	PlayerRenderer->ChangeAnimation(_Anim);
-}
-
-void APlayer::SetArmPosition()
-{
-	FVector PlayerRenPos = PlayerRenderer->GetTransformRef().Location;
-
-	/*if (IsIdle == true) {
-		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(-8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
-		}
-		else if(IsRight == false) {
-			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
-		}
-	}
-	else if (IsWalking == true) {
-		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
-		}
-		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(-8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
-		}
-	}
-	else if (IsRunning == true) {
-		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(-8.f, 8.f, static_cast<float>(ERenderOrder::ARM)));
-		}
-		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 8.f, static_cast<float>(ERenderOrder::ARM)));
-		}
-	}
-	else if (IsJumping == true) {
-		if (IsRight == true) {
-			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 4.f, static_cast<float>(ERenderOrder::ARM)));
-		}
-		else if (IsRight == false) {
-			ArmRenderer->SetRelativeLocation(PlayerRenPos + FVector(8.f, 8.f, static_cast<float>(ERenderOrder::ARM)));
-		}
-	}*/
 }
 
 void APlayer::AddPlayerRendererLocation(FVector _Loc)
@@ -337,7 +236,7 @@ void APlayer::Idle(float _DeltaTime)
 void APlayer::Walking(float _DeltaTime)
 {
 	PlayerRenderer->ChangeAnimation("Walking");
-	ArmRenderer->ChangeAnimation("Walking");
+	ArmRenderer->ChangeAnimation("ArmWalking");
 
 	float WalkVelocity = 100.0f;
 

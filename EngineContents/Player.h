@@ -29,8 +29,6 @@ public:
 	APlayer& operator=(const APlayer& _Other) = delete;
 	APlayer& operator=(APlayer&& _Other) noexcept = delete;
 
-	void PlayerInput(float _DeltaTime);
-
 	std::shared_ptr<class USpriteRenderer> GetPlayerRenderer()
 	{
 		return PlayerRenderer;
@@ -97,7 +95,5 @@ private:
 	const float MaxFallSpeed = -5000.0f;
 
 	UFSMStateManager FSM;
-
-	void SetArmPosition();
 };
 
