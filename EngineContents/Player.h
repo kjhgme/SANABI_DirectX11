@@ -82,7 +82,6 @@ private:
 
 	std::shared_ptr<class ACameraActor> PlayerCamera;
 	std::shared_ptr<class ATextBubble> PlayerText;
-	std::shared_ptr<class UFontRenderer> TextTest;
 
 	bool SceneMode = true;
 	bool bIsRight = true;

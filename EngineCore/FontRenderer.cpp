@@ -26,6 +26,7 @@ void UFontRenderer::Render(UEngineCamera* _Camera, float _DeltaTime)
 	URenderer::Render(_Camera, _DeltaTime);
 
 	ACameraActor* CameraActor = _Camera->GetActor<ACameraActor>();
+	CameraActor->GetCameraComponent()->SetProjectionType(EProjectionType::Orthographic);
 
 	FVector ScreenPos = CameraActor->WorldPosToScreenPos(GetWorldLocation());
 

@@ -39,11 +39,6 @@ APlayer::APlayer()
 	AimRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	AimRenderer->SetSprite("Aim", 0);
 	AimRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1000.0 });
-
-	TextTest = CreateDefaultSubObject<UFontRenderer>();
-	TextTest->SetFont("궁서");
-	TextTest->SetText("폰트 랜더러에영");
-	TextTest->SetupAttachment(RootComponent);
 }
 
 APlayer::~APlayer()
@@ -89,11 +84,6 @@ void APlayer::Tick(float _DeltaTime)
 	{
 		FSM.ChangeState(PlayerState::Death);
 	}
-	if (UEngineInput::IsDown('H'))
-	{
-		TextTest->AddRelativeLocation({ 10, 10, -100 });
-		int a = 0;
-	}
 }
 
 void APlayer::SetAnimation(std::string_view _Anim)
@@ -111,7 +101,6 @@ void APlayer::AddPlayerRendererLocation(FVector _Loc)
 	PlayerRenderer->AddRelativeLocation(_Loc);
 	ArmRenderer->AddRelativeLocation(_Loc);
 	Collision->AddRelativeLocation(_Loc);
-	TextTest->AddRelativeLocation(_Loc);
 }
 
 void APlayer::CheckRightDir()
