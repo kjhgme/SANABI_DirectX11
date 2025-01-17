@@ -15,6 +15,7 @@ public:
 	int State = 0;
 
 	void StareAtPlayer();
+	void StartBattle();
 
 protected:
 	void BeginPlay() override;
