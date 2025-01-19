@@ -25,6 +25,26 @@ public:
 	void Render(float _DeltaTime);
 	ENGINEAPI void Release(float _DeltaTime);
 
+	ENGINEAPI EProjectionType GetProjectionType()
+	{
+		return ProjectionType;
+	}
+
+	ENGINEAPI float GetNear()
+	{
+		return Near;
+	}	
+	
+	ENGINEAPI float GetFar()
+	{
+		return Far;
+	}	
+	
+	ENGINEAPI float GetFOV()
+	{
+		return FOV;
+	}
+
 	// SetFunction
 	ENGINEAPI void SetFar(float _Value)
 	{

@@ -12,7 +12,7 @@ public:
 	ATextBubble& operator=(const ATextBubble& _Other) = delete;
 	ATextBubble& operator=(ATextBubble&& _Other) noexcept = delete;
 
-	void SetText();
+	void SetText(std::string_view _Text, float _Size);
 
 protected:
 	void BeginPlay() override;
@@ -22,6 +22,7 @@ private:
 	std::shared_ptr<class USpriteRenderer> BubbleRenderer;
 	std::shared_ptr<class USpriteRenderer> BubbleTailRenderer;
 	std::shared_ptr<class USpriteRenderer> BubbleMarkerRenderer;
+	std::shared_ptr<class UFontRenderer> TextRenderer;
 
 };
 

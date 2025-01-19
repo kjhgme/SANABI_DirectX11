@@ -76,8 +76,8 @@ void ABossGameMode::BeginPlay()
 
 	InitScenes();
 
-	Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
-	Player->SetSceneMode(false);	
+	//Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
+	//Player->SetSceneMode(false);	
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
@@ -123,10 +123,6 @@ void ABossGameMode::Tick(float _DeltaTime)
 		SceneTakeNum++;
 	}
 
-	/*if (UEngineInput::IsDown(VK_F1))
-	{
-		GetWorld()->GetMainCamera()->FreeCameraSwitch();
-	}*/
 
 	//if (true == bPlayNextAnimation && true == Player->GetPlayerRenderer().get()->IsCurAnimationEnd())
 	//{
@@ -137,19 +133,24 @@ void ABossGameMode::Tick(float _DeltaTime)
 	//	bPlayNextAnimation = false;
 	//}
 
-	Player->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
-	for (int i = 0; i < Platforms.size(); ++i) {
-		Platforms[i].get()->AddActorLocation({ { 300.0f * _DeltaTime, 0.0f, 0.0f } });
-	}
-	Mari->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
-	BackGround->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
 
-	if(Boss != nullptr && Boss.get()->State >= 1)
-		Boss->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
+
+	//Player->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
+	//for (int i = 0; i < Platforms.size(); ++i) {
+	//	Platforms[i].get()->AddActorLocation({ { 300.0f * _DeltaTime, 0.0f, 0.0f } });
+	//}
+	//Mari->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
+	//BackGround->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
+
+	//if(Boss != nullptr && Boss.get()->State >= 1)
+	//	Boss->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
 }
 
 void ABossGameMode::InitScenes()
 {
+	Scenes.push_back([this]() {	
+		Player->MakeTextBubble("끝났다는 것은 다시 시작된다는 것을");
+		});
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });

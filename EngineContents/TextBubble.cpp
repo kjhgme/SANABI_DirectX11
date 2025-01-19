@@ -1,10 +1,11 @@
 #include "PreCompile.h"
 #include "TextBubble.h"
 
-#include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
-#include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/EngineGraphicDevice.h>
+#include <EnginePlatform/EngineInput.h>
+#include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/FontRenderer.h>
 #include <EngineCore/EngineCore.h>
 
 ATextBubble::ATextBubble()
@@ -15,6 +16,7 @@ ATextBubble::ATextBubble()
 	BubbleMarkerRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BubbleRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BubbleTailRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	TextRenderer = CreateDefaultSubObject<UFontRenderer>();
 
 	BubbleRenderer->SetSprite("TextUI", 0);
 	BubbleTailRenderer->SetSprite("TextUI", 1);
@@ -22,15 +24,17 @@ ATextBubble::ATextBubble()
 	BubbleMarkerRenderer->CreateAnimation("BubbleSelectionMarker", "BubbleSelectionMarker");
 	BubbleMarkerRenderer->ChangeAnimation("BubbleSelectionMarker");
 
-	BubbleRenderer->SetRelativeLocation({ 0.0f, 50.0f, -1.0f });
-	BubbleTailRenderer->SetRelativeLocation({ 0.0f, 40.0f, -1.0f });
-	BubbleMarkerRenderer->SetRelativeLocation({ 0.0f, 55.0f, -1.0f });
+	BubbleRenderer->SetRelativeLocation({ 0.0f, 45.0f, -1.0f });
+	BubbleTailRenderer->SetRelativeLocation({ 0.0f, 40.0f, -2.0f });
+	BubbleMarkerRenderer->SetRelativeLocation({ 0.0f, 55.0f, -3.0f });
 
-	BubbleMarkerRenderer->SetAutoScaleRatio(5.0f);
+	TextRenderer->SetFont("PFStardust");
+	TextRenderer->SetText("");
 
 	BubbleRenderer->SetupAttachment(RootComponent);
 	BubbleTailRenderer->SetupAttachment(RootComponent);
 	BubbleMarkerRenderer->SetupAttachment(RootComponent);
+	TextRenderer->SetupAttachment(RootComponent);
 }
 
 ATextBubble::~ATextBubble()
@@ -40,8 +44,6 @@ ATextBubble::~ATextBubble()
 void ATextBubble::BeginPlay()
 {
 	AActor::BeginPlay();
-
-	SetText();
 }
 
 void ATextBubble::Tick(float _DeltaTime)
@@ -50,9 +52,8 @@ void ATextBubble::Tick(float _DeltaTime)
 
 }
 
-void ATextBubble::SetText()
+void ATextBubble::SetText(std::string_view _Text, float _Size)
 {
-	// UEngineGraphicDevice& test = UEngineCore::GetDevice();
-
-	// test.RenderText("한글가능?", 100.f, 10.f, 10.0f);
+	TextRenderer->SetText(std::string(_Text));
+	TextRenderer->SetSize(_Size);
 }

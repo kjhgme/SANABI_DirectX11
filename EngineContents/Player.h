@@ -34,8 +34,6 @@ public:
 		return PlayerRenderer;
 	}
 
-	void SetAnimation(std::string_view _Anim);
-
 	bool GetSceneMode()
 	{
 		return SceneMode;
@@ -46,9 +44,13 @@ public:
 		SceneMode = _Mode;
 	}
 
+	void SetAnimation(std::string_view _Anim);
+
 	void AddPlayerRendererLocation(FVector _Loc);
 	
 	void CheckRightDir();
+
+	void MakeTextBubble(std::string_view _Text, float _Size = 40.0f);
 
 	// PlayerFunction
 	void ApplyGravity(float _DeltaTime);
@@ -81,7 +83,6 @@ private:
 	std::shared_ptr<class UCollision> Collision;
 
 	std::shared_ptr<class ACameraActor> PlayerCamera;
-	std::shared_ptr<class ATextBubble> PlayerText;
 
 	bool SceneMode = true;
 	bool bIsRight = true;

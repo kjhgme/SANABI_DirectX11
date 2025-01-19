@@ -129,8 +129,37 @@ FVector ACameraActor::WorldPosToScreenPos(FVector _Pos)
 	FTransform CameraTransform = GetActorTransform();
 
 	_Pos = _Pos * CameraTransform.View;
-	_Pos = _Pos * CameraTransform.Projection;
+
+	 // Get projection type and apply appropriate transformations
+	EProjectionType ProjectionType = GetCameraComponent()->GetProjectionType();
+	if (ProjectionType == EProjectionType::Orthographic)
+	{
+		_Pos = _Pos * CameraTransform.Projection; // Orthographic handling remains the same
+	}
+	else if (ProjectionType == EProjectionType::Perspective)
+	{
+		// Perspective projection calculations
+		float Near = GetCameraComponent()->GetNear();
+		float Far = GetCameraComponent()->GetFar();
+		float FOV = GetCameraComponent()->GetFOV();
+
+		// Perspective projection matrix calculation
+		float4x4 PerspectiveMatrix;
+		PerspectiveMatrix.PerspectiveFovDeg(FOV, Size.X, Size.Y, Near, Far);
+
+		_Pos = _Pos * PerspectiveMatrix;
+	}
+
 	_Pos = _Pos * ViewPort;
+
+	// Perform perspective divide for perspective projection
+	if (ProjectionType == EProjectionType::Perspective)
+	{
+		_Pos.X /= _Pos.W;
+		_Pos.Y /= _Pos.W;
+		_Pos.Z /= _Pos.W;
+	}
+
 	return _Pos;
 }
 

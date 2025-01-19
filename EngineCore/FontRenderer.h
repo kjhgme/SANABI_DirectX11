@@ -20,6 +20,11 @@ public:
 		Text = _Text;
 	}
 
+	void SetSize(float _Size)
+	{
+		Scale = _Size;
+	}
+
 	ENGINEAPI void Render(UEngineCamera* _Camera, float _DeltaTime) override;
 
 protected:

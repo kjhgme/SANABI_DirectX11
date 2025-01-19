@@ -117,6 +117,12 @@ void APlayer::CheckRightDir()
 	}
 }
 
+void APlayer::MakeTextBubble(std::string_view _Text, float _Size)
+{
+	std::shared_ptr<ATextBubble> PlayerText = GetWorld()->SpawnActor<ATextBubble>();
+	PlayerText->SetText(_Text, _Size);
+}
+
 void APlayer::ApplyGravity(float _DeltaTime)
 {
 	if (Collision->IsColliding())
