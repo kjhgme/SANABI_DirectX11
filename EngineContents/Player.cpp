@@ -4,6 +4,7 @@
 
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/DefaultSceneComponent.h>
+#include <EngineCore/TimeEventComponent.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/Collision.h>
@@ -40,6 +41,8 @@ APlayer::APlayer()
 	AimRenderer->SetSprite("Aim", 0);
 	AimRenderer->AddRelativeLocation({ 0.0f, 118.0f * 0.5f, 0.0f });
 	//AimRenderer->SetAutoScaleRatio(0.1f);
+
+	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 }
 
 APlayer::~APlayer()
@@ -50,6 +53,7 @@ void APlayer::BeginPlay()
 {
 	AActor::BeginPlay();
 
+	// PlayerCollision
 	Collision = CreateDefaultSubObject<UCollision>();
 	Collision->SetupAttachment(RootComponent);
 	Collision->SetCollisionProfileName("Player");
@@ -65,6 +69,13 @@ void APlayer::BeginPlay()
 	{
 		UEngineDebug::OutPutString("End : " + _Other->GetCollisionProfileName());
 	});
+
+	// GrabCollision
+	GrabCollision = CreateDefaultSubObject<UCollision>();
+	GrabCollision->SetupAttachment(ArmRenderer);
+	GrabCollision->SetCollisionProfileName("Grab");
+	GrabCollision->AddRelativeLocation({ 0.0f, 0.8f, 0.0f});
+	GrabCollision->SetScale3D({ 0.8f, 0.3f });
 }
 
 void APlayer::Tick(float _DeltaTime)
@@ -114,15 +125,18 @@ void APlayer::AddPlayerRendererLocation(FVector _Loc)
 
 void APlayer::CheckRightDir()
 {
-	if (true == bIsRight)
+	if (false == bIsGrabbing)
 	{
-		PlayerRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
-		ArmRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
-	}
-	else 
-	{
-		PlayerRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-		ArmRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+		if (true == bIsRight)
+		{
+			PlayerRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+			ArmRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+		}
+		else
+		{
+			PlayerRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+			ArmRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+		}
 	}
 }
 
@@ -139,6 +153,26 @@ void APlayer::ClearTextBubble()
 	{
 		PlayerText->Destroy();
 	}
+}
+
+void APlayer::GrabLaunchToPosition(FVector _Pos)
+{
+	FVector TargetPosition = _Pos;
+
+	TimeEventComponent->AddUpdateEvent(0.1f, [this, TargetPosition](float DeltaTime, float CurTime)
+	{
+		auto Lerp = [](FVector A, FVector B, float Alpha)
+		{
+			return A * (1 - Alpha) + B * Alpha;
+		};
+
+		float Alpha = UEngineMath::Clamp(DeltaTime / 0.1f, 0.0f, 1.0f);
+		FVector NewPosition = Lerp(FVector::ZERO, TargetPosition, Alpha);
+
+		this->GetArmRenderer()->AddRelativeLocation(NewPosition);
+	},
+		false
+	);
 }
 
 void APlayer::ApplyGravity(float _DeltaTime)
@@ -197,14 +231,14 @@ void APlayer::InitPlayerAnimation()
 		}
 		// Grab
 		{
-			ArmRenderer->CreateAnimation("ArmGrab_Flying", "SNB_Grab_Flying");
-			ArmRenderer->CreateAnimation("ArmGrab_Grabbing", "SNB_Grab_Grabbing");
-			ArmRenderer->CreateAnimation("ArmGrab_Grabed", "SNB_Grab_Grabed");
-			ArmRenderer->CreateAnimation("ArmGrab_Lower_Grabbed", "SNB_Grab_Lower_Grabbed");
-			ArmRenderer->CreateAnimation("ArmGrab_Lower_Grabbing", "SNB_Grab_Lower_Grabbing");
-			ArmRenderer->CreateAnimation("ArmGrab_Return", "SNB_Grab_Return");
-			ArmRenderer->CreateAnimation("ArmGrab_ReturnWithGrabbed", "SNB_Grab_ReturnWithGrabbed");
-			ArmRenderer->CreateAnimation("ArmGrab_ReturnWithoutGrabbed", "SNB_Grab_ReturnWithoutGrabbed");
+			ArmRenderer->CreateAnimation("ArmGrab_Flying", "SNB_Grab_Flying", false);
+			ArmRenderer->CreateAnimation("ArmGrab_Grabbing", "SNB_Grab_Grabbing", false);
+			ArmRenderer->CreateAnimation("ArmGrab_Grabed", "SNB_Grab_Grabed", false);
+			ArmRenderer->CreateAnimation("ArmGrab_Lower_Grabbed", "SNB_Grab_Lower_Grabbed", false);
+			ArmRenderer->CreateAnimation("ArmGrab_Lower_Grabbing", "SNB_Grab_Lower_Grabbing", false);
+			ArmRenderer->CreateAnimation("ArmGrab_Return", "SNB_Grab_Return", false);
+			ArmRenderer->CreateAnimation("ArmGrab_ReturnWithGrabbed", "SNB_Grab_ReturnWithGrabbed",false);
+			ArmRenderer->CreateAnimation("ArmGrab_ReturnWithoutGrabbed", "SNB_Grab_ReturnWithoutGrabbed", false);
 		}
 	}
 	// BossAnim
@@ -596,8 +630,45 @@ void APlayer::Death(float _DeltaTime)
 
 void APlayer::Grab_Flying(float _DeltaTime)
 {
-	ArmRenderer->ChangeAnimation("ArmGrab_Flying"); 
+	ArmRenderer->ChangeAnimation("ArmGrab_Flying");
+
+	float ZDis = GetActorLocation().Z - GetWorld()->GetMainCamera()->GetActorLocation().Z;
 	
+	// 현재 ArmRenderer의 위치
+	FVector CurrentPos = ArmRenderer->GetWorldLocation();
+
+	// 타겟 위치 계산 (마우스 화면 좌표 기준으로 월드 좌표를 얻음)
+	FVector TargetWorldPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosWithOutPos(ZDis);
+
+	// 방향 벡터 계산
+	FVector Direction = (TargetWorldPos - CurrentPos).NormalizeReturn();
+
+	// Z축은 고정(2D 평면에서의 회전 계산)
+	FVector Forward = FVector::FORWARD; // 기본적으로 (1, 0, 0)
+	FVector Up = FVector::UP;           // Z축 방향 (0, 0, 1)
+
+	// 각도 계산 (내적 사용)
+	float CosTheta = FVector::Dot(Forward, Direction);
+	float AngleRad = CosTheta * UEngineMath::D2R;
+
+	// 회전 축 계산 (외적 사용)
+	FVector RotationAxis = FVector::Cross(Forward, Direction).NormalizeReturn();
+
+	// 로컬 좌표에서 Z축 고정이므로 Z만 처리
+	float ZRotation = AngleRad * UEngineMath::R2D;
+	if (RotationAxis.Z < 0) // 방향에 따라 각도를 반전
+	{
+		ZRotation = -ZRotation;
+	}
+
+	// ArmRenderer 회전값 설정
+	ArmRenderer->SetRotation(FVector(0.0f, 0.0f, ZRotation));
+
+	if(bIsGrabbing == false)
+		GrabLaunchToPosition(GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosWithOutPos(ZDis));
+
+	bIsGrabbing = true;
+
 	float WalkVelocity = 100.0f;
 
 	if (UEngineInput::IsPress('A'))
@@ -614,10 +685,16 @@ void APlayer::Grab_Flying(float _DeltaTime)
 	}
 	if (UEngineInput::IsFree(VK_LBUTTON))
 	{
+		ArmRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
+		ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
+		bIsGrabbing = false;
+
 		FSM.ChangeState(PlayerState::Idle);
+		return;
 	}
 }
 
 void APlayer::Grab_Grabbing(float _DeltaTime)
 {
+
 }

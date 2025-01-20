@@ -37,10 +37,11 @@ public:
 ABossGameMode::ABossGameMode()
 {
 	GetWorld()->CreateCollisionProfile("Player");
-	GetWorld()->CreateCollisionProfile("Arm");
+	GetWorld()->CreateCollisionProfile("Grab");
 	GetWorld()->CreateCollisionProfile("Boss");
 	GetWorld()->CreateCollisionProfile("BossPlatform");
 	GetWorld()->LinkCollisionProfile("Player", "BossPlatform");
+	GetWorld()->LinkCollisionProfile("Grab", "BossPlatform");
 
 	BackGround = GetWorld()->SpawnActor<ABossBackGround>();
 	

@@ -41,6 +41,11 @@ public:
 		return SceneMode;
 	}
 
+	std::shared_ptr<class USpriteRenderer> GetArmRenderer()
+	{
+		return ArmRenderer;
+	}
+
 	void SetSceneMode(bool _Mode)
 	{
 		SceneMode = _Mode;
@@ -54,6 +59,8 @@ public:
 
 	void MakeTextBubble(std::string_view _Text, float _Size = 40.0f);
 	void ClearTextBubble();
+
+	void GrabLaunchToPosition(FVector _Pos);
 
 	// PlayerFunction
 	void ApplyGravity(float _DeltaTime);
@@ -86,14 +93,18 @@ private:
 	std::shared_ptr<class USpriteRenderer> ArmRenderer;
 	std::shared_ptr<class USpriteRenderer> AimRenderer;
 	std::shared_ptr<class UCollision> Collision;
+	std::shared_ptr<class UCollision> GrabCollision;
 
 	std::shared_ptr<class ACameraActor> PlayerCamera;
 	std::shared_ptr<class ATextBubble> PlayerText;
+
+	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 
 	bool SceneMode = true;
 	bool bIsRight = true;
 	bool bCanJump = true; 
 	bool bHasSpawnedVfx = false;
+	bool bIsGrabbing = false;
 
 	float Gravity = -98.0f;
 	float GravityVelocity = 0.0f;

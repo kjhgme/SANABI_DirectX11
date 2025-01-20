@@ -48,7 +48,7 @@ public:
 		return CurAnimation->CurIndex;
 	}
 
-	ENGINEAPI std::string GetCurSpriteName()
+	std::string GetCurSpriteName()
 	{
 		return Sprite->GetName();
 	}
