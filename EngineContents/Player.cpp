@@ -38,7 +38,8 @@ APlayer::APlayer()
 
 	AimRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	AimRenderer->SetSprite("Aim", 0);
-	AimRenderer->AddRelativeLocation({ 0.0f, 0.0f, 1000.0 });
+	AimRenderer->AddRelativeLocation({ 0.0f, 118.0f * 0.5f, 0.0f });
+	//AimRenderer->SetAutoScaleRatio(0.1f);
 }
 
 APlayer::~APlayer()
@@ -70,9 +71,16 @@ void APlayer::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+
+	std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetCamera(0);
+
 	UEngineCore::GetMainWindow().GetMousePos();
 
-	AimRenderer->SetRelativeLocation(PlayerCamera->ScreenMousePosToWorldPos());
+	float ZDis = GetActorLocation().Z - Camera->GetActorLocation().Z;
+
+	UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPosWithOutPos(ZDis).ToString());
+	//AimRenderer->SetRelativeLocation(PlayerCamera->ScreenMousePosToWorldPos());
+
 
 	if (false == SceneMode)
 	{
@@ -84,6 +92,12 @@ void APlayer::Tick(float _DeltaTime)
 	{
 		FSM.ChangeState(PlayerState::Death);
 	}
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
+	{
+		std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetCamera(0);
+		UEngineCore::GetMainWindow().GetMousePos();
+		UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPos().ToString());
+	}
 }
 
 void APlayer::SetAnimation(std::string_view _Anim)
@@ -91,6 +105,7 @@ void APlayer::SetAnimation(std::string_view _Anim)
 	if (false == ArmRenderer->ChangeAnimation("Arm" + std::string(_Anim)))
 	{
 		ArmRenderer->ChangeAnimation("SNB_Arm_NoImage");
+
 	}
 	
 	PlayerRenderer->ChangeAnimation(_Anim);

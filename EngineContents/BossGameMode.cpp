@@ -76,8 +76,8 @@ void ABossGameMode::BeginPlay()
 
 	InitScenes();
 
-	//Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
-	//Player->SetSceneMode(false);	
+	Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
+	Player->SetSceneMode(false);	
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
