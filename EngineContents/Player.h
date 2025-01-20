@@ -113,6 +113,9 @@ private:
 	float JumpVelocity = 3.0f;
 	const float MaxFallSpeed = -5000.0f;
 
+	// Grab
+	float AimRotZ = 0.0f;
+
 	UFSMStateManager FSM;
 };
 

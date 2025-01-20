@@ -89,8 +89,8 @@ void APlayer::Tick(float _DeltaTime)
 
 	float ZDis = GetActorLocation().Z - Camera->GetActorLocation().Z;
 
-	UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPosWithOutPos(ZDis).ToString());
-	AimRenderer->SetRelativeLocation(Camera->ScreenMousePosToWorldPosWithOutPos(ZDis));
+	//UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPosWithOutPos(ZDis).ToString());
+	//AimRenderer->SetRelativeLocation(Camera->ScreenMousePosToWorldPosWithOutPos(ZDis));
 
 
 	if (false == SceneMode)
@@ -634,40 +634,24 @@ void APlayer::Grab_Flying(float _DeltaTime)
 
 	float ZDis = GetActorLocation().Z - GetWorld()->GetMainCamera()->GetActorLocation().Z;
 	
-	// 현재 ArmRenderer의 위치
-	FVector CurrentPos = ArmRenderer->GetWorldLocation();
-
-	// 타겟 위치 계산 (마우스 화면 좌표 기준으로 월드 좌표를 얻음)
-	FVector TargetWorldPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosWithOutPos(ZDis);
-
-	// 방향 벡터 계산
-	FVector Direction = (TargetWorldPos - CurrentPos).NormalizeReturn();
-
-	// Z축은 고정(2D 평면에서의 회전 계산)
-	FVector Forward = FVector::FORWARD; // 기본적으로 (1, 0, 0)
-	FVector Up = FVector::UP;           // Z축 방향 (0, 0, 1)
-
-	// 각도 계산 (내적 사용)
-	float CosTheta = FVector::Dot(Forward, Direction);
-	float AngleRad = CosTheta * UEngineMath::D2R;
-
-	// 회전 축 계산 (외적 사용)
-	FVector RotationAxis = FVector::Cross(Forward, Direction).NormalizeReturn();
-
-	// 로컬 좌표에서 Z축 고정이므로 Z만 처리
-	float ZRotation = AngleRad * UEngineMath::R2D;
-	if (RotationAxis.Z < 0) // 방향에 따라 각도를 반전
+	if (bIsGrabbing == false)
 	{
-		ZRotation = -ZRotation;
-	}
-
-	// ArmRenderer 회전값 설정
-	ArmRenderer->SetRotation(FVector(0.0f, 0.0f, ZRotation));
-
-	if(bIsGrabbing == false)
 		GrabLaunchToPosition(GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosWithOutPos(ZDis));
 
-	bIsGrabbing = true;
+		FVector CurrentPos = ArmRenderer->GetWorldLocation();
+		FVector TargetWorldPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosWithOutPos(ZDis);
+
+		FVector CrossResult = FVector::Cross(FVector(0, 1, 0), TargetWorldPos - CurrentPos);
+		CrossResult.Normalize();
+
+		AimRotZ = FVector::GetVectorAngleDeg(TargetWorldPos - CurrentPos, FVector(0, 1, 0)) * CrossResult.Z;
+
+		bIsGrabbing = true;
+	}
+
+	ArmRenderer->SetRotation({ 0.0f, 0.0f, AimRotZ });
+
+	// UEngineDebug::OutPutString(std::to_string(AimRotZ));
 
 	float WalkVelocity = 100.0f;
 
