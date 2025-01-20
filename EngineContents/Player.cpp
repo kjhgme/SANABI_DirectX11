@@ -79,7 +79,7 @@ void APlayer::Tick(float _DeltaTime)
 	float ZDis = GetActorLocation().Z - Camera->GetActorLocation().Z;
 
 	UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPosWithOutPos(ZDis).ToString());
-	//AimRenderer->SetRelativeLocation(PlayerCamera->ScreenMousePosToWorldPos());
+	AimRenderer->SetRelativeLocation(Camera->ScreenMousePosToWorldPosWithOutPos(ZDis));
 
 
 	if (false == SceneMode)
@@ -91,12 +91,6 @@ void APlayer::Tick(float _DeltaTime)
 	if (UEngineInput::IsDown('G'))
 	{
 		FSM.ChangeState(PlayerState::Death);
-	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetCamera(0);
-		UEngineCore::GetMainWindow().GetMousePos();
-		UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPos().ToString());
 	}
 }
 
@@ -167,37 +161,51 @@ void APlayer::InitPlayerAnimation()
 {
 	// Base
 	{
-		PlayerRenderer->CreateAnimation("Idle", "SNB_Idle");
-		ArmRenderer->CreateAnimation("ArmIdle", "SNB_Arm_Idle");
+		// Base of Base
+		{
+			PlayerRenderer->CreateAnimation("Idle", "SNB_Idle");
+			ArmRenderer->CreateAnimation("ArmIdle", "SNB_Arm_Idle");
 
-		PlayerRenderer->CreateAnimation("Walking", "SNB_Walking");
-		ArmRenderer->CreateAnimation("ArmWalking", "SNB_Arm_Walking");
+			PlayerRenderer->CreateAnimation("Walking", "SNB_Walking");
+			ArmRenderer->CreateAnimation("ArmWalking", "SNB_Arm_Walking");
 
-		PlayerRenderer->CreateAnimation("RunStart", "SNB_RunStart", false);
-		ArmRenderer->CreateAnimation("ArmRunStart", "SNB_Arm_RunStart", false);
-		PlayerRenderer->CreateAnimation("Running", "SNB_Running");
-		ArmRenderer->CreateAnimation("ArmRunning", "SNB_Arm_Running");
-		PlayerRenderer->CreateAnimation("RunStop", "SNB_RunStop", false);
-		ArmRenderer->CreateAnimation("ArmRunStop", "SNB_Arm_RunStop", false);
+			PlayerRenderer->CreateAnimation("RunStart", "SNB_RunStart", false);
+			ArmRenderer->CreateAnimation("ArmRunStart", "SNB_Arm_RunStart", false);
+			PlayerRenderer->CreateAnimation("Running", "SNB_Running");
+			ArmRenderer->CreateAnimation("ArmRunning", "SNB_Arm_Running");
+			PlayerRenderer->CreateAnimation("RunStop", "SNB_RunStop", false);
+			ArmRenderer->CreateAnimation("ArmRunStop", "SNB_Arm_RunStop", false);
 
-		PlayerRenderer->CreateAnimation("Jumping", "SNB_Jumping", false);
-		ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Jumping", false);
-		PlayerRenderer->CreateAnimation("FallStart", "SNB_FallStart" , false);
-		ArmRenderer->CreateAnimation("ArmFallStart", "SNB_Arm_FallStart", false);
-		PlayerRenderer->CreateAnimation("Falling", "SNB_Falling");
-		ArmRenderer->CreateAnimation("ArmFalling", "SNB_Arm_Falling");
-		PlayerRenderer->CreateAnimation("Landing", "SNB_Landing", false);
-		ArmRenderer->CreateAnimation("ArmLanding", "SNB_Arm_Landing", false);
-		PlayerRenderer->CreateAnimation("Land2Run", "SNB_Land2Run", false);
-		ArmRenderer->CreateAnimation("ArmLand2Run", "SNB_Arm_Land2Run", false);
+			PlayerRenderer->CreateAnimation("Jumping", "SNB_Jumping", false);
+			ArmRenderer->CreateAnimation("ArmJumping", "SNB_Arm_Jumping", false);
+			PlayerRenderer->CreateAnimation("FallStart", "SNB_FallStart", false);
+			ArmRenderer->CreateAnimation("ArmFallStart", "SNB_Arm_FallStart", false);
+			PlayerRenderer->CreateAnimation("Falling", "SNB_Falling");
+			ArmRenderer->CreateAnimation("ArmFalling", "SNB_Arm_Falling");
+			PlayerRenderer->CreateAnimation("Landing", "SNB_Landing", false);
+			ArmRenderer->CreateAnimation("ArmLanding", "SNB_Arm_Landing", false);
+			PlayerRenderer->CreateAnimation("Land2Run", "SNB_Land2Run", false);
+			ArmRenderer->CreateAnimation("ArmLand2Run", "SNB_Arm_Land2Run", false);
 
-		PlayerRenderer->CreateAnimation("Swing", "SNB_Swing");
-		PlayerRenderer->CreateAnimation("SwingJump", "SNB_SwingJump");
-		ArmRenderer->CreateAnimation("ArmJSwingJump", "SNB_Arm_SwingJump");
-		PlayerRenderer->CreateAnimation("SwingJumpUp", "SNB_SwingJumpUp");
-		ArmRenderer->CreateAnimation("ArmSwingJumpUp", "SNB_Arm_SwingJumpUp");
+			PlayerRenderer->CreateAnimation("Swing", "SNB_Swing");
+			PlayerRenderer->CreateAnimation("SwingJump", "SNB_SwingJump");
+			ArmRenderer->CreateAnimation("ArmJSwingJump", "SNB_Arm_SwingJump");
+			PlayerRenderer->CreateAnimation("SwingJumpUp", "SNB_SwingJumpUp");
+			ArmRenderer->CreateAnimation("ArmSwingJumpUp", "SNB_Arm_SwingJumpUp");
 
-		PlayerRenderer->CreateAnimation("Death", "SNB_Death", false);
+			PlayerRenderer->CreateAnimation("Death", "SNB_Death", false);
+		}
+		// Grab
+		{
+			ArmRenderer->CreateAnimation("ArmGrab_Flying", "SNB_Grab_Flying");
+			ArmRenderer->CreateAnimation("ArmGrab_Grabbing", "SNB_Grab_Grabbing");
+			ArmRenderer->CreateAnimation("ArmGrab_Grabed", "SNB_Grab_Grabed");
+			ArmRenderer->CreateAnimation("ArmGrab_Lower_Grabbed", "SNB_Grab_Lower_Grabbed");
+			ArmRenderer->CreateAnimation("ArmGrab_Lower_Grabbing", "SNB_Grab_Lower_Grabbing");
+			ArmRenderer->CreateAnimation("ArmGrab_Return", "SNB_Grab_Return");
+			ArmRenderer->CreateAnimation("ArmGrab_ReturnWithGrabbed", "SNB_Grab_ReturnWithGrabbed");
+			ArmRenderer->CreateAnimation("ArmGrab_ReturnWithoutGrabbed", "SNB_Grab_ReturnWithoutGrabbed");
+		}
 	}
 	// BossAnim
 	{
@@ -224,7 +232,8 @@ void APlayer::InitPlayerState()
 	FSM.CreateState(PlayerState::Landing, std::bind(&APlayer::Landing, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Land2Run, std::bind(&APlayer::Land2Run, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Death, std::bind(&APlayer::Death, this, std::placeholders::_1), [this]() {});
-
+	FSM.CreateState(PlayerState::Grab_Flying, std::bind(&APlayer::Grab_Flying, this, std::placeholders::_1), [this]() {});
+	FSM.CreateState(PlayerState::Grab_Grabbing, std::bind(&APlayer::Grab_Grabbing, this, std::placeholders::_1), [this]() {});
 }
 
 void APlayer::Idle(float _DeltaTime)
@@ -252,6 +261,16 @@ void APlayer::Idle(float _DeltaTime)
 	if (UEngineInput::IsDown(VK_SPACE))
 	{
 		FSM.ChangeState(PlayerState::Jumping);
+		return;
+	}
+	if (false == Collision->IsColliding())
+	{
+		FSM.ChangeState(PlayerState::FallStart);
+		return;
+	}
+	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	{
+		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
 	}
 }
@@ -315,6 +334,11 @@ void APlayer::RunStart(float _DeltaTime)
 		FSM.ChangeState(PlayerState::Running);
 		return;
 	}
+	if (false == Collision->IsColliding())
+	{
+		FSM.ChangeState(PlayerState::FallStart);
+		return;
+	}
 }
 
 void APlayer::Running(float _DeltaTime)
@@ -341,6 +365,11 @@ void APlayer::Running(float _DeltaTime)
 		true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S'))
 	{
 		FSM.ChangeState(PlayerState::RunStop);
+		return;
+	}
+	if (false == Collision->IsColliding())
+	{
+		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
 }
@@ -370,6 +399,11 @@ void APlayer::RunStop(float _DeltaTime)
 	if (PlayerRenderer->IsCurAnimationEnd())
 	{
 		FSM.ChangeState(PlayerState::Idle);
+		return;
+	}
+	if (false == Collision->IsColliding())
+	{
+		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
 }
@@ -497,6 +531,11 @@ void APlayer::Landing(float _DeltaTime)
 		FSM.ChangeState(PlayerState::Idle);
 		return;
 	}
+	if (false == Collision->IsColliding())
+	{
+		FSM.ChangeState(PlayerState::FallStart);
+		return;
+	}
 }
 
 void APlayer::Land2Run(float _DeltaTime)
@@ -542,6 +581,11 @@ void APlayer::Land2Run(float _DeltaTime)
 		FSM.ChangeState(PlayerState::Running);
 		return;
 	}
+	if (false == Collision->IsColliding())
+	{
+		FSM.ChangeState(PlayerState::FallStart);
+		return;
+	}
 }
 
 void APlayer::Death(float _DeltaTime)
@@ -550,3 +594,30 @@ void APlayer::Death(float _DeltaTime)
 	ArmRenderer->ChangeAnimation("SNB_Arm_NoImage");
 }
 
+void APlayer::Grab_Flying(float _DeltaTime)
+{
+	ArmRenderer->ChangeAnimation("ArmGrab_Flying"); 
+	
+	float WalkVelocity = 100.0f;
+
+	if (UEngineInput::IsPress('A'))
+	{
+		bIsRight = false;
+		PlayerRenderer->ChangeAnimation("Walking");
+		AddRelativeLocation(FVector{ -WalkVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	else if (UEngineInput::IsPress('D'))
+	{
+		bIsRight = true;
+		PlayerRenderer->ChangeAnimation("Walking");
+		AddRelativeLocation(FVector{ WalkVelocity * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsFree(VK_LBUTTON))
+	{
+		FSM.ChangeState(PlayerState::Idle);
+	}
+}
+
+void APlayer::Grab_Grabbing(float _DeltaTime)
+{
+}

@@ -16,6 +16,8 @@ enum class PlayerState
 	Landing,
 	Land2Run,
 	Death,
+	Grab_Flying,
+	Grab_Grabbing,
 };
 
 class APlayer : public APawn
@@ -72,6 +74,8 @@ public:
 	void Landing(float _DeltaTime);
 	void Land2Run(float _DeltaTime);
 	void Death(float _DeltaTime);
+	void Grab_Flying(float _DeltaTime);
+	void Grab_Grabbing(float _DeltaTime);
 
 protected:
 	void BeginPlay() override;
