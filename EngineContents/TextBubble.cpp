@@ -7,6 +7,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/FontRenderer.h>
 #include <EngineCore/EngineCore.h>
+#include <EngineCore/FontWidget.h>
 
 ATextBubble::ATextBubble()
 {
@@ -27,6 +28,7 @@ ATextBubble::ATextBubble()
 	BubbleRenderer->SetRelativeLocation({ 0.0f, 45.0f, -1.0f });
 	BubbleTailRenderer->SetRelativeLocation({ 0.0f, 40.0f, -2.0f });
 	BubbleMarkerRenderer->SetRelativeLocation({ 0.0f, 55.0f, -3.0f });
+	TextRenderer->SetRelativeLocation({ 0.0f, 92.0f, -4.0f });
 
 	TextRenderer->SetFont("PFStardust");
 	TextRenderer->SetText("");

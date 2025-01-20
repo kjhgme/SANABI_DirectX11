@@ -119,8 +119,17 @@ void APlayer::CheckRightDir()
 
 void APlayer::MakeTextBubble(std::string_view _Text, float _Size)
 {
-	std::shared_ptr<ATextBubble> PlayerText = GetWorld()->SpawnActor<ATextBubble>();
+	PlayerText = GetWorld()->SpawnActor<ATextBubble>();
 	PlayerText->SetText(_Text, _Size);
+	PlayerText->SetActorLocation(GetActorLocation());
+}
+
+void APlayer::ClearTextBubble()
+{
+	if (PlayerText != nullptr)
+	{
+		PlayerText->Destroy();
+	}
 }
 
 void APlayer::ApplyGravity(float _DeltaTime)

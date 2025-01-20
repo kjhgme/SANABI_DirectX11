@@ -15,12 +15,12 @@ public:
 
 	ENGINEAPI void SetFont(std::string_view _Value, float _Scale = 20.0f, UColor _Color = UColor::BLACK, FW1_TEXT_FLAG _Flag = FW1_TEXT_FLAG::FW1_LEFT);
 
-	void SetText(std::string _Text)
+	ENGINEAPI void SetText(std::string _Text)
 	{
 		Text = _Text;
 	}
 
-	void SetSize(float _Size)
+	ENGINEAPI void SetSize(float _Size)
 	{
 		Scale = _Size;
 	}

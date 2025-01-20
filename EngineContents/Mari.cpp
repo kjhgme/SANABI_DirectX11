@@ -5,6 +5,7 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/FontRenderer.h>
+#include "TextBubble.h"
 
 AMari::AMari()
 {
@@ -91,4 +92,19 @@ void AMari::MufinOn()
 void AMari::MufinOff()
 {
 	MufinRenderer->ChangeAnimation("Mufin_NoImage");
+}
+
+void AMari::MakeTextBubble(std::string_view _Text, float _Size)
+{
+	MariText = GetWorld()->SpawnActor<ATextBubble>();
+	MariText->SetText(_Text, _Size);
+	MariText->SetActorLocation(GetActorLocation());
+}
+
+void AMari::ClearTextBubble()
+{
+	if (MariText != nullptr)
+	{
+		MariText->Destroy();
+	}
 }

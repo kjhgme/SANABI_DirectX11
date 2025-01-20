@@ -51,6 +51,7 @@ public:
 	void CheckRightDir();
 
 	void MakeTextBubble(std::string_view _Text, float _Size = 40.0f);
+	void ClearTextBubble();
 
 	// PlayerFunction
 	void ApplyGravity(float _DeltaTime);
@@ -83,6 +84,7 @@ private:
 	std::shared_ptr<class UCollision> Collision;
 
 	std::shared_ptr<class ACameraActor> PlayerCamera;
+	std::shared_ptr<class ATextBubble> PlayerText;
 
 	bool SceneMode = true;
 	bool bIsRight = true;

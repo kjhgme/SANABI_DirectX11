@@ -5,6 +5,7 @@
 #include <EngineCore/FontWidget.h>
 #include <EngineCore/CameraActor.h>
 
+
 ABossGameHUD::ABossGameHUD()
 {
 }
@@ -16,16 +17,15 @@ ABossGameHUD::~ABossGameHUD()
 void ABossGameHUD::BeginPlay()
 {
 	AHUD::BeginPlay();
-	
-	//{
-	//	std::shared_ptr<UFontWidget> Widget = CreateWidget<UFontWidget>(-1);
+	/*
+	{
+		std::shared_ptr<UFontWidget> Widget = CreateWidget<UFontWidget>(-1);
 
-	//	Widget->SetWorldLocation({ -10, -10 });
-	//	Widget->SetFont("±Ã¼­");
-	//	// Widget->SetFont("PFSdust");
-	//	Widget->SetFontSize(50.0f);
-	//	Widget->SetText("¾È³ç ¾È³ç ¾È³ç");
-	//}
+		Widget->SetWorldLocation({ -10, -10 });
+		Widget->SetFont("PFStardust");
+		Widget->SetFontSize(24.0f);
+		Widget->SetText("¾È³ç ¾È³ç ¾È³ç");
+	}*/
 }
 
 void ABossGameHUD::Tick(float _DeltaTime)

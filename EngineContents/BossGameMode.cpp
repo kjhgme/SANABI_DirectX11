@@ -149,9 +149,18 @@ void ABossGameMode::Tick(float _DeltaTime)
 void ABossGameMode::InitScenes()
 {
 	Scenes.push_back([this]() {	
-		Player->MakeTextBubble("끝났다는 것은 다시 시작된다는 것을");
+		Player->MakeTextBubble("그만 해라. 언제까지 불 셈이냐?");
 		});
-	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
+	Scenes.push_back([this]() {
+		Player->ClearTextBubble(); 
+		Mari->ChangeToNextAnim();
+	}); 
+	Scenes.push_back([this]() {
+		Player->MakeTextBubble("금마리.");
+	});
+	Scenes.push_back([this]() {
+		Player->ClearTextBubble();
+	});
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });

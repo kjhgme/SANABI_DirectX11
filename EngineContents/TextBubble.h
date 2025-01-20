@@ -4,8 +4,8 @@
 class ATextBubble : public AActor
 {
 public:
-	ATextBubble();
-	~ATextBubble();
+	ENGINEAPI ATextBubble();
+	ENGINEAPI ~ATextBubble();
 
 	ATextBubble(const ATextBubble& _Other) = delete;
 	ATextBubble(ATextBubble&& _Other) noexcept = delete;
