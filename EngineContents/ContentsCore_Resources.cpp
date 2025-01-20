@@ -153,6 +153,7 @@ void UContentsCore::InitResources()
 			LoadFolder("Mari/BossStage/005_TrainOnMindBreakStart");
 			LoadFolder("Mari/BossStage/006_TrainOnMindBreakLoop");
 			LoadFolder("Mari/BossStage/007_TrainOnMindBreakEnd");
+			LoadFolder("Mari/BossStage/008_TrainOnLoopLookBack");
 			LoadFolder("Mari/BossStage/009_TrainOn2Idle");
 			LoadFolder("Mari/BossStage/010_LookBackgroundStart");
 			LoadFolder("Mari/BossStage/011_LookBackgroundLoop");

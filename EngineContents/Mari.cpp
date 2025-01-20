@@ -37,9 +37,9 @@ void AMari::InitMariAnimation()
 	MariRenderer->CreateAnimation("003_TrainOnHarmonicaEnd", "003_TrainOnHarmonicaEnd", false);
 	MariRenderer->CreateAnimation("004_TrainOnLoop", "004_TrainOnLoop");
 	MariRenderer->CreateAnimation("005_TrainOnMindBreakStart", "005_TrainOnMindBreakStart", false);
-	MariRenderer->CreateAnimation("006_TrainOnMindBreakLoop", "006_TrainOnMindBreakLoop", true);
+	MariRenderer->CreateAnimation("006_TrainOnMindBreakLoop", "006_TrainOnMindBreakLoop");
 	MariRenderer->CreateAnimation("007_TrainOnMindBreakEnd", "007_TrainOnMindBreakEnd", false);
-	MariRenderer->CreateAnimation("008_TrainOnLoop", "004_TrainOnLoop");
+	MariRenderer->CreateAnimation("008_TrainOnLoopLookBack", "008_TrainOnLoopLookBack");
 	MariRenderer->CreateAnimation("009_TrainOn2Idle", "009_TrainOn2Idle", false);
 	MariRenderer->CreateAnimation("010_LookBackgroundStart", "010_LookBackgroundStart", false);
 	MariRenderer->CreateAnimation("011_LookBackgroundLoop", "011_LookBackgroundLoop");
@@ -48,17 +48,20 @@ void AMari::InitMariAnimation()
 	MariRenderer->CreateAnimation("015_AltDroneRideStart", "015_AltDroneRideStart", false);
 	MariRenderer->CreateAnimation("016_AltDroneRideCloakStart", "016_AltDroneRideCloakStart", false);
 
-	MufinRenderer->CreateAnimation("Mufin_NoImage", "Mufin_NoImage");
+	MufinRenderer->CreateAnimation("Mufin_NoImage", "Mufin_NoImage", false);
 	MufinRenderer->CreateAnimation("014_AltDroneCloakEnd", "014_AltDroneCloakEnd", false);
 
 	AnimQueue.push("001_TrainOnHarmonicaPlay");
 	AnimQueue.push("002_TrainOnHarmonicaPlayEndLoop");
 	AnimQueue.push("003_TrainOnHarmonicaEnd");
 	AnimQueue.push("004_TrainOnLoop");
+	AnimQueue.push("008_TrainOnLoopLookBack");
+	AnimQueue.push("004_TrainOnLoop");
+	AnimQueue.push("008_TrainOnLoopLookBack");
 	AnimQueue.push("005_TrainOnMindBreakStart");
 	AnimQueue.push("006_TrainOnMindBreakLoop");
 	AnimQueue.push("007_TrainOnMindBreakEnd");
-	AnimQueue.push("008_TrainOnLoop");
+	AnimQueue.push("004_TrainOnLoop");
 	AnimQueue.push("009_TrainOn2Idle");
 	AnimQueue.push("010_LookBackgroundStart");
 	AnimQueue.push("011_LookBackgroundLoop");
