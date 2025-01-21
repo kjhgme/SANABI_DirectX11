@@ -97,38 +97,6 @@ void ACameraActor::Tick(float _DeltaTime)
 	CameraComponent->CalculateViewAndProjection();
 }
 
-FVector ACameraActor::ScreenPosToWorldPosWithOutPos(FVector _Pos, float _PosZ)
-{
-	FVector Size = UEngineCore::GetMainWindow().GetWindowSize();
-
-	float4x4 ViewPort;
-	ViewPort.ViewPort(Size.X, Size.Y, 0.0f, 0.0f, 0.0f, 1.0f);
-
-	FTransform CameraTransform = GetActorTransform();
-
-	float4x4 ViewMat = CameraTransform.View;
-	ViewMat.ArrVector[3] = FVector::ZERO;
-
-	_Pos = _Pos * ViewPort.InverseReturn();
-	_Pos = _Pos * CameraTransform.Projection.InverseReturn();
-	_Pos = _Pos * ViewMat.InverseReturn();
-
-	float Ratio = Size.X / Size.Y;
-
-	_Pos.Y *= Ratio;
-
-	// -668;
-
-	float FOV = GetCameraComponent()->FOV * 0.5f * UEngineMath::D2R;
-
-	// 높이 / 밑변 
-	FVector ZDisScreenScale;
-	ZDisScreenScale.X = tanf(FOV * Ratio) * _PosZ * _Pos.X;
-	ZDisScreenScale.Y = tanf(FOV) * _PosZ * _Pos.Y;
-
-	return ZDisScreenScale;
-}
-
 FVector ACameraActor::ScreenPosToWorldPos(FVector _Pos)
 {
 	FVector Size = UEngineCore::GetMainWindow().GetWindowSize();
@@ -145,13 +113,6 @@ FVector ACameraActor::ScreenPosToWorldPos(FVector _Pos)
 	return _Pos;
 }
 
-FVector ACameraActor::ScreenMousePosToWorldPosWithOutPos(float _PosZ)
-{
-	FVector MousePos = UEngineCore::GetMainWindow().GetMousePos();
-
-	return ScreenPosToWorldPosWithOutPos(MousePos, _PosZ);
-}
-
 FVector ACameraActor::WorldPosToScreenPos(FVector _Pos)
 {
 	FVector Size = UEngineCore::GetMainWindow().GetWindowSize();
@@ -165,46 +126,6 @@ FVector ACameraActor::WorldPosToScreenPos(FVector _Pos)
 	_Pos = _Pos * CameraTransform.Projection;
 	_Pos = _Pos * ViewPort;
 	return _Pos;
-	//FVector Size = UEngineCore::GetMainWindow().GetWindowSize();
-
-	//float4x4 ViewPort;
-	//ViewPort.ViewPort(Size.X, Size.Y, 0.0f, 0.0f, 0.0f, 1.0f);
-
-	//FTransform CameraTransform = GetActorTransform();
-
-	//_Pos = _Pos * CameraTransform.View;
-
-	// // Get projection type and apply appropriate transformations
-	//EProjectionType ProjectionType = GetCameraComponent()->GetProjectionType();
-	//if (ProjectionType == EProjectionType::Orthographic)
-	//{
-	//	_Pos = _Pos * CameraTransform.Projection; // Orthographic handling remains the same
-	//}
-	//else if (ProjectionType == EProjectionType::Perspective)
-	//{
-	//	// Perspective projection calculations
-	//	float Near = GetCameraComponent()->GetNear();
-	//	float Far = GetCameraComponent()->GetFar();
-	//	float FOV = GetCameraComponent()->GetFOV();
-
-	//	// Perspective projection matrix calculation
-	//	float4x4 PerspectiveMatrix;
-	//	PerspectiveMatrix.PerspectiveFovDeg(FOV, Size.X, Size.Y, Near, Far);
-
-	//	_Pos = _Pos * PerspectiveMatrix;
-	//}
-
-	//_Pos = _Pos * ViewPort;
-
-	//// Perform perspective divide for perspective projection
-	//if (ProjectionType == EProjectionType::Perspective)
-	//{
-	//	_Pos.X /= _Pos.W;
-	//	_Pos.Y /= _Pos.W;
-	//	_Pos.Z /= _Pos.W;
-	//}
-
-	//return _Pos;
 }
 
 FVector ACameraActor::ScreenMousePosToWorldPos()
@@ -212,6 +133,53 @@ FVector ACameraActor::ScreenMousePosToWorldPos()
 	FVector MousePos = UEngineCore::GetMainWindow().GetMousePos();
 
 	return ScreenPosToWorldPos(MousePos);
+}
+
+FVector ACameraActor::ScreenMousePosToWorldPosPerspective(float _ZDis)
+{
+	FVector MousePos = UEngineCore::GetMainWindow().GetMousePos();
+
+	return ScreenPosToWorldPosPerspective(MousePos, _ZDis);
+}
+
+ FVector ACameraActor::ScreenPosToWorldPosPerspective(FVector _Pos, float _ZDis)
+{
+	 // 화면 크기 가져오기
+	 FVector Size = UEngineCore::GetMainWindow().GetWindowSize();
+
+	 // Step 1: 화면 좌표 -> NDC 좌표
+	 _Pos.X = (_Pos.X / Size.X) * 2.0f - 1.0f; // X: [0, Size.X] -> [-1, 1]
+	 _Pos.Y = 1.0f - (_Pos.Y / Size.Y) * 2.0f; // Y: [0, Size.Y] -> [-1, 1], Y축 반전
+	 _Pos.Z = 1.0f; // 클리핑 공간의 Z값은 기본적으로 1.0 (far plane)
+
+	 // 카메라의 Projection 및 View 행렬 가져오기
+	 FTransform CameraTransform = GetActorTransform();
+	 float4x4 Projection = CameraTransform.Projection;
+	 float4x4 View = CameraTransform.View;
+
+	 // Step 2: NDC -> 뷰 공간 (역투영 행렬 사용)
+	 float4x4 InvProjection = Projection.InverseReturn();
+	 FVector ViewPos = FVector(_Pos.X, _Pos.Y, _Pos.Z, 1.0f) * InvProjection;
+
+	 // Step 3: W 분할 (Perspective 투영)
+	 if (ViewPos.W != 0.0f)
+	 {
+		 ViewPos.X /= ViewPos.W;
+		 ViewPos.Y /= ViewPos.W;
+		 ViewPos.Z /= ViewPos.W;
+	 }
+
+	 // Step 4: 뷰 공간 -> 월드 공간
+	 float4x4 InvView = View.InverseReturn();
+	 FVector WorldPos = ViewPos * InvView;
+
+	 float ZScale = _ZDis / WorldPos.Z;
+
+	 WorldPos.X *= (ZScale);
+	 WorldPos.Y *= (ZScale);
+	 WorldPos.Z = _ZDis;
+
+	 return FVector(WorldPos.X, WorldPos.Y, -2.0f);
 }
 
 void ACameraActor::FreeCameraOn()

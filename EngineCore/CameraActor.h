@@ -22,9 +22,9 @@ public:
 	}
 
 	ENGINEAPI FVector ScreenMousePosToWorldPos();
-	ENGINEAPI FVector ScreenMousePosToWorldPosWithOutPos(float _PosZ);
+	ENGINEAPI FVector ScreenMousePosToWorldPosPerspective(float _PosZ);
 
-	ENGINEAPI FVector ScreenPosToWorldPosWithOutPos(FVector _Pos, float _PosZ);
+	ENGINEAPI FVector ScreenPosToWorldPosPerspective(FVector _Pos, float _PosZ);
 
 	ENGINEAPI FVector ScreenPosToWorldPos(FVector _Pos);
 

@@ -474,6 +474,15 @@ public:
 		return *this;
 	}
 
+	TVector& operator/=(float _Other)
+	{
+		X /= _Other;
+		Y /= _Other;
+		Z /= _Other;
+
+		return *this;
+	}
+
 
 	std::string ToString()
 	{
@@ -682,8 +691,6 @@ public:
 
 	void PerspectiveFovRad(float _FovAngle, float _Width, float _Height, float _Near, float _Far)
 	{
-		Identity();
-
 		Identity();
 		DirectMatrix = DirectX::XMMatrixPerspectiveFovLH(_FovAngle, _Width / _Height, _Near, _Far);
 	}

@@ -39,7 +39,6 @@ APlayer::APlayer()
 
 	AimRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	AimRenderer->SetSprite("Aim", 0);
-	AimRenderer->AddRelativeLocation({ 0.0f, 118.0f * 0.5f, 0.0f });
 	//AimRenderer->SetAutoScaleRatio(0.1f);
 
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
@@ -88,11 +87,14 @@ void APlayer::Tick(float _DeltaTime)
 	UEngineCore::GetMainWindow().GetMousePos();
 
 	float ZDis = GetActorLocation().Z - Camera->GetActorLocation().Z;
+	AimRenderer->SetRelativeLocation(Camera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation());
+	UEngineDebug::OutPutString(Camera->GetActorLocation().ToString());
 
-	//UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPosWithOutPos(ZDis).ToString());
-	//AimRenderer->SetRelativeLocation(Camera->ScreenMousePosToWorldPosWithOutPos(ZDis));
-
-
+	if (UEngineInput::IsDown(MK_LBUTTON))
+	{
+		UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPosPerspective(ZDis).ToString());
+		AimRenderer->SetRelativeLocation(Camera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation());
+	}
 	if (false == SceneMode)
 	{
 		FSM.Update(_DeltaTime);
@@ -636,10 +638,10 @@ void APlayer::Grab_Flying(float _DeltaTime)
 	
 	if (bIsGrabbing == false)
 	{
-		GrabLaunchToPosition(GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosWithOutPos(ZDis));
+		// GrabLaunchToPosition(GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosWithOutPos(ZDis));
 
 		FVector CurrentPos = ArmRenderer->GetWorldLocation();
-		FVector TargetWorldPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosWithOutPos(ZDis);
+		FVector TargetWorldPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosPerspective(ZDis);
 
 		FVector CrossResult = FVector::Cross(FVector(0, 1, 0), TargetWorldPos - CurrentPos);
 		CrossResult.Normalize();
