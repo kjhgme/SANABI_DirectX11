@@ -81,13 +81,8 @@ void APlayer::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-
-	std::shared_ptr<class ACameraActor> Camera = GetWorld()->GetCamera(0);
-
-	UEngineCore::GetMainWindow().GetMousePos();
-
-	float ZDis = GetActorLocation().Z - Camera->GetActorLocation().Z;
-	AimPos = Camera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation();
+	float ZDis = GetActorLocation().Z - PlayerCamera->GetActorLocation().Z;
+	AimPos = PlayerCamera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation();
 	AimPos.Y += 15.0f;
 	AimRenderer->SetRelativeLocation(AimPos);
 	UEngineDebug::OutPutString(AimPos.ToString());

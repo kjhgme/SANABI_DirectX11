@@ -21,9 +21,10 @@ public:
 		return CameraComponent;
 	}
 
-	ENGINEAPI FVector ScreenMousePosToWorldPos();
-	ENGINEAPI FVector ScreenMousePosToWorldPosPerspective(float _PosZ);
+	ENGINEAPI FVector ScreenMousePosToWorldPos(); 
+	ENGINEAPI FVector ScreenMousePosToWorldPosWithOutPos();
 
+	ENGINEAPI FVector ScreenMousePosToWorldPosPerspective(float _PosZ);
 	ENGINEAPI FVector ScreenPosToWorldPosPerspective(FVector _Pos, float _PosZ);
 
 	ENGINEAPI FVector ScreenPosToWorldPos(FVector _Pos);
@@ -59,7 +60,7 @@ private:
 	ENGINEAPI void FreeCameraCheck();
 
 	FTransform PrevTrans;
-	EProjectionType PrevProjectionType = EProjectionType::Perspective;
+	EProjectionType PrevProjectionType = EProjectionType::Orthographic;
 	float FreeSpeed = 500.0f;
 
 	FVector ScreenPos;

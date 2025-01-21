@@ -135,6 +135,11 @@ FVector ACameraActor::ScreenMousePosToWorldPos()
 	return ScreenPosToWorldPos(MousePos);
 }
 
+FVector ACameraActor::ScreenMousePosToWorldPosWithOutPos()
+{
+	return FVector();
+}
+
 FVector ACameraActor::ScreenMousePosToWorldPosPerspective(float _ZDis)
 {
 	FVector MousePos = UEngineCore::GetMainWindow().GetMousePos();
