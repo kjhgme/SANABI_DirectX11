@@ -361,8 +361,9 @@ bool USpriteRenderer::ChangeAnimation(std::string_view _AnimationName, bool _For
 	if (true == IsAutoScale)
 	{
 		FVector Scale = CurAnimation->Sprite->GetSpriteScaleToReal(CurIndex);
+		Scale *= AutoScaleRatio;
 		Scale.Z = 1.0f;
-		SetRelativeScale3D(Scale * AutoScaleRatio);
+		SetRelativeScale3D(Scale);
 	}
 
 	return true;

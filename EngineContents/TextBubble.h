@@ -19,7 +19,9 @@ protected:
 	void Tick(float _DeltaTime) override;
 
 private:
-	std::shared_ptr<class USpriteRenderer> BubbleRenderer;
+	std::shared_ptr<class USpriteRenderer> BubbleLRenderer;
+	std::shared_ptr<class USpriteRenderer> BubbleMRenderer;
+	std::shared_ptr<class USpriteRenderer> BubbleRRenderer;
 	std::shared_ptr<class USpriteRenderer> BubbleTailRenderer;
 	std::shared_ptr<class USpriteRenderer> BubbleMarkerRenderer;
 	std::shared_ptr<class UFontRenderer> TextRenderer;
