@@ -39,7 +39,7 @@ APlayer::APlayer()
 
 	AimRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	AimRenderer->SetSprite("Aim", 0);
-	//AimRenderer->SetAutoScaleRatio(0.1f);
+	AimRenderer->SetAutoScaleRatio(1.0f);
 
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 }
@@ -87,20 +87,26 @@ void APlayer::Tick(float _DeltaTime)
 	UEngineCore::GetMainWindow().GetMousePos();
 
 	float ZDis = GetActorLocation().Z - Camera->GetActorLocation().Z;
-	AimRenderer->SetRelativeLocation(Camera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation());
-	UEngineDebug::OutPutString(Camera->GetActorLocation().ToString());
+	AimPos = Camera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation();
+	AimPos.Y += 15.0f;
+	AimRenderer->SetRelativeLocation(AimPos);
+	UEngineDebug::OutPutString(AimPos.ToString());
 
 	if (UEngineInput::IsDown(MK_LBUTTON))
 	{
-		UEngineDebug::OutPutString(Camera->ScreenMousePosToWorldPosPerspective(ZDis).ToString());
-		AimRenderer->SetRelativeLocation(Camera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation());
+		UEngineDebug::OutPutString(AimPos.ToString());
 	}
 	if (false == SceneMode)
 	{
+		AimRenderer->SetSprite("Aim", 0);
 		FSM.Update(_DeltaTime);
 		ApplyGravity(_DeltaTime);
 		CheckRightDir();
-	}	
+	}
+	else if (true == SceneMode)
+	{
+		AimRenderer->SetSprite("Aim", 1);
+	}
 	if (UEngineInput::IsDown('G'))
 	{
 		FSM.ChangeState(PlayerState::Death);
@@ -638,15 +644,16 @@ void APlayer::Grab_Flying(float _DeltaTime)
 	
 	if (bIsGrabbing == false)
 	{
-		// GrabLaunchToPosition(GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosWithOutPos(ZDis));
 
 		FVector CurrentPos = ArmRenderer->GetWorldLocation();
-		FVector TargetWorldPos = GetWorld()->GetMainCamera()->ScreenMousePosToWorldPosPerspective(ZDis);
+		FVector TargetWorldPos = AimPos;
 
 		FVector CrossResult = FVector::Cross(FVector(0, 1, 0), TargetWorldPos - CurrentPos);
 		CrossResult.Normalize();
 
 		AimRotZ = FVector::GetVectorAngleDeg(TargetWorldPos - CurrentPos, FVector(0, 1, 0)) * CrossResult.Z;
+
+		GrabLaunchToPosition(TargetWorldPos);
 
 		bIsGrabbing = true;
 	}

@@ -114,6 +114,7 @@ private:
 	const float MaxFallSpeed = -5000.0f;
 
 	// Grab
+	FVector AimPos{};
 	float AimRotZ = 0.0f;
 
 	UFSMStateManager FSM;

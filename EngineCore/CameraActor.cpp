@@ -175,8 +175,8 @@ FVector ACameraActor::ScreenMousePosToWorldPosPerspective(float _ZDis)
 
 	 float ZScale = _ZDis / WorldPos.Z;
 
-	 WorldPos.X *= (ZScale);
-	 WorldPos.Y *= (ZScale);
+	 WorldPos.X *= ZScale;
+	 WorldPos.Y *= ZScale;
 	 WorldPos.Z = _ZDis;
 
 	 return FVector(WorldPos.X, WorldPos.Y, -2.0f);
