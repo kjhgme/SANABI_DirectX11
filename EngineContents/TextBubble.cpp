@@ -37,7 +37,7 @@ ATextBubble::ATextBubble()
 	BubbleMarkerRenderer->SetRelativeLocation({ 0.0f, 55.0f, static_cast<float>(ERenderOrder::UI) -2.0f });
 
 	TextRenderer->SetRelativeLocation(BubbleMRenderer->GetWorldLocation());
-	TextRenderer->AddRelativeLocation({ 0, 0, static_cast<float>(ERenderOrder::UI) - 3.0f });
+	TextRenderer->AddRelativeLocation({ 0, 17.0f, static_cast<float>(ERenderOrder::UI) - 3.0f });
 
 	TextRenderer->SetFont("PFStardust");
 	TextRenderer->SetText("");
@@ -52,6 +52,8 @@ ATextBubble::ATextBubble()
 	BubbleLRenderer->SetAutoScale(false);
 	BubbleMRenderer->SetAutoScale(false);
 	BubbleRRenderer->SetAutoScale(false);
+
+	BubbleMarkerRenderer->SetAutoScaleRatio(0.6f);
 }
 
 ATextBubble::~ATextBubble()
@@ -71,11 +73,13 @@ void ATextBubble::Tick(float _DeltaTime)
 
 void ATextBubble::SetText(std::string_view _Text, float _Size)
 {
-	BubbleLRenderer->AddRelativeLocation({ (- _Size * static_cast<float>(_Text.size()) / 5.0f) / 2.0f, 0.0f, 0.0f});
-	BubbleRRenderer->AddRelativeLocation({ (_Size * static_cast<float>(_Text.size()) / 5.0f) / 2.0f + 1.0f, 0.0f, 0.0f });
-	BubbleLRenderer->SetScale3D({ 5.0f, _Size / 2.0f, 1.0f });
-	BubbleMRenderer->SetScale3D({ _Size * static_cast<float>(_Text.size()) / 5.0f, _Size / 2.0f, 1.0f});
-	BubbleRRenderer->SetScale3D({ 5.0f, _Size / 2.0f, 1.0f });
+	BubbleLRenderer->AddRelativeLocation({ (- _Size * static_cast<float>(_Text.size()) / 8.0f) / 2.0f - 2.0f, 0.0f, 0.0f});
+	BubbleRRenderer->AddRelativeLocation({ (_Size * static_cast<float>(_Text.size()) / 8.0f) / 2.0f + 3.0f, 0.0f, 0.0f });
+	BubbleMarkerRenderer->AddRelativeLocation({ (_Size * static_cast<float>(_Text.size()) / 8.0f) / 2.0f, -(_Size / 4.0f), 0.0f });
+	
+	BubbleLRenderer->SetScale3D({ 5.0f, _Size / 2.0f + 2.0f, 1.0f });
+	BubbleMRenderer->SetScale3D({ _Size * static_cast<float>(_Text.size()) / 8.0f + 4.0f, _Size / 2.0f + 2.0f, 1.0f});
+	BubbleRRenderer->SetScale3D({ 5.0f, _Size / 2.0f + 2.0f, 1.0f });
 
 	TextRenderer->SetText(std::string(_Text));
 	TextRenderer->SetSize(_Size);

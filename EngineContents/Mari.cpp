@@ -101,7 +101,7 @@ void AMari::MakeTextBubble(std::string_view _Text, float _Size)
 {
 	MariText = GetWorld()->SpawnActor<ATextBubble>();
 	MariText->SetText(_Text, _Size);
-	MariText->SetActorLocation(GetActorLocation());
+	MariText->SetActorLocation(GetActorLocation() + FVector(0.0f, 5.0f, 0.0f));
 }
 
 void AMari::ClearTextBubble()

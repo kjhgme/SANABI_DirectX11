@@ -147,7 +147,7 @@ void APlayer::MakeTextBubble(std::string_view _Text, float _Size)
 {
 	PlayerText = GetWorld()->SpawnActor<ATextBubble>();
 	PlayerText->SetText(_Text, _Size);
-	PlayerText->SetActorLocation(GetActorLocation());
+	PlayerText->SetActorLocation(GetActorLocation() + FVector(0.0f, 5.0f, 0.0f));
 }
 
 void APlayer::ClearTextBubble()

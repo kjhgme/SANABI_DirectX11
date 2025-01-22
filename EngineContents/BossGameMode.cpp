@@ -54,7 +54,7 @@ ABossGameMode::ABossGameMode()
 
 	Player = GetWorld()->SpawnActor<APlayer>();
 	Player->AddActorLocation({ 0.0f, -35.0f, 0.0f });
-
+	
 	Mari = GetWorld()->SpawnActor<AMari>();
 	Mari->AddActorLocation({ { 30.0f, -28.0f, -2.0f } });
 
@@ -102,11 +102,11 @@ void ABossGameMode::Tick(float _DeltaTime)
 	}
 	if (UEngineInput::IsPress('Q'))
 	{
-		MainCamera->AddRelativeLocation({ 0.0f, 0.0f, -100.0f * _DeltaTime, 1.0f });
+		MainCamera->AddActorLocation({ 0.0f, 0.0f, -100.0f * _DeltaTime, 1.0f });
 	}
 	if (UEngineInput::IsPress('E'))
 	{
-		MainCamera->AddRelativeLocation({ 0.0f, 0.0f, 100.0f * _DeltaTime, 1.0f });
+		MainCamera->AddActorLocation({ 0.0f, 0.0f, 100.0f * _DeltaTime, 1.0f });
 	}
 	if (UEngineInput::IsDown(VK_SPACE) && true == Player->GetSceneMode())
 	{

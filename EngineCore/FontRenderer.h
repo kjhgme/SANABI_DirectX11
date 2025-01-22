@@ -13,7 +13,7 @@ public:
 	UFontRenderer& operator=(const UFontRenderer& _Other) = delete;
 	UFontRenderer& operator=(UFontRenderer&& _Other) noexcept = delete;
 
-	ENGINEAPI void SetFont(std::string_view _Value, float _Scale = 20.0f, UColor _Color = UColor::BLACK, FW1_TEXT_FLAG _Flag = FW1_TEXT_FLAG::FW1_LEFT);
+	ENGINEAPI void SetFont(std::string_view _Value, float _Scale = 20.0f, UColor _Color = UColor::BLACK, FW1_TEXT_FLAG _Flag = static_cast<FW1_TEXT_FLAG>(FW1_CENTER | FW1_VCENTER));
 
 	ENGINEAPI void SetText(std::string _Text)
 	{
@@ -34,6 +34,6 @@ private:
 	std::string Text;
 	float Scale = 20.0f;
 	UColor Color = UColor::BLACK;
-	FW1_TEXT_FLAG Flag = FW1_TEXT_FLAG::FW1_LEFT;
+	FW1_TEXT_FLAG Flag = static_cast<FW1_TEXT_FLAG>(FW1_CENTER | FW1_VCENTER);
 };
 

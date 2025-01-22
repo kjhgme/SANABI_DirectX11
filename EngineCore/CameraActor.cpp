@@ -242,7 +242,7 @@ void ACameraActor::Zoom(float _Value, float _Duration)
 	{
 		FVector DeltaMove = DeltaOffsetPerSecond * DeltaTime;
 
-		this->AddRelativeLocation(DeltaMove);
+		this->AddActorLocation(DeltaMove);
 	},
 
 		false

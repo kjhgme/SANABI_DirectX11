@@ -57,7 +57,7 @@ public:
 	
 	void CheckRightDir();
 
-	void MakeTextBubble(std::string_view _Text, float _Size = 40.0f);
+	void MakeTextBubble(std::string_view _Text, float _Size = 24.0f);
 	void ClearTextBubble();
 
 	void GrabLaunchToPosition(FVector _Pos);

@@ -60,7 +60,7 @@ private:
 	ENGINEAPI void FreeCameraCheck();
 
 	FTransform PrevTrans;
-	EProjectionType PrevProjectionType = EProjectionType::Orthographic;
+	EProjectionType PrevProjectionType = EProjectionType::Perspective;
 	float FreeSpeed = 500.0f;
 
 	FVector ScreenPos;

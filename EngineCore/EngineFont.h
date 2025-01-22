@@ -18,7 +18,7 @@ public:
 
 
 
-	void FontDraw(const std::string& _Text, float _FontScale, const FVector& _Pos, const UColor& _Color = UColor::BLACK, FW1_TEXT_FLAG Flag = FW1_LEFT);
+	void FontDraw(const std::string& _Text, float _FontScale, const FVector& _Pos, const UColor& _Color = UColor::BLACK, FW1_TEXT_FLAG Flag = static_cast<FW1_TEXT_FLAG>(FW1_CENTER | FW1_VCENTER));
 
 protected:
 
