@@ -35,7 +35,7 @@ ABossPlatform::ABossPlatform()
 	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
 		{
 			_Other->GetActor()->Destroy();
-			UEngineDebug::OutPutString("Enter");
+			// UEngineDebug::OutPutString("Enter");
 		});
 
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();

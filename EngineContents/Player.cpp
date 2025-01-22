@@ -65,12 +65,12 @@ void APlayer::BeginPlay()
 
 	Collision->SetCollisionEnter([this](UCollision* _This, UCollision* _Other)
 	{
-		UEngineDebug::OutPutString("Enter : " + _Other->GetCollisionProfileName());
+		// UEngineDebug::OutPutString("Enter : " + _Other->GetCollisionProfileName());
 	});
 
 	Collision->SetCollisionEnd([this](UCollision* _This, UCollision* _Other)
 	{
-		UEngineDebug::OutPutString("End : " + _Other->GetCollisionProfileName());
+		// UEngineDebug::OutPutString("End : " + _Other->GetCollisionProfileName());
 	});
 
 	// GrabCollision
@@ -89,11 +89,11 @@ void APlayer::Tick(float _DeltaTime)
 	AimPos = PlayerCamera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation();
 	AimPos.Y += 15.0f;
 	AimRenderer->SetRelativeLocation(AimPos);
-	UEngineDebug::OutPutString(AimPos.ToString());
+	// UEngineDebug::OutPutString(AimPos.ToString());
 
 	if (UEngineInput::IsDown(MK_LBUTTON))
 	{
-		UEngineDebug::OutPutString(AimPos.ToString());
+		// UEngineDebug::OutPutString(AimPos.ToString());
 	}
 	if (false == SceneMode)
 	{
