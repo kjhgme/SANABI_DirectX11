@@ -118,7 +118,6 @@ void ABossGameMode::Tick(float _DeltaTime)
 		MainCamera->SetActorLocation(CameraPos);
 	}
 
-
 	//if (true == bPlayNextAnimation && true == Player->GetPlayerRenderer().get()->IsCurAnimationEnd())
 	//{
 	//	Scenes[SceneTakeNum]();

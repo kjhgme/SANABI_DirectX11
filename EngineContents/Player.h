@@ -41,9 +41,9 @@ public:
 		return SceneMode;
 	}
 
-	std::shared_ptr<class USpriteRenderer> GetArmRenderer()
+	std::shared_ptr<class USpriteRenderer> GetGrabRenderer()
 	{
-		return ArmRenderer;
+		return GrabRenderer;
 	}
 
 	void SetSceneMode(bool _Mode)
@@ -91,6 +91,7 @@ protected:
 private:
 	std::shared_ptr<class USpriteRenderer> PlayerRenderer;
 	std::shared_ptr<class USpriteRenderer> ArmRenderer;
+	std::shared_ptr<class USpriteRenderer> GrabRenderer;
 	std::shared_ptr<class USpriteRenderer> AimRenderer;
 	std::shared_ptr<class UCollision> Collision;
 	std::shared_ptr<class UCollision> GrabCollision;

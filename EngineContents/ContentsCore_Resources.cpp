@@ -120,9 +120,13 @@ void UContentsCore::InitResources()
 			LoadFolder("SNB/SNB_Arm_Land2Run");
 			LoadFolder("SNB/SNB_Arm_SwingJump");
 			LoadFolder("SNB/SNB_Arm_SwingJumpUp");
+
+			LoadFolder("SNB/SNB_Arm_Shoot");
+			LoadFolder("SNB/SNB_Arm_Grabbed");
 		}
 		// Grab
 		{
+			LoadFolder("SNB/SNB_Grab/SNB_Grab_NoImage");
 			LoadFolder("SNB/SNB_Grab/SNB_Grab_Flying");
 			LoadFolder("SNB/SNB_Grab/SNB_Grab_Grabbing");
 			LoadFolder("SNB/SNB_Grab/SNB_Grab_Grabed");

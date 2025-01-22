@@ -19,18 +19,22 @@ APlayer::APlayer()
 
 	PlayerRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	ArmRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	GrabRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	InitPlayerAnimation(); 
 	InitPlayerState();
 
 	PlayerRenderer->ChangeAnimation("Idle");
 	ArmRenderer->ChangeAnimation("ArmIdle");
+	GrabRenderer->ChangeAnimation("Grab_NoImage");
 
 	PlayerRenderer->SetupAttachment(RootComponent);
 	ArmRenderer->SetupAttachment(RootComponent);
+	GrabRenderer->SetupAttachment(RootComponent);
 
 	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::PLAYER) });
 	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) });
+	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) + 1 });
 
 	PlayerCamera = GetWorld()->GetMainCamera();
 	PlayerCamera->AttachToActor(this);
@@ -123,6 +127,7 @@ void APlayer::AddPlayerRendererLocation(FVector _Loc)
 {
 	PlayerRenderer->AddRelativeLocation(_Loc);
 	ArmRenderer->AddRelativeLocation(_Loc);
+	GrabRenderer->AddRelativeLocation(_Loc);
 	Collision->AddRelativeLocation(_Loc);
 }
 
@@ -172,7 +177,7 @@ void APlayer::GrabLaunchToPosition(FVector _Pos)
 		float Alpha = UEngineMath::Clamp(DeltaTime / 0.1f, 0.0f, 1.0f);
 		FVector NewPosition = Lerp(FVector::ZERO, TargetPosition, Alpha);
 
-		this->GetArmRenderer()->AddRelativeLocation(NewPosition);
+		this->GetGrabRenderer()->AddRelativeLocation(NewPosition);
 	},
 		false
 	);
@@ -231,17 +236,21 @@ void APlayer::InitPlayerAnimation()
 			ArmRenderer->CreateAnimation("ArmSwingJumpUp", "SNB_Arm_SwingJumpUp");
 
 			PlayerRenderer->CreateAnimation("Death", "SNB_Death", false);
+
+			ArmRenderer->CreateAnimation("ArmShoot", "SNB_Arm_Shoot", false);
+			ArmRenderer->CreateAnimation("ArmGrabbed", "SNB_Arm_Grabbed", false);
 		}
 		// Grab
 		{
-			ArmRenderer->CreateAnimation("ArmGrab_Flying", "SNB_Grab_Flying", false);
-			ArmRenderer->CreateAnimation("ArmGrab_Grabbing", "SNB_Grab_Grabbing", false);
-			ArmRenderer->CreateAnimation("ArmGrab_Grabed", "SNB_Grab_Grabed", false);
-			ArmRenderer->CreateAnimation("ArmGrab_Lower_Grabbed", "SNB_Grab_Lower_Grabbed", false);
-			ArmRenderer->CreateAnimation("ArmGrab_Lower_Grabbing", "SNB_Grab_Lower_Grabbing", false);
-			ArmRenderer->CreateAnimation("ArmGrab_Return", "SNB_Grab_Return", false);
-			ArmRenderer->CreateAnimation("ArmGrab_ReturnWithGrabbed", "SNB_Grab_ReturnWithGrabbed",false);
-			ArmRenderer->CreateAnimation("ArmGrab_ReturnWithoutGrabbed", "SNB_Grab_ReturnWithoutGrabbed", false);
+			GrabRenderer->CreateAnimation("Grab_NoImage", "SNB_Grab_NoImage", false);
+			GrabRenderer->CreateAnimation("Grab_Flying", "SNB_Grab_Flying", false);
+			GrabRenderer->CreateAnimation("Grab_Grabbing", "SNB_Grab_Grabbing", false);
+			GrabRenderer->CreateAnimation("Grab_Grabed", "SNB_Grab_Grabed", false);
+			GrabRenderer->CreateAnimation("Grab_Lower_Grabbed", "SNB_Grab_Lower_Grabbed", false);
+			GrabRenderer->CreateAnimation("Grab_Lower_Grabbing", "SNB_Grab_Lower_Grabbing", false);
+			GrabRenderer->CreateAnimation("Grab_Return", "SNB_Grab_Return", false);
+			GrabRenderer->CreateAnimation("Grab_ReturnWithGrabbed", "SNB_Grab_ReturnWithGrabbed",false);
+			GrabRenderer->CreateAnimation("Grab_ReturnWithoutGrabbed", "SNB_Grab_ReturnWithoutGrabbed", false);
 		}
 	}
 	// BossAnim
@@ -633,7 +642,8 @@ void APlayer::Death(float _DeltaTime)
 
 void APlayer::Grab_Flying(float _DeltaTime)
 {
-	ArmRenderer->ChangeAnimation("ArmGrab_Flying");
+	ArmRenderer->ChangeAnimation("ArmShoot");
+	GrabRenderer->ChangeAnimation("Grab_Flying");
 
 	float ZDis = GetActorLocation().Z - GetWorld()->GetMainCamera()->GetActorLocation().Z;
 	
@@ -653,7 +663,7 @@ void APlayer::Grab_Flying(float _DeltaTime)
 		bIsGrabbing = true;
 	}
 
-	ArmRenderer->SetRotation({ 0.0f, 0.0f, AimRotZ });
+	GrabRenderer->SetRotation({ 0.0f, 0.0f, AimRotZ });
 
 	// UEngineDebug::OutPutString(std::to_string(AimRotZ));
 
