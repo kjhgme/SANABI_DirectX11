@@ -14,8 +14,8 @@ ABossPlatform::ABossPlatform()
 	PlatformBoxRenderer = CreateDefaultSubObject< USpriteRenderer>();
 	PlatformBoosterRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	
-	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_Idle", "BossPlatform_A_Idle");
-	PlatformBoosterRenderer->CreateAnimation("BossPlatform_A_BoosterLoop", "BossPlatform_A_BoosterLoop");
+	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_Idle", "BossPlatform_A_Idle", true, 0.15f);
+	PlatformBoosterRenderer->CreateAnimation("BossPlatform_A_BoosterLoop", "BossPlatform_A_BoosterLoop", true, 0.1f);
 		
 	PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_Idle");
 	PlatformBoosterRenderer->ChangeAnimation("BossPlatform_A_BoosterLoop");

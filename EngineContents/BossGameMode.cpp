@@ -61,7 +61,7 @@ ABossGameMode::ABossGameMode()
 	Mari->AddActorLocation({ { 30.0f, -28.0f, -2.0f } });
 
 	MainCamera = GetWorld()->GetMainCamera();
-	MainCamera->SetActorLocation({ 0.0f, 50.0f, -200.0f, 1.0f });
+	MainCamera->SetActorLocation({ 0.0f, 20.0f, -300.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 
 	Boss = GetWorld()->SpawnActor<ABoss>();
@@ -91,39 +91,30 @@ void ABossGameMode::Tick(float _DeltaTime)
 
 	UEngineDebug::OutPutString(Player->GetActorLocation().ToString());
 
-	FVector CameraPos = Player->GetActorLocation();
-
-	if (Player->GetActorLocation().X < -400.0f)
+	if (false == Player->GetSceneMode())
 	{
-		CameraPos.X = -400.0f;
-		CameraPos.Z = -500.0f;
+		FVector CameraPos = Player->GetActorLocation();
 
+		if (Player->GetActorLocation().X < -400.0f)
+		{
+			CameraPos.X = -400.0f;
+		}
+		if (Player->GetActorLocation().X > 400.0f)
+		{
+			CameraPos.X = 400.0f;
+		}
+		if (Player->GetActorLocation().Y < -400.0f)
+		{
+			CameraPos.Y = -400.0f;
+		}
+		if (Player->GetActorLocation().Y > 400.0f)
+		{
+			CameraPos.Y = 400.0f;
+		}
+
+		CameraPos.Z = MainCamera->GetActorLocation().Z;
 		MainCamera->SetActorLocation(CameraPos);
 	}
-	if (Player->GetActorLocation().X > 400.0f)
-	{
-		CameraPos.X = 400.0f;
-		CameraPos.Z = -500.0f;
-
-		MainCamera->SetActorLocation(CameraPos);
-	}
-	if (Player->GetActorLocation().Y < -400.0f)
-	{
-		CameraPos.Y = -400.0f;
-		CameraPos.Z = -500.0f;
-
-		MainCamera->SetActorLocation(CameraPos);
-	}
-	if (Player->GetActorLocation().Y > 400.0f)
-	{
-		CameraPos.Y = 400.0f;
-		CameraPos.Z = -500.0f;
-
-		MainCamera->SetActorLocation(CameraPos);
-	}
-
-	CameraPos.Z = -500.0f;
-	MainCamera->SetActorLocation(CameraPos);
 
 	if (UEngineInput::IsDown('F'))
 	{
@@ -153,25 +144,6 @@ void ABossGameMode::Tick(float _DeltaTime)
 		CameraPos.Z = -500.0f;
 		MainCamera->SetActorLocation(CameraPos);
 	}
-
-	//if (true == bPlayNextAnimation && true == Player->GetPlayerRenderer().get()->IsCurAnimationEnd())
-	//{
-	//	Scenes[SceneTakeNum]();
-	//	SceneTakeNum++;
-	//	// Scene(_DeltaTime);
-	//
-	//	bPlayNextAnimation = false;
-	//}
-
-	//Player->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
-	//for (int i = 0; i < Platforms.size(); ++i) {
-	//	Platforms[i].get()->AddActorLocation({ { 300.0f * _DeltaTime, 0.0f, 0.0f } });
-	//}
-	//Mari->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
-	//BackGround->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
-	//
-	//if(Boss != nullptr && Boss.get()->State != 1)
-	//	Boss->AddActorLocation({ 300.0f * _DeltaTime, 0.0f, 0.0f });
 }
 
 void ABossGameMode::InitScenes()
