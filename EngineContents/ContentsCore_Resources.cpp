@@ -31,6 +31,25 @@ void UContentsCore::InitResources()
 		LoadFolder("UI/AimStart");
 		LoadFolder("UI/GrabIcon_AttackGrab");
 		LoadFolder("UI/Grablcon_Grab");
+
+		// HP
+		LoadFolder("UI/HP/HP4_1_Damaged");
+		LoadFolder("UI/HP/HP4_1_Idle");
+		LoadFolder("UI/HP/HP4_2_Damaged");
+		LoadFolder("UI/HP/HP4_2_Disapear");
+		LoadFolder("UI/HP/HP4_2_Idle");
+		LoadFolder("UI/HP/HP4_2_Mini");
+		LoadFolder("UI/HP/HP4_2_Restore");
+		LoadFolder("UI/HP/HP4_3_Damaged");
+		LoadFolder("UI/HP/HP4_3_Disappear");
+		LoadFolder("UI/HP/HP4_3_Idle");
+		LoadFolder("UI/HP/HP4_3_Mini");
+		LoadFolder("UI/HP/HP4_3_Restore");
+		LoadFolder("UI/HP/HP4_4_Disappear");
+		LoadFolder("UI/HP/HP4_4_Idle");
+		LoadFolder("UI/HP/HP4_4_Mini");
+		LoadFolder("UI/HP/HP4_4_Restore");
+		LoadFolder("UI/HP/HP4_NoImage");
 	}
 	// Title
 	{

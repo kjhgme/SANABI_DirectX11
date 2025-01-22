@@ -28,14 +28,17 @@ APlayer::APlayer()
 	PlayerRenderer->ChangeAnimation("Idle");
 	ArmRenderer->ChangeAnimation("ArmIdle");
 	GrabRenderer->ChangeAnimation("Grab_NoImage");
+	HpRenderer->ChangeAnimation("HP4_NoImage");
 
 	PlayerRenderer->SetupAttachment(RootComponent);
 	ArmRenderer->SetupAttachment(RootComponent);
 	GrabRenderer->SetupAttachment(RootComponent);
+	HpRenderer->SetupAttachment(RootComponent);
 
 	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::PLAYER) });
 	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) });
-	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) + 1 });
+	GrabRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) - 1 });
+	HpRenderer->AddRelativeLocation({ -30.0f, 40.0f, static_cast<float>(ERenderOrder::UI) + 1 });
 
 	PlayerCamera = GetWorld()->GetMainCamera();
 
@@ -97,13 +100,16 @@ void APlayer::Tick(float _DeltaTime)
 	}
 	if (false == SceneMode)
 	{
-		AimRenderer->SetSprite("Aim", 0);
 		FSM.Update(_DeltaTime);
 		ApplyGravity(_DeltaTime);
 		CheckRightDir();
+
+		HpRenderer->ChangeAnimation("HP4_4_Mini");
+		AimRenderer->SetSprite("Aim", 0);
 	}
 	else if (true == SceneMode)
 	{
+		HpRenderer->ChangeAnimation("HP4_4_NoImage");
 		AimRenderer->SetSprite("Aim", 1);
 	}
 	if (UEngineInput::IsDown('G'))
@@ -139,6 +145,7 @@ void APlayer::CheckRightDir()
 		{
 			PlayerRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
 			ArmRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+			HpRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
 		}
 		else
 		{
@@ -251,6 +258,26 @@ void APlayer::InitPlayerAnimation()
 			GrabRenderer->CreateAnimation("Grab_Return", "SNB_Grab_Return", false);
 			GrabRenderer->CreateAnimation("Grab_ReturnWithGrabbed", "SNB_Grab_ReturnWithGrabbed",false);
 			GrabRenderer->CreateAnimation("Grab_ReturnWithoutGrabbed", "SNB_Grab_ReturnWithoutGrabbed", false);
+		}
+		// HP
+		{
+			HpRenderer->CreateAnimation("HP4_1_Damaged", "HP4_1_Damaged", false);
+			HpRenderer->CreateAnimation("HP4_1_Idle", "HP4_1_Idle", false);
+			HpRenderer->CreateAnimation("HP4_2_Damaged", "HP4_2_Damaged", false);
+			HpRenderer->CreateAnimation("HP4_2_Disapear", "HP4_2_Disapear", false);
+			HpRenderer->CreateAnimation("HP4_2_Idle", "HP4_2_Idle", false);
+			HpRenderer->CreateAnimation("HP4_2_Mini", "HP4_2_Mini", false);
+			HpRenderer->CreateAnimation("HP4_2_Restore", "HP4_2_Restore", false);
+			HpRenderer->CreateAnimation("HP4_3_Damaged", "HP4_3_Damaged", false);
+			HpRenderer->CreateAnimation("HP4_3_Disappear", "HP4_3_Disappear", false);
+			HpRenderer->CreateAnimation("HP4_3_Idle", "HP4_3_Idle", false);
+			HpRenderer->CreateAnimation("HP4_3_Mini", "HP4_3_Mini", false);
+			HpRenderer->CreateAnimation("HP4_3_Restore", "HP4_3_Restore", false);
+			HpRenderer->CreateAnimation("HP4_4_Disappear", "HP4_4_Disappear", false);
+			HpRenderer->CreateAnimation("HP4_4_Idle", "HP4_4_Idle", false);
+			HpRenderer->CreateAnimation("HP4_4_Mini", "HP4_4_Mini", false);
+			HpRenderer->CreateAnimation("HP4_4_Restore", "HP4_4_Restore", false);
+			HpRenderer->CreateAnimation("HP4_NoImage", "HP4_NoImage", false);
 		}
 	}
 	// BossAnim
