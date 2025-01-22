@@ -89,7 +89,41 @@ void ABossGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	UEngineDebug::OutPutString(MainCamera->GetActorLocation().ToString());
+	UEngineDebug::OutPutString(Player->GetActorLocation().ToString());
+
+	FVector CameraPos = Player->GetActorLocation();
+
+	if (Player->GetActorLocation().X < -400.0f)
+	{
+		CameraPos.X = -400.0f;
+		CameraPos.Z = -500.0f;
+
+		MainCamera->SetActorLocation(CameraPos);
+	}
+	if (Player->GetActorLocation().X > 400.0f)
+	{
+		CameraPos.X = 400.0f;
+		CameraPos.Z = -500.0f;
+
+		MainCamera->SetActorLocation(CameraPos);
+	}
+	if (Player->GetActorLocation().Y < -400.0f)
+	{
+		CameraPos.Y = -400.0f;
+		CameraPos.Z = -500.0f;
+
+		MainCamera->SetActorLocation(CameraPos);
+	}
+	if (Player->GetActorLocation().Y > 400.0f)
+	{
+		CameraPos.Y = 400.0f;
+		CameraPos.Z = -500.0f;
+
+		MainCamera->SetActorLocation(CameraPos);
+	}
+
+	CameraPos.Z = -500.0f;
+	MainCamera->SetActorLocation(CameraPos);
 
 	if (UEngineInput::IsDown('F'))
 	{
@@ -160,7 +194,7 @@ void ABossGameMode::InitScenes()
 	});
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {
-		Mari->MakeTextBubble("...");
+		Mari->MakeTextBubble("¡¤¡¤¡¤");
 	});
 	Scenes.push_back([this]() {
 		Mari->ClearTextBubble();

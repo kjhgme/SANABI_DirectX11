@@ -37,7 +37,6 @@ APlayer::APlayer()
 	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) + 1 });
 
 	PlayerCamera = GetWorld()->GetMainCamera();
-	PlayerCamera->AttachToActor(this);
 
 	FSM.ChangeState(PlayerState::Idle);
 
