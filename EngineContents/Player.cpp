@@ -20,6 +20,7 @@ APlayer::APlayer()
 	PlayerRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	ArmRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	GrabRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	HpRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	InitPlayerAnimation(); 
 	InitPlayerState();
@@ -86,7 +87,7 @@ void APlayer::Tick(float _DeltaTime)
 
 	float ZDis = GetActorLocation().Z - PlayerCamera->GetActorLocation().Z;
 	AimPos = PlayerCamera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation();
-	AimPos.Y += 15.0f;
+	AimPos.Y -= 30.0f;
 	AimRenderer->SetRelativeLocation(AimPos);
 	// UEngineDebug::OutPutString(AimPos.ToString());
 

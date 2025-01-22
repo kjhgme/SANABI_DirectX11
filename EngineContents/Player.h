@@ -93,6 +93,8 @@ private:
 	std::shared_ptr<class USpriteRenderer> ArmRenderer;
 	std::shared_ptr<class USpriteRenderer> GrabRenderer;
 	std::shared_ptr<class USpriteRenderer> AimRenderer;
+	std::shared_ptr<class USpriteRenderer> HpRenderer;
+
 	std::shared_ptr<class UCollision> Collision;
 	std::shared_ptr<class UCollision> GrabCollision;
 
