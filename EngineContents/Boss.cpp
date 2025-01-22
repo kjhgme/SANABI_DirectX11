@@ -20,14 +20,14 @@ ABoss::ABoss()
 	BossRenderer->ChangeAnimation("Boss_Slap");
 	BossWingRenderer->ChangeAnimation("Boss_Wing_NoImage");
 
-	BossRenderer->AddRelativeLocation({ 1800.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) });
-	BossWingRenderer->AddRelativeLocation({ 1800.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
+	BossRenderer->AddRelativeLocation({ 1800.0f, 100.0f, static_cast<float>(ERenderOrder::BOSS) });
+	BossWingRenderer->AddRelativeLocation({ 1800.0f, 100.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
 
 	BossRenderer->SetupAttachment(RootComponent);
 	BossWingRenderer->SetupAttachment(RootComponent);
 	
-	BossRenderer->SetAutoScaleRatio(0.5f);
-	BossWingRenderer->SetAutoScaleRatio(0.5f);
+	BossRenderer->SetAutoScaleRatio(0.2f);
+	BossWingRenderer->SetAutoScaleRatio(0.2f);
 
 	BossRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
 	BossWingRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
@@ -49,13 +49,12 @@ void ABoss::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	if (State == 0)
-	{	
-
+	{
 	}
 	else if (State == 1)
 	{
-		BossRenderer->AddRelativeLocation({ -2000.0f * _DeltaTime, 0.0f, 0.0f });
-		BossWingRenderer->AddRelativeLocation({ -2000.0f * _DeltaTime, 0.0f, 0.0f });
+		BossRenderer->AddRelativeLocation({ -1500.0f * _DeltaTime, 0.0f, 0.0f });
+		BossWingRenderer->AddRelativeLocation({ -1500.0f * _DeltaTime, 0.0f, 0.0f });
 	}
 	else if (State == 2)
 	{
@@ -101,13 +100,12 @@ void ABoss::StareAtPlayer()
 	// BossRenderer->SetRelativeLocation({ 20.0f, -130.0f, 100.0f });
 	// BossWingRenderer->SetRelativeLocation({ 20.0f, -130.0f, 101.0f });
 	
-	BossRenderer->SetRelativeLocation({ 20.0f, -600.0f, 100.0f });
-	BossWingRenderer->SetRelativeLocation({ 20.0f, -600.0f, 101.0f });
+	BossRenderer->SetRelativeLocation({ 20.0f, -600.0f, static_cast<float>(ERenderOrder::BOSS) });
+	BossWingRenderer->SetRelativeLocation({ 20.0f, -600.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
 
 	FVector TargetPosition1 = { 0.0f, 520.0f, 0.0f };
 	FVector TargetPosition2 = { 0.0f, -50.0f, 0.0f };
 	FVector TargetPosition3 = { 0.0f, 1500.0f, 0.0f };
-
 
 	TimeEventComponent->AddUpdateEvent(4.0f, [this, TargetPosition1](float DeltaTime, float CurTime)
 	{
