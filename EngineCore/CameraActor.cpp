@@ -235,14 +235,14 @@ void ACameraActor::FreeCameraSwitch()
 
 void ACameraActor::Zoom(float _Value, float _Duration)
 {
-	const FVector TotalOffset = FVector(0.0f, 0.0f, _Value);
-	const FVector DeltaOffsetPerSecond = TotalOffset / _Duration;
+	const float TotalOffset =_Value;
+	const float DeltaOffsetPerSecond = TotalOffset / _Duration;
 
 	TimeEventComponent->AddUpdateEvent(_Duration, [this, DeltaOffsetPerSecond](float DeltaTime, float CurTime)
 	{
-		FVector DeltaMove = DeltaOffsetPerSecond * DeltaTime;
+		float DeltaMove = DeltaOffsetPerSecond * DeltaTime;
 
-		this->AddActorLocation(DeltaMove);
+		this->AddRelativeLocation({ 0.0f, 0.0f, DeltaMove });
 	},
 
 		false

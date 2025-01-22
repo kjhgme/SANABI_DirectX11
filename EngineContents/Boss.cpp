@@ -49,13 +49,13 @@ void ABoss::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	if (State == 0)
-	{
-		BossRenderer->AddRelativeLocation({ -2000.0f * _DeltaTime, 0.0f, 0.0f });
-		BossWingRenderer->AddRelativeLocation({ -2000.0f * _DeltaTime, 0.0f, 0.0f });
+	{	
+
 	}
 	else if (State == 1)
 	{
-
+		BossRenderer->AddRelativeLocation({ -2000.0f * _DeltaTime, 0.0f, 0.0f });
+		BossWingRenderer->AddRelativeLocation({ -2000.0f * _DeltaTime, 0.0f, 0.0f });
 	}
 	else if (State == 2)
 	{
