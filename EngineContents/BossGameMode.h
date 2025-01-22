@@ -16,6 +16,11 @@ public:
 
 	void Tick(float _DeltaTime) override;
 
+	std::shared_ptr<class APlayer> GetPlayer() const 
+	{
+		return Player;
+	}
+
 	void InitScenes();
 
 protected:

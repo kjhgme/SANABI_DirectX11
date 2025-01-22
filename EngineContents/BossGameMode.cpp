@@ -19,18 +19,20 @@
 #include <EngineCore/HUD.h>
 #include "ContentsEditorGUI.h"
 
-class TestWindow : public UEngineGUIWindow
+class BossGameGUI : public UEngineGUIWindow
 {
 public:
 	void OnGUI() override
 	{
-		if (true == ImGui::Button("FreeCameraOn"))
+		if (true == ImGui::Button("FreeCameraSwitch"))
 		{
 			GetWorld()->GetMainCamera()->FreeCameraSwitch();
 		}
-
-		ImGui::SameLine();
-		ImGui::Text("test");
+		if (true == ImGui::Button("StartBoss"))
+		{
+			// Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
+			// Player->SetSceneMode(false);	
+		}
 	}
 };
 
@@ -80,8 +82,8 @@ void ABossGameMode::BeginPlay()
 
 	InitScenes();
 
-	// Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
-	// Player->SetSceneMode(false);	
+	Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
+	Player->SetSceneMode(false);	
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
@@ -125,7 +127,7 @@ void ABossGameMode::Tick(float _DeltaTime)
 	{
 		FVector CameraPos = MainCamera->GetActorLocation();
 		CameraPos.Z = -600.0f;
-		MainCamera->MoveCamera(CameraPos, 0.0f);
+		MainCamera->SetActorLocation(CameraPos);
 	}
 
 
@@ -486,11 +488,11 @@ void ABossGameMode::LevelChangeStart()
 	}
 
 	{
-		std::shared_ptr<TestWindow> Window = UEngineGUI::FindGUIWindow<TestWindow>("TestWindow");
+		std::shared_ptr<BossGameGUI> Window = UEngineGUI::FindGUIWindow<BossGameGUI>("BossGameGUI");
 
 		if (nullptr == Window)
 		{
-			Window = UEngineGUI::CreateGUIWindow<TestWindow>("TestWindow");
+			Window = UEngineGUI::CreateGUIWindow<BossGameGUI>("BossGameGUI");
 		}
 
 		Window->SetActive(true);
