@@ -36,8 +36,6 @@ private:
 
 	std::vector<std::function<void()>> Scenes;
 
-	float4 LastPlayerPosition;
-
 	int SceneTakeNum = 0;
 	bool bPlayNextAnimation = false;
 };

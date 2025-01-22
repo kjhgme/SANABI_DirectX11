@@ -25,11 +25,11 @@ ABossBackGround::ABossBackGround()
 	BG_Building1_Renderer->SetSprite("BOSS_BG", 3);
 	BG_Building2_Renderer->SetSprite("BOSS_BG", 4);
 
-	BG_Sky_Renderer->SetRelativeLocation({ 0.0f, -1500.0f, static_cast<float>(ERenderOrder::BACKGROUND)-1 });
-	BG_Cloud1_Renderer->SetRelativeLocation({ 0.0f, -1000.0f, static_cast<float>(ERenderOrder::BACKGROUND)-2 });
-	BG_Cloud2_Renderer->SetRelativeLocation({ 0.0f, -300.0f, static_cast<float>(ERenderOrder::BACKGROUND)-3 });
-	BG_Building1_Renderer->SetRelativeLocation({ 0.0f, -2500.0f, static_cast<float>(ERenderOrder::BACKGROUND)-4 });
-	BG_Building2_Renderer->SetRelativeLocation({ 0.0f, -3000.0f, static_cast<float>(ERenderOrder::BACKGROUND)-5 });
+	BG_Sky_Renderer->SetRelativeLocation({ 0.0f, -830.0f, static_cast<float>(ERenderOrder::BACKGROUND)-1 });
+	BG_Cloud1_Renderer->SetRelativeLocation({ 0.0f, -200.0f, static_cast<float>(ERenderOrder::BACKGROUND)-2 });
+	BG_Cloud2_Renderer->SetRelativeLocation({ 0.0f, -130.0f, static_cast<float>(ERenderOrder::BACKGROUND)-3 });
+	BG_Building1_Renderer->SetRelativeLocation({ 0.0f, -580.0f, static_cast<float>(ERenderOrder::BACKGROUND)-4 });
+	BG_Building2_Renderer->SetRelativeLocation({ 0.0f, -700.0f, static_cast<float>(ERenderOrder::BACKGROUND)-5 });
 
 	BG_Sky_Renderer->SetupAttachment(RootComponent);
 	BG_Cloud1_Renderer->SetupAttachment(RootComponent);
@@ -37,13 +37,22 @@ ABossBackGround::ABossBackGround()
 	BG_Building1_Renderer->SetupAttachment(RootComponent);
 	BG_Building2_Renderer->SetupAttachment(RootComponent);
 
-	BG_Sky_Renderer->SetAutoScaleRatio(4.0f);
-	BG_Cloud1_Renderer->SetAutoScaleRatio(4.0f);
-	BG_Cloud2_Renderer->SetAutoScaleRatio(4.0f);
-	BG_Building1_Renderer->SetAutoScaleRatio(4.0f);
-	BG_Building2_Renderer->SetAutoScaleRatio(4.0f);
+	BG_Sky_Renderer->SetAutoScale(false);
+	BG_Sky_Renderer->SetScale3D({ 830.0f * 2.0f, 830.0f * 2.0f, 0.0f });
+	BG_Cloud1_Renderer->SetAutoScaleRatio(1.3f);
+	BG_Cloud2_Renderer->SetAutoScaleRatio(1.3f);
 }
 
 ABossBackGround::~ABossBackGround()
 {
+}
+
+void ABossBackGround::Tick(float _DeltaTime)
+{
+	AActor::Tick(_DeltaTime);
+
+	BG_Cloud1_Renderer->AddUVPlusValue({ _DeltaTime * 0.008f, 0.0f, 0.0f, 1.0f });
+	BG_Cloud2_Renderer->AddUVPlusValue({ _DeltaTime * 0.032f, 0.0f, 0.0f, 1.0f });
+	BG_Building1_Renderer->AddUVPlusValue({ _DeltaTime * 0.08f, 0.0f, 0.0f, 1.0f });
+	BG_Building2_Renderer->AddUVPlusValue({ _DeltaTime * 0.16f, 0.0f, 0.0f, 1.0f });
 }
