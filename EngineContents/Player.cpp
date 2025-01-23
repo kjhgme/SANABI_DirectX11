@@ -201,27 +201,25 @@ void APlayer::ClearTextBubble()
 	}
 }
 
-void APlayer::GrabLaunchToPosition(const FVector& _TargetPos, const FVector& _CurrentPos)
+void APlayer::GrabLaunchToPosition(const FVector& _TargetPos)
 {
 	FVector TargetPos = _TargetPos;
-	FVector CurrentPos = _CurrentPos;
+	FVector CurrentPos = PlayerRenderer->GetRelativeLocation();
 
-	//TimeEventComponent->AddUpdateEvent(2.0f, [this, TargetPos, CurrentPos](float DeltaTime, float CurTime)
-	//{
-	//	auto Lerp = [](FVector A, FVector B, float Alpha)
-	//	{
-	//		return A * (1 - Alpha) + B * Alpha;
-	//	};
+	TimeEventComponent->AddUpdateEvent(0.1f, [this, TargetPos, CurrentPos](float DeltaTime, float CurTime)
+	{
+		auto Lerp = [](FVector A, FVector B, float Alpha)
+		{
+			return A * (1 - Alpha) + B * Alpha;
+		};
 
-	//	float Alpha = UEngineMath::Clamp(CurTime / 2.0f, 0.0f, 1.0f);
-	//	FVector NewPosition = Lerp(CurrentPos, TargetPos, Alpha);
+		float Alpha = UEngineMath::Clamp(CurTime / 0.1f, 0.0f, 1.0f);
+		FVector NewPosition = Lerp(CurrentPos, TargetPos, Alpha);
 
-	//	this->GetGrabRenderer()->SetWorldLocation(NewPosition);
-	//},
-	//	false
-	//);
-
-	this->GetGrabRenderer()->SetWorldLocation(CurrentPos);
+		this->GetGrabRenderer()->SetWorldLocation(NewPosition);
+	},
+		false
+	);
 }
 
 void APlayer::ApplyGravity(float _DeltaTime)

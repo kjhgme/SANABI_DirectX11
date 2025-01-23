@@ -63,7 +63,7 @@ public:
 	void MakeTextBubble(std::string_view _Text, float _Size = 24.0f);
 	void ClearTextBubble();
 
-	void GrabLaunchToPosition(const FVector& _TargetPos, const FVector& _CurrentPos);
+	void GrabLaunchToPosition(const FVector& _TargetPos);
 
 	// PlayerFunction
 	void ApplyGravity(float _DeltaTime);

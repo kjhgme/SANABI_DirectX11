@@ -594,7 +594,7 @@ void APlayer::Grab_Flying(float _DeltaTime)
 
 		AimRotZ = FVector::GetVectorAngleDeg(TargetWorldPos - CurrentPos, FVector(0, 1, 0)) * CrossResult.Z;
 
-		GrabLaunchToPosition(TargetWorldPos - GetActorLocation(), CurrentPos);
+		GrabLaunchToPosition(TargetWorldPos - CurrentPos);
 
 		bIsGrabbing = true;
 	}
