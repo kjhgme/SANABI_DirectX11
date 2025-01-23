@@ -67,19 +67,19 @@ void APlayer::InitPlayerAnimation()
 		// HP
 		{
 			HpRenderer->CreateAnimation("HP4_1_Damaged", "HP4_1_Damaged", false);
-			HpRenderer->CreateAnimation("HP4_1_Idle", "HP4_1_Idle", false);
+			HpRenderer->CreateAnimation("HP4_1_Idle", "HP4_1_Idle");
 			HpRenderer->CreateAnimation("HP4_2_Damaged", "HP4_2_Damaged", false);
 			HpRenderer->CreateAnimation("HP4_2_Disapear", "HP4_2_Disapear", false);
-			HpRenderer->CreateAnimation("HP4_2_Idle", "HP4_2_Idle", false);
+			HpRenderer->CreateAnimation("HP4_2_Idle", "HP4_2_Idle");
 			HpRenderer->CreateAnimation("HP4_2_Mini", "HP4_2_Mini", false);
 			HpRenderer->CreateAnimation("HP4_2_Restore", "HP4_2_Restore", false);
 			HpRenderer->CreateAnimation("HP4_3_Damaged", "HP4_3_Damaged", false);
 			HpRenderer->CreateAnimation("HP4_3_Disappear", "HP4_3_Disappear", false);
-			HpRenderer->CreateAnimation("HP4_3_Idle", "HP4_3_Idle", false);
+			HpRenderer->CreateAnimation("HP4_3_Idle", "HP4_3_Idle");
 			HpRenderer->CreateAnimation("HP4_3_Mini", "HP4_3_Mini", false);
 			HpRenderer->CreateAnimation("HP4_3_Restore", "HP4_3_Restore", false);
 			HpRenderer->CreateAnimation("HP4_4_Disappear", "HP4_4_Disappear", false);
-			HpRenderer->CreateAnimation("HP4_4_Idle", "HP4_4_Idle", false);
+			HpRenderer->CreateAnimation("HP4_4_Idle", "HP4_4_Idle");
 			HpRenderer->CreateAnimation("HP4_4_Mini", "HP4_4_Mini", false);
 			HpRenderer->CreateAnimation("HP4_4_Restore", "HP4_4_Restore", false);
 			HpRenderer->CreateAnimation("HP4_NoImage", "HP4_NoImage", false);
@@ -483,35 +483,31 @@ void APlayer::Damaged(float _DeltaTime)
 	ArmRenderer->ChangeAnimation("ArmDamaged");
 
 	if (false == bIsInfinity)
-	{		
-		if (HP == 4)
+	{
+		if (HP == 3)
 		{
-			HpRenderer->ChangeAnimation("HP4_4_Mini");
-		}
-		else if (HP == 3)
-		{
-			HpRenderer->ChangeAnimation("HP4_3_Idle");
+			HpRenderer->ChangeAnimation("HP4_3_Damaged");
 		}
 		else if (HP == 2)
 		{
-			HpRenderer->ChangeAnimation("HP4_2_Idle");
+			HpRenderer->ChangeAnimation("HP4_2_Damaged");
 		}
 		else if (HP == 1)
 		{
-			HpRenderer->ChangeAnimation("HP4_1_Idle");
+			HpRenderer->ChangeAnimation("HP4_1_Damaged");
 		}
 		else if (HP <= 0) {
 			FSM.ChangeState(PlayerState::Death);
 		}
-		else if (HP == 5) {
-			HpRenderer->ChangeAnimation("HP4_4_Restore");
-		}
 
+		HealTime = 10.0f;
 		bIsInfinity = true;		
 	}
 
 	if (true == PlayerRenderer->IsCurAnimationEnd())
 	{
+		HpRenderer->ChangeAnimation("HP4_" + std::to_string(HP) + "_Idle");
+
 		TimeEventComponent->AddEndEvent(2.0f, [this]()
 		{
 			bIsInfinity = false;

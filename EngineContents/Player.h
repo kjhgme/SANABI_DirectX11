@@ -32,6 +32,7 @@ public:
 	APlayer& operator=(const APlayer& _Other) = delete;
 	APlayer& operator=(APlayer&& _Other) noexcept = delete;
 
+	// GetFunction
 	std::shared_ptr<class USpriteRenderer> GetPlayerRenderer()
 	{
 		return PlayerRenderer;
@@ -47,6 +48,12 @@ public:
 		return GrabRenderer;
 	}
 
+	int GetHp() const
+	{
+		return HP;
+	}
+
+	// SetFunction
 	void SetSceneMode(bool _Mode);
 
 	void SetAnimation(std::string_view _Anim);
@@ -120,6 +127,7 @@ private:
 	int HP = 4;
 	bool bIsInfinity = false;
 	float InfinityTime = 3.0f;
+	float HealTime = 0.0f;
 
 	// Grab
 	FVector AimPos{};

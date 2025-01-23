@@ -121,6 +121,15 @@ void APlayer::Tick(float _DeltaTime)
 		ApplyGravity(_DeltaTime);
 		CheckRightDir();
 
+		if (HealTime > 0.0f)
+		{
+			HealTime -= _DeltaTime;
+			if (HealTime <= 0.0f)
+			{
+				Heal();
+			}
+		}
+
 		AimRenderer->SetSprite("Aim", 0);
 	}
 	else if (true == SceneMode)
@@ -242,4 +251,18 @@ void APlayer::Heal()
 	HP = 4;
 
 	HpRenderer->ChangeAnimation("HP4_4_Restore");
+
+	TimeEventComponent->AddUpdateEvent(3.0f, [this](float _DeltaTime, float _CurTime) {
+		if(true == HpRenderer->IsCurAnimationEnd())
+			HpRenderer->ChangeAnimation("HP4_4_Idle");
+	},
+		false
+	);
+
+	TimeEventComponent->AddEndEvent(5.0f, [this]() {
+		if(this->GetHp() == 4)
+			HpRenderer->ChangeAnimation("HP4_4_Mini");
+	},
+		false
+	);
 }
