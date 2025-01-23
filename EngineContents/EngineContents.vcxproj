@@ -247,6 +247,7 @@
     <ClCompile Include="ContentsCore_Resources.cpp" />
     <ClCompile Include="ContentsEditorGUI.cpp" />
     <ClCompile Include="MapMakerMode.cpp" />
+    <ClCompile Include="PlayerStateFunction.cpp" />
     <ClCompile Include="PlayerVfx.cpp">
       <SubType>
       </SubType>

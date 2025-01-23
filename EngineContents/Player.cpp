@@ -103,18 +103,26 @@ void APlayer::Tick(float _DeltaTime)
 		FSM.Update(_DeltaTime);
 		ApplyGravity(_DeltaTime);
 		CheckRightDir();
-
-		HpRenderer->ChangeAnimation("HP4_4_Mini");
+		CheckHP();
 		AimRenderer->SetSprite("Aim", 0);
 	}
 	else if (true == SceneMode)
 	{
-		HpRenderer->ChangeAnimation("HP4_4_NoImage");
+		HpRenderer->ChangeAnimation("HP4_NoImage");
 		AimRenderer->SetSprite("Aim", 1);
 	}
 	if (UEngineInput::IsDown('G'))
 	{
 		FSM.ChangeState(PlayerState::Death);
+	}
+	if (UEngineInput::IsDown(VK_F1))
+	{
+		HP -= 1;
+		FSM.ChangeState(PlayerState::Damaged);
+	}
+	if (UEngineInput::IsDown(VK_F2))
+	{
+		Heal();
 	}
 }
 
@@ -155,6 +163,32 @@ void APlayer::CheckRightDir()
 	}
 }
 
+void APlayer::CheckHP()
+{
+	if (HP == 4)
+	{
+		HpRenderer->ChangeAnimation("HP4_4_Mini");
+	}
+	else if (HP == 3)
+	{
+		HpRenderer->ChangeAnimation("HP4_3_Idle");
+	}
+	else if (HP == 2)
+	{
+		HpRenderer->ChangeAnimation("HP4_2_Idle");
+	}
+	else if (HP == 1)
+	{
+		HpRenderer->ChangeAnimation("HP4_1_Idle");
+	}
+	else if (HP <= 0) {
+		FSM.ChangeState(PlayerState::Death);
+	}
+	else if (HP == 5) {
+		HpRenderer->ChangeAnimation("HP4_4_Restore");
+	}
+}
+
 void APlayer::MakeTextBubble(std::string_view _Text, float _Size)
 {
 	PlayerText = GetWorld()->SpawnActor<ATextBubble>();
@@ -192,18 +226,28 @@ void APlayer::GrabLaunchToPosition(FVector _Pos)
 
 void APlayer::ApplyGravity(float _DeltaTime)
 {
-	if (Collision->IsColliding())
+	if (HP != 0)
 	{
-		GravityVelocity = 0;
-		Gravity = 0;
-	}
-	else {
-		Gravity = -98.0f * 2.0f;
-		GravityVelocity += Gravity * _DeltaTime;
-		GravityVelocity = UEngineMath::Clamp(GravityVelocity, MaxFallSpeed, 0.0f);
+		if (Collision->IsColliding())
+		{
+			GravityVelocity = 0;
+			Gravity = 0;
+		}
+		else {
+			Gravity = -98.0f * 2.0f;
+			GravityVelocity += Gravity * _DeltaTime;
+			GravityVelocity = UEngineMath::Clamp(GravityVelocity, MaxFallSpeed, 0.0f);
+		}
 	}
 
 	this->AddActorLocation({ 0.0f, _DeltaTime * GravityVelocity, 0.0f });
+}
+
+void APlayer::Heal()
+{
+	HP = 4;
+
+	HpRenderer->ChangeAnimation("HP4_Restore");
 }
 
 void APlayer::InitPlayerAnimation()
@@ -243,6 +287,9 @@ void APlayer::InitPlayerAnimation()
 			ArmRenderer->CreateAnimation("ArmSwingJumpUp", "SNB_Arm_SwingJumpUp");
 
 			PlayerRenderer->CreateAnimation("Death", "SNB_Death", false);
+
+			PlayerRenderer->CreateAnimation("Damaged", "SNB_Damaged", false);
+			ArmRenderer->CreateAnimation("ArmDamaged", "SNB_Arm_Damaged", false);
 
 			ArmRenderer->CreateAnimation("ArmShoot", "SNB_Arm_Shoot", false);
 			ArmRenderer->CreateAnimation("ArmGrabbed", "SNB_Arm_Grabbed", false);
@@ -305,421 +352,7 @@ void APlayer::InitPlayerState()
 	FSM.CreateState(PlayerState::Landing, std::bind(&APlayer::Landing, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Land2Run, std::bind(&APlayer::Land2Run, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Death, std::bind(&APlayer::Death, this, std::placeholders::_1), [this]() {});
+	FSM.CreateState(PlayerState::Damaged, std::bind(&APlayer::Damaged, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Grab_Flying, std::bind(&APlayer::Grab_Flying, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Grab_Grabbing, std::bind(&APlayer::Grab_Grabbing, this, std::placeholders::_1), [this]() {});
-}
-
-void APlayer::Idle(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("Idle");
-	ArmRenderer->ChangeAnimation("ArmIdle");
-
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-		FSM.ChangeState(PlayerState::RunStart);
-		return;
-	}
-	else if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;
-		FSM.ChangeState(PlayerState::RunStart);
-		return;
-	}
-	if (UEngineInput::IsPress('R'))
-	{
-		FSM.ChangeState(PlayerState::Walking);
-		return;
-	}
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
-		FSM.ChangeState(PlayerState::Jumping);
-		return;
-	}
-	if (false == Collision->IsColliding())
-	{
-		FSM.ChangeState(PlayerState::FallStart);
-		return;
-	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
-		return;
-	}
-}
-
-void APlayer::Walking(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("Walking");
-	ArmRenderer->ChangeAnimation("ArmWalking");
-
-	float WalkVelocity = 100.0f;
-
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-
-		AddRelativeLocation(FVector{ -WalkVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	else if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;
-
-		AddRelativeLocation(FVector{ WalkVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D') &&
-		true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S') &&
-		true == UEngineInput::IsFree('R'))
-	{
-		FSM.ChangeState(PlayerState::Idle);
-		return;
-	}
-}
-
-void APlayer::RunStart(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("RunStart");
-	ArmRenderer->ChangeAnimation("ArmRunStart");
-
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	else if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;
-		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
-		FSM.ChangeState(PlayerState::Jumping);
-		return;
-	}
-	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D') &&
-		true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S'))
-	{
-		FSM.ChangeState(PlayerState::RunStop);
-		return;
-	}
-	if (PlayerRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(PlayerState::Running);
-		return;
-	}
-	if (false == Collision->IsColliding())
-	{
-		FSM.ChangeState(PlayerState::FallStart);
-		return;
-	}
-}
-
-void APlayer::Running(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("Running");
-	ArmRenderer->ChangeAnimation("ArmRunning");
-
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	else if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;		
-		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
-		FSM.ChangeState(PlayerState::Jumping);
-		return;
-	}
-	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D') &&
-		true == UEngineInput::IsFree('W') && true == UEngineInput::IsFree('S'))
-	{
-		FSM.ChangeState(PlayerState::RunStop);
-		return;
-	}
-	if (false == Collision->IsColliding())
-	{
-		FSM.ChangeState(PlayerState::FallStart);
-		return;
-	}
-}
-
-void APlayer::RunStop(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("RunStop");
-	ArmRenderer->ChangeAnimation("ArmRunStop");
-
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-		FSM.ChangeState(PlayerState::RunStart);
-		return;
-	}
-	else if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;
-		FSM.ChangeState(PlayerState::RunStart);
-		return;
-	}
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
-		FSM.ChangeState(PlayerState::Jumping);
-		return;
-	}
-	if (PlayerRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(PlayerState::Idle);
-		return;
-	}
-	if (false == Collision->IsColliding())
-	{
-		FSM.ChangeState(PlayerState::FallStart);
-		return;
-	}
-}
-
-void APlayer::Jumping(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("Jumping");
-	ArmRenderer->ChangeAnimation("ArmJumping");
-
-	if (!bHasSpawnedVfx)
-	{
-		std::shared_ptr<APlayerVfx> Vfx = GetWorld()->SpawnActor<APlayerVfx>();
-		Vfx->InitVfx("Vfx_Jump");
-		Vfx->InitPos(this->GetActorLocation());
-		bHasSpawnedVfx = true;
-	}
-
-	if (true == bCanJump)
-	{
-		bCanJump = false;
-	}
-
-	this->AddActorLocation({ 0.0f, JumpVelocity, 0.0f });
-		
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	else if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;
-		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (PlayerRenderer->IsCurAnimationEnd())
-	{
-		bHasSpawnedVfx = false;
-		FSM.ChangeState(PlayerState::FallStart);
-		return;
-	}
-}
-
-void APlayer::FallStart(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("FallStart");
-	ArmRenderer->ChangeAnimation("ArmFallStart");
-
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;
-		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (PlayerRenderer->IsCurAnimationEnd())
-	{
-		FSM.ChangeState(PlayerState::Falling);
-		return;
-	}
-}
-
-void APlayer::Falling(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("Falling");
-	ArmRenderer->ChangeAnimation("ArmFalling");
-
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	else if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;
-		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-
-	if (Collision->IsColliding())
-	{
-		if (UEngineInput::IsPress('A') || UEngineInput::IsPress('D'))
-		{
-			FSM.ChangeState(PlayerState::Land2Run);
-			return;
-		}
-		else
-		{
-			FSM.ChangeState(PlayerState::Landing);
-			return;
-		}
-	}
-
-}
-
-void APlayer::Landing(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("Landing");
-	ArmRenderer->ChangeAnimation("ArmLanding");
-
-	if (!bHasSpawnedVfx)
-	{
-		std::shared_ptr<APlayerVfx> Vfx = GetWorld()->SpawnActor<APlayerVfx>();
-		Vfx->InitVfx("Vfx_Landing");
-		Vfx->InitPos(this->GetActorLocation());
-		bHasSpawnedVfx = true;
-	}
-
-	bCanJump = true;
-
-	if (UEngineInput::IsPress('A') || UEngineInput::IsPress('D'))
-	{
-		FSM.ChangeState(PlayerState::RunStart);
-		return;
-	}
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
-		FSM.ChangeState(PlayerState::Jumping);
-		return;
-	}
-	if (PlayerRenderer->IsCurAnimationEnd())
-	{  
-		bHasSpawnedVfx = false; 
-		FSM.ChangeState(PlayerState::Idle);
-		return;
-	}
-	if (false == Collision->IsColliding())
-	{
-		FSM.ChangeState(PlayerState::FallStart);
-		return;
-	}
-}
-
-void APlayer::Land2Run(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("Land2Run");
-	ArmRenderer->ChangeAnimation("ArmLand2Run");
-	
-	if (!bHasSpawnedVfx)
-	{
-		std::shared_ptr<APlayerVfx> Vfx = GetWorld()->SpawnActor<APlayerVfx>();
-		Vfx->InitVfx("Vfx_Landing");
-		Vfx->InitPos(this->GetActorLocation());
-		bHasSpawnedVfx = true;
-	}
-
-	bCanJump = true;
-
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-		AddRelativeLocation(FVector{ -MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	else if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;
-		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (UEngineInput::IsDown(VK_SPACE))
-	{
-		bHasSpawnedVfx = false;
-		FSM.ChangeState(PlayerState::Jumping);
-		return;
-	}
-	if (true == UEngineInput::IsFree('A') && true == UEngineInput::IsFree('D'))
-	{
-		bHasSpawnedVfx = false;
-		FSM.ChangeState(PlayerState::RunStop);
-		return;
-	}
-	if (PlayerRenderer->IsCurAnimationEnd())
-	{
-		bHasSpawnedVfx = false;
-		FSM.ChangeState(PlayerState::Running);
-		return;
-	}
-	if (false == Collision->IsColliding())
-	{
-		FSM.ChangeState(PlayerState::FallStart);
-		return;
-	}
-}
-
-void APlayer::Death(float _DeltaTime)
-{
-	PlayerRenderer->ChangeAnimation("Death");
-	ArmRenderer->ChangeAnimation("SNB_Arm_NoImage");
-}
-
-void APlayer::Grab_Flying(float _DeltaTime)
-{
-	ArmRenderer->ChangeAnimation("ArmShoot");
-	GrabRenderer->ChangeAnimation("Grab_Flying");
-
-	float ZDis = GetActorLocation().Z - GetWorld()->GetMainCamera()->GetActorLocation().Z;
-	
-	if (bIsGrabbing == false)
-	{
-
-		FVector CurrentPos = ArmRenderer->GetWorldLocation();
-		FVector TargetWorldPos = AimPos;
-
-		FVector CrossResult = FVector::Cross(FVector(0, 1, 0), TargetWorldPos - CurrentPos);
-		CrossResult.Normalize();
-
-		AimRotZ = FVector::GetVectorAngleDeg(TargetWorldPos - CurrentPos, FVector(0, 1, 0)) * CrossResult.Z;
-
-		GrabLaunchToPosition(TargetWorldPos);
-
-		bIsGrabbing = true;
-	}
-
-	GrabRenderer->SetRotation({ 0.0f, 0.0f, AimRotZ });
-
-	// UEngineDebug::OutPutString(std::to_string(AimRotZ));
-
-	float WalkVelocity = 100.0f;
-
-	if (UEngineInput::IsPress('A'))
-	{
-		bIsRight = false;
-		PlayerRenderer->ChangeAnimation("Walking");
-		AddRelativeLocation(FVector{ -WalkVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	else if (UEngineInput::IsPress('D'))
-	{
-		bIsRight = true;
-		PlayerRenderer->ChangeAnimation("Walking");
-		AddRelativeLocation(FVector{ WalkVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (UEngineInput::IsFree(VK_LBUTTON))
-	{
-		ArmRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
-		ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
-		bIsGrabbing = false;
-
-		FSM.ChangeState(PlayerState::Idle);
-		return;
-	}
-}
-
-void APlayer::Grab_Grabbing(float _DeltaTime)
-{
-
 }

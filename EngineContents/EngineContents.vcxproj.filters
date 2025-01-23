@@ -127,6 +127,9 @@
     <ClCompile Include="Boss.cpp">
       <Filter>Boss</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerStateFunction.cpp">
+      <Filter>Global</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameMode">

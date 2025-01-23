@@ -16,6 +16,7 @@ enum class PlayerState
 	Landing,
 	Land2Run,
 	Death,
+	Damaged,
 	Grab_Flying,
 	Grab_Grabbing,
 };
@@ -56,6 +57,7 @@ public:
 	void AddPlayerRendererLocation(FVector _Loc);
 	
 	void CheckRightDir();
+	void CheckHP();
 
 	void MakeTextBubble(std::string_view _Text, float _Size = 24.0f);
 	void ClearTextBubble();
@@ -64,6 +66,7 @@ public:
 
 	// PlayerFunction
 	void ApplyGravity(float _DeltaTime);
+	void Heal();
 
 	// InitFunction
 	void InitPlayerAnimation();
@@ -81,6 +84,7 @@ public:
 	void Landing(float _DeltaTime);
 	void Land2Run(float _DeltaTime);
 	void Death(float _DeltaTime);
+	void Damaged(float _DeltaTime);
 	void Grab_Flying(float _DeltaTime);
 	void Grab_Grabbing(float _DeltaTime);
 
@@ -115,6 +119,8 @@ private:
 	float MoveVelocity = 300.0f;
 	float JumpVelocity = 3.0f;
 	const float MaxFallSpeed = -5000.0f;
+
+	int HP = 4;
 
 	// Grab
 	FVector AimPos{};

@@ -121,6 +121,7 @@ void UContentsCore::InitResources()
 			LoadFolder("SNB/SNB_SwingJump");
 			LoadFolder("SNB/SNB_SwingJumpUp");
 			LoadFolder("SNB/SNB_Death");
+			LoadFolder("SNB/SNB_Damaged");
 
 			LoadFolder("SNB/SNB_Chain");
 		}
@@ -139,6 +140,7 @@ void UContentsCore::InitResources()
 			LoadFolder("SNB/SNB_Arm_Land2Run");
 			LoadFolder("SNB/SNB_Arm_SwingJump");
 			LoadFolder("SNB/SNB_Arm_SwingJumpUp");
+			LoadFolder("SNB/SNB_Arm_Damaged");
 
 			LoadFolder("SNB/SNB_Arm_Shoot");
 			LoadFolder("SNB/SNB_Arm_Grabbed");
