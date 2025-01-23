@@ -163,7 +163,7 @@ void ABossGameMode::InitScenes()
 	});
 	Scenes.push_back([this]() {
 		Player->MakeTextBubble("그게 무슨 의미지?!");	// zoomIn
-		Player.get()->AddPlayerRendererLocation({ 3.0f, 15.0f, 0.0f });
+		Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
 		Player->SetAnimation("Idle");
 	});
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });

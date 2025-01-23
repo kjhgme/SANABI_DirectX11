@@ -148,7 +148,7 @@ void APlayer::Idle(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -181,7 +181,7 @@ void APlayer::Walking(float _DeltaTime)
 		FSM.ChangeState(PlayerState::Idle);
 		return;
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -224,7 +224,7 @@ void APlayer::RunStart(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -262,7 +262,7 @@ void APlayer::Running(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -301,7 +301,7 @@ void APlayer::RunStop(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -344,7 +344,7 @@ void APlayer::Jumping(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -371,7 +371,7 @@ void APlayer::FallStart(float _DeltaTime)
 		FSM.ChangeState(PlayerState::Falling);
 		return;
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -393,7 +393,7 @@ void APlayer::Falling(float _DeltaTime)
 		bIsRight = true;
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -450,7 +450,7 @@ void APlayer::Landing(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -505,7 +505,7 @@ void APlayer::Land2Run(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsPress(VK_LBUTTON))
+	if (true == UEngineInput::IsDown(VK_LBUTTON))
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
@@ -585,8 +585,8 @@ void APlayer::Grab_Flying(float _DeltaTime)
 
 	if (bIsGrabbing == false)
 	{
-		FVector CurrentPos = ArmRenderer->GetWorldLocation();
-		FVector TargetWorldPos = AimPos;
+		FVector CurrentPos = PlayerRenderer->GetWorldLocation();
+		FVector TargetWorldPos = AimRenderer->GetWorldLocation();
 		CurrentPos.Z = TargetWorldPos.Z;
 
 		FVector CrossResult = FVector::Cross(FVector(0, 1, 0), TargetWorldPos - CurrentPos);
@@ -594,9 +594,7 @@ void APlayer::Grab_Flying(float _DeltaTime)
 
 		AimRotZ = FVector::GetVectorAngleDeg(TargetWorldPos - CurrentPos, FVector(0, 1, 0)) * CrossResult.Z;
 
-		GrabLaunchToPosition(TargetWorldPos);
-
-		int a = 0;
+		GrabLaunchToPosition(TargetWorldPos - GetActorLocation(), CurrentPos);
 
 		bIsGrabbing = true;
 	}

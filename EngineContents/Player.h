@@ -57,15 +57,13 @@ public:
 	void SetSceneMode(bool _Mode);
 
 	void SetAnimation(std::string_view _Anim);
-
-	void AddPlayerRendererLocation(FVector _Loc);
 	
 	void CheckRightDir();
 
 	void MakeTextBubble(std::string_view _Text, float _Size = 24.0f);
 	void ClearTextBubble();
 
-	void GrabLaunchToPosition(FVector _Pos);
+	void GrabLaunchToPosition(const FVector& _TargetPos, const FVector& _CurrentPos);
 
 	// PlayerFunction
 	void ApplyGravity(float _DeltaTime);

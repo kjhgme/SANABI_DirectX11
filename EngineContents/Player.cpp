@@ -28,6 +28,7 @@ APlayer::APlayer()
 	PlayerRenderer->ChangeAnimation("Idle");
 	ArmRenderer->ChangeAnimation("ArmIdle");
 	GrabRenderer->ChangeAnimation("Grab_NoImage");
+	GrabRenderer->ChangeAnimation("Grab_Flying");
 	HpRenderer->ChangeAnimation("HP4_NoImage");
 
 	PlayerRenderer->SetupAttachment(RootComponent);
@@ -92,10 +93,11 @@ void APlayer::Tick(float _DeltaTime)
 	AimPos = PlayerCamera->ScreenMousePosToWorldPosPerspective(ZDis);
 	AimPos += {PlayerCamera->GetActorLocation().X, PlayerCamera->GetActorLocation().Y, 0.0f };
 	AimPos.Y -= 30.0f;
-	AimRenderer->SetRelativeLocation(AimPos);
+	AimRenderer->SetWorldLocation(AimPos);
+
 	// UEngineDebug::OutPutString(AimPos.ToString());
 
-	if (UEngineInput::IsDown(MK_LBUTTON))
+	if (UEngineInput::IsDown(VK_LBUTTON))
 	{
 		// UEngineDebug::OutPutString(AimPos.ToString());
 	}
@@ -166,14 +168,6 @@ void APlayer::SetAnimation(std::string_view _Anim)
 	PlayerRenderer->ChangeAnimation(_Anim);
 }
 
-void APlayer::AddPlayerRendererLocation(FVector _Loc)
-{
-	PlayerRenderer->AddRelativeLocation(_Loc);
-	ArmRenderer->AddRelativeLocation(_Loc);
-	GrabRenderer->AddRelativeLocation(_Loc);
-	Collision->AddRelativeLocation(_Loc);
-}
-
 void APlayer::CheckRightDir()
 {
 	if (false == bIsGrabbing)
@@ -207,24 +201,27 @@ void APlayer::ClearTextBubble()
 	}
 }
 
-void APlayer::GrabLaunchToPosition(FVector _Pos)
+void APlayer::GrabLaunchToPosition(const FVector& _TargetPos, const FVector& _CurrentPos)
 {
-	FVector TargetPosition = _Pos;
+	FVector TargetPos = _TargetPos;
+	FVector CurrentPos = _CurrentPos;
 
-	TimeEventComponent->AddUpdateEvent(0.1f, [this, TargetPosition](float DeltaTime, float CurTime)
-	{
-		auto Lerp = [](FVector A, FVector B, float Alpha)
-		{
-			return A * (1 - Alpha) + B * Alpha;
-		};
+	//TimeEventComponent->AddUpdateEvent(2.0f, [this, TargetPos, CurrentPos](float DeltaTime, float CurTime)
+	//{
+	//	auto Lerp = [](FVector A, FVector B, float Alpha)
+	//	{
+	//		return A * (1 - Alpha) + B * Alpha;
+	//	};
 
-		float Alpha = UEngineMath::Clamp(DeltaTime / 0.1f, 0.0f, 1.0f);
-		FVector NewPosition = Lerp(FVector::ZERO, TargetPosition, Alpha);
+	//	float Alpha = UEngineMath::Clamp(CurTime / 2.0f, 0.0f, 1.0f);
+	//	FVector NewPosition = Lerp(CurrentPos, TargetPos, Alpha);
 
-		this->GetGrabRenderer()->AddRelativeLocation(NewPosition);
-	},
-		false
-	);
+	//	this->GetGrabRenderer()->SetWorldLocation(NewPosition);
+	//},
+	//	false
+	//);
+
+	this->GetGrabRenderer()->SetWorldLocation(CurrentPos);
 }
 
 void APlayer::ApplyGravity(float _DeltaTime)
