@@ -152,7 +152,7 @@ void APlayer::Idle(float _DeltaTime)
 	{
 		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
-	}
+	}	
 }
 
 void APlayer::Walking(float _DeltaTime)
@@ -577,14 +577,14 @@ void APlayer::Damaged(float _DeltaTime)
 }
 
 void APlayer::Grab_Flying(float _DeltaTime)
-{
+{	
 	ArmRenderer->ChangeAnimation("ArmShoot");
 	GrabRenderer->ChangeAnimation("Grab_Flying");
 
-	float ZDis = GetActorLocation().Z - GetWorld()->GetMainCamera()->GetActorLocation().Z;
-
 	if (bIsGrabbing == false)
 	{
+		float ZDis = GetActorLocation().Z - GetWorld()->GetMainCamera()->GetActorLocation().Z;
+
 		FVector CurrentPos = PlayerRenderer->GetWorldLocation();
 		FVector TargetWorldPos = AimRenderer->GetWorldLocation();
 		CurrentPos.Z = TargetWorldPos.Z;
@@ -620,7 +620,7 @@ void APlayer::Grab_Flying(float _DeltaTime)
 		ArmRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
 		ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
 
-		GrabRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
+		GrabRenderer->SetWorldLocation(PlayerRenderer->GetWorldLocation());
 		GrabRenderer->ChangeAnimation("Grab_NoImage");
 		bIsGrabbing = false;
 

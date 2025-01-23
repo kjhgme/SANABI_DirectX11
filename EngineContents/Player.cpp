@@ -217,6 +217,7 @@ void APlayer::GrabLaunchToPosition(const FVector& _TargetPos)
 		FVector NewPosition = Lerp(CurrentPos, TargetPos, Alpha);
 
 		this->GetGrabRenderer()->SetWorldLocation(NewPosition);
+		this->GetGrabRenderer()->AddWorldLocation({ 0.0f, 30.0f, 0.0f });
 	},
 		false
 	);
