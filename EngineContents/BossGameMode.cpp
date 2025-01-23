@@ -97,7 +97,7 @@ void ABossGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
-	UEngineDebug::OutPutString(Player->GetActorLocation().ToString());
+	// UEngineDebug::OutPutString(Player->GetActorLocation().ToString());
 
 	if (false == Player->GetSceneMode())
 	{

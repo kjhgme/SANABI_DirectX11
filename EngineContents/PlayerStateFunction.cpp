@@ -617,12 +617,12 @@ void APlayer::Grab_Flying(float _DeltaTime)
 	}
 	if (UEngineInput::IsFree(VK_LBUTTON))
 	{
+		bIsGrabbing = false;
+
 		ArmRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
 		ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
 
-		GrabRenderer->SetWorldLocation(PlayerRenderer->GetWorldLocation());
 		GrabRenderer->ChangeAnimation("Grab_NoImage");
-		bIsGrabbing = false;
 
 		FSM.ChangeState(PlayerState::Idle);
 		return;

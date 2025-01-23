@@ -48,6 +48,12 @@ public:
 		return GrabRenderer;
 	}
 
+	std::shared_ptr<class UCollision> GetGrabCollision()
+	{
+		return GrabCollision;
+	}
+
+
 	int GetHp() const
 	{
 		return HP;

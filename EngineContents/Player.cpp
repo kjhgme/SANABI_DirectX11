@@ -79,10 +79,20 @@ void APlayer::BeginPlay()
 
 	// GrabCollision
 	GrabCollision = CreateDefaultSubObject<UCollision>();
-	GrabCollision->SetupAttachment(ArmRenderer);
+	GrabCollision->SetupAttachment(GrabRenderer);
 	GrabCollision->SetCollisionProfileName("Grab");
 	GrabCollision->AddRelativeLocation({ 0.0f, 0.8f, 0.0f});
-	GrabCollision->SetScale3D({ 0.8f, 0.3f });
+	GrabCollision->SetScale3D({ 0.3f, 0.3f });
+
+	GrabCollision->SetCollisionEnter([this](UCollision* _This, UCollision* _Other)
+	{
+		UEngineDebug::OutPutString("Enter : " + _Other->GetCollisionProfileName());
+	});
+
+	GrabCollision->SetCollisionEnd([this](UCollision* _This, UCollision* _Other)
+	{
+		UEngineDebug::OutPutString("End : " + _Other->GetCollisionProfileName());
+	});
 }
 
 void APlayer::Tick(float _DeltaTime)
@@ -94,7 +104,7 @@ void APlayer::Tick(float _DeltaTime)
 	AimPos += {PlayerCamera->GetActorLocation().X, PlayerCamera->GetActorLocation().Y, 0.0f };
 	AimPos.Y -= 30.0f;
 	AimRenderer->SetWorldLocation(AimPos);
-
+		
 	// UEngineDebug::OutPutString(AimPos.ToString());
 
 	if (UEngineInput::IsDown(VK_LBUTTON))
