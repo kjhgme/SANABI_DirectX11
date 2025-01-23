@@ -89,7 +89,8 @@ void APlayer::Tick(float _DeltaTime)
 	AActor::Tick(_DeltaTime);
 
 	float ZDis = GetActorLocation().Z - PlayerCamera->GetActorLocation().Z;
-	AimPos = PlayerCamera->ScreenMousePosToWorldPosPerspective(ZDis) + GetActorLocation();
+	AimPos = PlayerCamera->ScreenMousePosToWorldPosPerspective(ZDis);
+	AimPos += {PlayerCamera->GetActorLocation().X, PlayerCamera->GetActorLocation().Y, 0.0f };
 	AimPos.Y -= 30.0f;
 	AimRenderer->SetRelativeLocation(AimPos);
 	// UEngineDebug::OutPutString(AimPos.ToString());
@@ -114,11 +115,13 @@ void APlayer::Tick(float _DeltaTime)
 	if (UEngineInput::IsDown('G'))
 	{
 		FSM.ChangeState(PlayerState::Death);
+		return;
 	}
 	if (UEngineInput::IsDown(VK_F1))
 	{
 		HP -= 1;
 		FSM.ChangeState(PlayerState::Damaged);
+		return;
 	}
 	if (UEngineInput::IsDown(VK_F2))
 	{
@@ -167,7 +170,7 @@ void APlayer::CheckHP()
 {
 	if (HP == 4)
 	{
-		HpRenderer->ChangeAnimation("HP4_4_Mini");
+		// HpRenderer->ChangeAnimation("HP4_4_Mini");
 	}
 	else if (HP == 3)
 	{
@@ -247,7 +250,7 @@ void APlayer::Heal()
 {
 	HP = 4;
 
-	HpRenderer->ChangeAnimation("HP4_Restore");
+	HpRenderer->ChangeAnimation("HP4_4_Restore");
 }
 
 void APlayer::InitPlayerAnimation()

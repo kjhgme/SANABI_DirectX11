@@ -375,7 +375,20 @@ void APlayer::Damaged(float _DeltaTime)
 
 	if (true == PlayerRenderer->IsCurAnimationEnd())
 	{
-		FSM.ChangeState(PlayerState::Idle);
+		if (false == Collision->IsColliding())
+		{
+			FSM.ChangeState(PlayerState::FallStart);
+			return;
+		}
+		else if (true == UEngineInput::IsPress('A') || true == UEngineInput::IsPress('D'))
+		{
+			FSM.ChangeState(PlayerState::RunStart);
+			return;
+		}
+		else {
+			FSM.ChangeState(PlayerState::Idle);
+			return;
+		}
 	}
 }
 

@@ -42,8 +42,16 @@ ABossGameMode::ABossGameMode()
 	GetWorld()->CreateCollisionProfile("Grab");
 	GetWorld()->CreateCollisionProfile("Boss");
 	GetWorld()->CreateCollisionProfile("BossPlatform");
+	GetWorld()->CreateCollisionProfile("BossAttack");
+	GetWorld()->CreateCollisionProfile("FloatingBomb");
+
 	GetWorld()->LinkCollisionProfile("Player", "BossPlatform");
 	GetWorld()->LinkCollisionProfile("Grab", "BossPlatform");
+	GetWorld()->LinkCollisionProfile("Grab", "FloatingBomb");
+	GetWorld()->LinkCollisionProfile("BossAttack", "BossPlatform");
+	GetWorld()->LinkCollisionProfile("BossAttack", "Player");
+	GetWorld()->LinkCollisionProfile("FloatingBomb", "Boss");
+	GetWorld()->LinkCollisionProfile("FloatingBomb", "BossPlatform");
 
 	BackGround = GetWorld()->SpawnActor<ABossBackGround>();
 	
