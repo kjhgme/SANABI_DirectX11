@@ -86,12 +86,16 @@ void APlayer::BeginPlay()
 
 	GrabCollision->SetCollisionEnter([this](UCollision* _This, UCollision* _Other)
 	{
-		UEngineDebug::OutPutString("Enter : " + _Other->GetCollisionProfileName());
+		if ("SNB_GRAB_FLYING" == this->GetGrabRenderer().get()->GetCurSpriteName())
+		{
+			this->FSM.ChangeState(PlayerState::Grab_Grabbing);
+			return;
+		}
 	});
 
 	GrabCollision->SetCollisionEnd([this](UCollision* _This, UCollision* _Other)
 	{
-		UEngineDebug::OutPutString("End : " + _Other->GetCollisionProfileName());
+
 	});
 }
 
