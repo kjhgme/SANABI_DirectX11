@@ -244,6 +244,7 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="BossScenario.cpp" />
     <ClCompile Include="ContentsCore_Resources.cpp" />
     <ClCompile Include="ContentsEditorGUI.cpp" />
     <ClCompile Include="MapMakerMode.cpp" />

@@ -99,19 +99,6 @@ void APlayer::Tick(float _DeltaTime)
 	{
 		// UEngineDebug::OutPutString(AimPos.ToString());
 	}
-	if (false == SceneMode)
-	{
-		FSM.Update(_DeltaTime);
-		ApplyGravity(_DeltaTime);
-		CheckRightDir();
-		CheckHP();
-		AimRenderer->SetSprite("Aim", 0);
-	}
-	else if (true == SceneMode)
-	{
-		HpRenderer->ChangeAnimation("HP4_NoImage");
-		AimRenderer->SetSprite("Aim", 1);
-	}
 	if (UEngineInput::IsDown('G'))
 	{
 		FSM.ChangeState(PlayerState::Death);
@@ -126,6 +113,20 @@ void APlayer::Tick(float _DeltaTime)
 	if (UEngineInput::IsDown(VK_F2))
 	{
 		Heal();
+	}
+
+	if (false == SceneMode)
+	{
+		FSM.Update(_DeltaTime);
+		ApplyGravity(_DeltaTime);
+		CheckRightDir();
+		CheckHP();
+		AimRenderer->SetSprite("Aim", 0);
+	}
+	else if (true == SceneMode)
+	{
+		HpRenderer->ChangeAnimation("HP4_NoImage");
+		AimRenderer->SetSprite("Aim", 1);
 	}
 }
 

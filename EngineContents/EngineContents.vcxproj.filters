@@ -130,6 +130,9 @@
     <ClCompile Include="PlayerStateFunction.cpp">
       <Filter>Global</Filter>
     </ClCompile>
+    <ClCompile Include="BossScenario.cpp">
+      <Filter>Scenario</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameMode">
@@ -158,6 +161,9 @@
     </Filter>
     <Filter Include="HUD">
       <UniqueIdentifier>{cb727549-5f0c-4494-8a6f-b15ec08f66ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenario">
+      <UniqueIdentifier>{085656f3-3fe9-48d6-953e-ecff790e7871}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
