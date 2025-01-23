@@ -47,17 +47,13 @@ public:
 		return GrabRenderer;
 	}
 
-	void SetSceneMode(bool _Mode)
-	{
-		SceneMode = _Mode;
-	}
+	void SetSceneMode(bool _Mode);
 
 	void SetAnimation(std::string_view _Anim);
 
 	void AddPlayerRendererLocation(FVector _Loc);
 	
 	void CheckRightDir();
-	void CheckHP();
 
 	void MakeTextBubble(std::string_view _Text, float _Size = 24.0f);
 	void ClearTextBubble();
@@ -120,7 +116,10 @@ private:
 	float JumpVelocity = 3.0f;
 	const float MaxFallSpeed = -5000.0f;
 
+	// HP
 	int HP = 4;
+	bool bIsInfinity = false;
+	float InfinityTime = 3.0f;
 
 	// Grab
 	FVector AimPos{};
