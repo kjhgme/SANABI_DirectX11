@@ -623,6 +623,7 @@ void APlayer::Grab_Flying(float _DeltaTime)
 		ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
 
 		GrabRenderer->ChangeAnimation("Grab_NoImage");
+		GrabRenderer->SetWorldLocation(PlayerRenderer->GetRelativeLocation());
 
 		FSM.ChangeState(PlayerState::Idle);
 		return;
@@ -631,5 +632,23 @@ void APlayer::Grab_Flying(float _DeltaTime)
 
 void APlayer::Grab_Grabbing(float _DeltaTime)
 {
+	GrabRenderer->SetWorldLocation(GrabbedPos);
+	GrabRenderer->ChangeAnimation("Grab_Grabed");
 
+	// 이해는 안가는데 이게 맞음.
+	GrabRenderer->AddWorldLocation(-(PlayerRenderer->GetWorldLocation()));
+		
+	if (UEngineInput::IsFree(VK_LBUTTON))
+	{
+		bIsGrabbing = false;
+
+		ArmRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
+		ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
+
+		GrabRenderer->ChangeAnimation("Grab_NoImage");
+		GrabRenderer->SetWorldLocation(PlayerRenderer->GetRelativeLocation());
+
+		FSM.ChangeState(PlayerState::Idle);
+		return;
+	}
 }

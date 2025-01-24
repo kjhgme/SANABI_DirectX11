@@ -64,6 +64,8 @@ public:
 
 	void SetAnimation(std::string_view _Anim);
 	
+	void SetGrabbedPos(const FVector& _Pos);
+
 	void CheckRightDir();
 
 	void MakeTextBubble(std::string_view _Text, float _Size = 24.0f);
@@ -134,6 +136,7 @@ private:
 	float HealTime = 0.0f;
 
 	// Grab
+	FVector GrabbedPos;
 	FVector AimPos{};
 	float AimRotZ = 0.0f;
 

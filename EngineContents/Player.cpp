@@ -28,7 +28,6 @@ APlayer::APlayer()
 	PlayerRenderer->ChangeAnimation("Idle");
 	ArmRenderer->ChangeAnimation("ArmIdle");
 	GrabRenderer->ChangeAnimation("Grab_NoImage");
-	GrabRenderer->ChangeAnimation("Grab_Flying");
 	HpRenderer->ChangeAnimation("HP4_NoImage");
 
 	PlayerRenderer->SetupAttachment(RootComponent);
@@ -88,6 +87,13 @@ void APlayer::BeginPlay()
 	{
 		if ("SNB_GRAB_FLYING" == this->GetGrabRenderer().get()->GetCurSpriteName())
 		{
+			UEngineDebug::OutPutString("Grabbbbb");
+
+			FVector temp = this->GetGrabRenderer()->GetWorldLocation();
+			this->GetGrabRenderer()->SetWorldLocation(temp);
+			this->SetGrabbedPos(temp);
+			UEngineDebug::OutPutString("temp : " + temp.ToString());
+			UEngineDebug::OutPutString("GrabedPos : " + this->GetGrabRenderer().get()->GetWorldLocation().ToString());
 			this->FSM.ChangeState(PlayerState::Grab_Grabbing);
 			return;
 		}
@@ -109,8 +115,6 @@ void APlayer::Tick(float _DeltaTime)
 	AimPos.Y -= 30.0f;
 	AimRenderer->SetWorldLocation(AimPos);
 		
-	// UEngineDebug::OutPutString(AimPos.ToString());
-
 	if (UEngineInput::IsDown(VK_LBUTTON))
 	{
 		// UEngineDebug::OutPutString(AimPos.ToString());
@@ -182,6 +186,11 @@ void APlayer::SetAnimation(std::string_view _Anim)
 	PlayerRenderer->ChangeAnimation(_Anim);
 }
 
+void APlayer::SetGrabbedPos(const FVector& _Pos)
+{
+	GrabbedPos = _Pos;
+}
+
 void APlayer::CheckRightDir()
 {
 	if (false == bIsGrabbing)
@@ -227,7 +236,7 @@ void APlayer::GrabLaunchToPosition(const FVector& _TargetPos)
 			return A * (1 - Alpha) + B * Alpha;
 		};
 
-		float Alpha = UEngineMath::Clamp(CurTime / 0.1f, 0.0f, 1.0f);
+		float Alpha = UEngineMath::Clamp(CurTime / 0.12f, 0.0f, 1.0f);
 		FVector NewPosition = Lerp(CurrentPos, TargetPos, Alpha);
 
 		this->GetGrabRenderer()->SetWorldLocation(NewPosition);
