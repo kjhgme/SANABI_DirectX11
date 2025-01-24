@@ -16,18 +16,13 @@ public:
 
 	void Tick(float _DeltaTime) override;
 
-	std::shared_ptr<class APlayer> GetPlayer() const 
-	{
-		return Player;
-	}
-
 	void InitScenes();
 
 protected:
 	void LevelChangeStart() override;
 
 private:
-	std::shared_ptr<class APlayer> Player;
+	class APlayer* Player;
 	std::shared_ptr<class AMari> Mari;
 	std::shared_ptr<class ABoss> Boss;
 	std::vector<std::shared_ptr<class ABossPlatform>> Platforms;

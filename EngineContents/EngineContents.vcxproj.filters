@@ -63,6 +63,12 @@
     <ClInclude Include="Boss.h">
       <Filter>Boss</Filter>
     </ClInclude>
+    <ClInclude Include="BodySlap.h">
+      <Filter>Boss\BossAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="BossAttack.h">
+      <Filter>Boss\BossAttack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -133,6 +139,12 @@
     <ClCompile Include="BossScenario.cpp">
       <Filter>Scenario</Filter>
     </ClCompile>
+    <ClCompile Include="BodySlap.cpp">
+      <Filter>Boss\BossAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="BossAttack.cpp">
+      <Filter>Boss\BossAttack</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameMode">
@@ -164,6 +176,9 @@
     </Filter>
     <Filter Include="Scenario">
       <UniqueIdentifier>{085656f3-3fe9-48d6-953e-ecff790e7871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Boss\BossAttack">
+      <UniqueIdentifier>{c3548cd7-54a8-4a3a-bdb8-bb2bbbbb724f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

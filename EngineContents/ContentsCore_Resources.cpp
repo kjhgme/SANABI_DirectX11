@@ -93,7 +93,13 @@ void UContentsCore::InitResources()
 			LoadFolder("BOSS/BossPlatform/BossPlatform_A_Idle");
 			LoadFolder("BOSS/BossPlatform/BossPlatform_A_BoosterLoop");
 		}
+		// Attack
+		{
+			LoadFolder("BOSS/BossAttack/BossAttack_BodySlap");
+			LoadFolder("BOSS/BossAttack/BossAttack_NoImage");
+		}
 	}
+
 	// Ending
 	{
 		LoadFolder("Ending/BadEnding");

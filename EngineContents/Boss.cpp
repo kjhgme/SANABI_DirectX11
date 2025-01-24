@@ -5,11 +5,16 @@
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/TimeEventComponent.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/CameraActor.h>
 #include <EngineCore/Collision.h>
+
+#include <EnginePlatform/EngineInput.h>
+#include "BossAttack.h"
+#include "BodySlap.h"
 
 ABoss::ABoss()
 {
-	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
+	Default = CreateDefaultSubObject<UDefaultSceneComponent>();
 	RootComponent = Default;
 
 	BossWingRenderer = CreateDefaultSubObject<USpriteRenderer>();
@@ -29,6 +34,7 @@ ABoss::ABoss()
 	BossRenderer->SetAutoScaleRatio(0.2f);
 	BossWingRenderer->SetAutoScaleRatio(0.2f);
 
+	bIsRight = false;
 	BossRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
 	BossWingRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
 
@@ -48,6 +54,17 @@ void ABoss::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	if (true == bIsRight)
+	{
+		BossRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+		BossWingRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+	}
+	else if (false == bIsRight)
+	{
+		BossRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+		BossWingRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+	}
+
 	if (State == 0)
 	{
 	}
@@ -60,33 +77,42 @@ void ABoss::Tick(float _DeltaTime)
 	{
 		int a = 0;
 	}
+
+	if (UEngineInput::IsDown('1'))
+	{
+		SlapAttack();
+	}
 }
 
 void ABoss::InitBossAnimation()
 {
-	BossRenderer->CreateAnimation("Boss_Slap", "Boss_Slap", false);
-	BossRenderer->CreateAnimation("Boss_Body_Idle", "Boss_Body_Idle");
-	BossRenderer->CreateAnimation("Boss_Body_Broken_Idle", "Boss_Body_Broken_Idle");
-
-	BossWingRenderer->CreateAnimation("Boss_Wing_NoImage", "Boss_Wing_NoImage", false);
-	BossWingRenderer->CreateAnimation("Boss_Wing_Neu_Idle", "Boss_Wing_Neu_Idle");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Up1", "Boss_Wing_Up1");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Up2", "Boss_Wing_Up2");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Up3", "Boss_Wing_Up3");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Up4", "Boss_Wing_Up4");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Down1", "Boss_Wing_Down1");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Down2", "Boss_Wing_Down2");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Down3", "Boss_Wing_Down3");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Down4", "Boss_Wing_Down4");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Up1", "Boss_Wing_Broken_Up1");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Up2", "Boss_Wing_Broken_Up2");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Up3", "Boss_Wing_Broken_Up3");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Up4", "Boss_Wing_Broken_Up4");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down1", "Boss_Wing_Broken_Down1");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down2", "Boss_Wing_Broken_Down2");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down3", "Boss_Wing_Broken_Down3");
-	BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down4", "Boss_Wing_Broken_Down4");
-
+	// Body
+	{
+		BossRenderer->CreateAnimation("Boss_Slap", "Boss_Slap", false);
+		BossRenderer->CreateAnimation("Boss_Body_Idle", "Boss_Body_Idle");
+		BossRenderer->CreateAnimation("Boss_Body_Broken_Idle", "Boss_Body_Broken_Idle");
+	}
+	//Wing
+	{
+		BossWingRenderer->CreateAnimation("Boss_Wing_NoImage", "Boss_Wing_NoImage", false);
+		BossWingRenderer->CreateAnimation("Boss_Wing_Neu_Idle", "Boss_Wing_Neu_Idle");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Up1", "Boss_Wing_Up1");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Up2", "Boss_Wing_Up2");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Up3", "Boss_Wing_Up3");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Up4", "Boss_Wing_Up4");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Down1", "Boss_Wing_Down1");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Down2", "Boss_Wing_Down2");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Down3", "Boss_Wing_Down3");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Down4", "Boss_Wing_Down4");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Up1", "Boss_Wing_Broken_Up1");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Up2", "Boss_Wing_Broken_Up2");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Up3", "Boss_Wing_Broken_Up3");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Up4", "Boss_Wing_Broken_Up4");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down1", "Boss_Wing_Broken_Down1");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down2", "Boss_Wing_Broken_Down2");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down3", "Boss_Wing_Broken_Down3");
+		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down4", "Boss_Wing_Broken_Down4");
+	}	
 }
 
 void ABoss::StareAtPlayer()
@@ -210,4 +236,36 @@ void ABoss::StartBattle()
 	},
 		false
 	);
+}
+
+void ABoss::SlapAttack()
+{
+	FVector PlayerPos = GetWorld()->GetMainPawn()->GetActorLocation();
+	
+	UEngineDebug::OutPutString(PlayerPos.ToString());
+
+	if (true == bIsRight)
+	{
+		for (int i = 0; i < 50; ++i)
+		{
+			TimeEventComponent->AddEndEvent(0.05f * i, [this, i, PlayerPos]() {
+				std::shared_ptr<ABossAttack> BodySlapAlert = GetWorld()->SpawnActor<ABodySlap>();
+				BodySlapAlert->SetActorLocation(PlayerPos);
+				BodySlapAlert->AddActorLocation({ i * 35.0f - (35.0f * 15), -176.0f, 5.0f });
+			}
+			, false);
+		}
+	}
+	else if (false == bIsRight)
+	{
+		for (int i = 0; i < 50; ++i)
+		{
+			TimeEventComponent->AddEndEvent(0.05f * i, [this, i, PlayerPos]() {
+				std::shared_ptr<ABossAttack> BodySlapAlert = GetWorld()->SpawnActor<ABodySlap>();
+				BodySlapAlert->SetActorLocation(PlayerPos);
+				BodySlapAlert->AddActorLocation({ -i * 35.0f + (35.0f * 15), -176.0f, 5.0f });
+			}
+			, false);
+		}
+	}
 }

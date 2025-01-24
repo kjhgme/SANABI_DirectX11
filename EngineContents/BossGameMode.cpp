@@ -62,8 +62,6 @@ ABossGameMode::ABossGameMode()
 		Platforms[i].get()->AddRelativeLocation({ 235.0f * (i - 3), -27.0f, 2.0f * i });
 	}
 
-	Player = GetWorld()->SpawnActor<APlayer>();
-	Player->AddActorLocation({ 0.0f, -35.0f, 0.0f });
 	
 	Mari = GetWorld()->SpawnActor<AMari>();
 	Mari->AddActorLocation({ { 30.0f, -28.0f, -2.0f } });
@@ -72,8 +70,7 @@ ABossGameMode::ABossGameMode()
 	MainCamera->SetActorLocation({ 0.0f, 20.0f, -300.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 
-	Boss = GetWorld()->SpawnActor<ABoss>();
-	Boss->SetActorLocation(Player->GetActorLocation());
+
 }
 
 ABossGameMode::~ABossGameMode()
@@ -84,13 +81,19 @@ void ABossGameMode::BeginPlay()
 {
 	AActor::BeginPlay();
 
+	Player = static_cast<APlayer*>(GetWorld()->GetMainPawn());
+	Player->AddActorLocation({ 0.0f, -35.0f, 0.0f });
+
+	Boss = GetWorld()->SpawnActor<ABoss>();
+	Boss->SetActorLocation(Player->GetActorLocation());
+
 	Player->SetAnimation("SNB_Boss_001_TrainOnLoop");
 	Mari->ChangeToNextAnim();
 
-	InitScenes();
+	Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
+	Player->SetSceneMode(false);
 
-	//Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
-	//Player->SetSceneMode(false);
+	InitScenes();
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
