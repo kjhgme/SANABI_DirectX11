@@ -233,7 +233,7 @@ void APlayer::GrabLaunchToPosition(const FVector& _TargetPos)
 			return A * (1 - Alpha) + B * Alpha;
 		};
 
-		float Alpha = UEngineMath::Clamp(CurTime / 0.12f, 0.0f, 1.0f);
+		float Alpha = UEngineMath::Clamp(CurTime / 0.1f, 0.0f, 1.0f);
 		FVector NewPosition = Lerp(CurrentPos, TargetPos, Alpha);
 
 		this->GetGrabRenderer()->SetWorldLocation(NewPosition);

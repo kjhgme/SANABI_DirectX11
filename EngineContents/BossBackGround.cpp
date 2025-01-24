@@ -39,12 +39,12 @@ ABossBackGround::ABossBackGround()
 	BG_Sky_Renderer->SetRelativeLocation({ 0.0f, -830.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 1 });
 	BG_Cloud1_Renderer->SetRelativeLocation({ -830.0f, -100.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 2 });
 	BG_Cloud2_Renderer->SetRelativeLocation({ -830.0f, -100.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 3 });
-	BG_Building1_Renderer->SetRelativeLocation({ -830.0f, -580.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 4 });
+	BG_Building1_Renderer->SetRelativeLocation({ -830.0f, -645.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 4 });
 	BG_Building2_Renderer->SetRelativeLocation({ -830.0f, -700.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 5 });
 
 	BG_Cloud1_Renderer2->SetRelativeLocation({ 830.0f, -100.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 2 });
 	BG_Cloud2_Renderer2->SetRelativeLocation({ 830.0f, -100.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 3 });
-	BG_Building1_Renderer2->SetRelativeLocation({ 830.0f, -580.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 4 });
+	BG_Building1_Renderer2->SetRelativeLocation({ 830.0f, -645.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 4 });
 	BG_Building2_Renderer2->SetRelativeLocation({ 830.0f, -700.0f, static_cast<float>(ERenderOrder::BACKGROUND) - 5 });
 
 	BG_Sky_Renderer->SetupAttachment(RootComponent);

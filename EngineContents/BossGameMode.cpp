@@ -89,8 +89,8 @@ void ABossGameMode::BeginPlay()
 
 	InitScenes();
 
-	Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
-	Player->SetSceneMode(false);
+	//Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
+	//Player->SetSceneMode(false);
 }
 
 void ABossGameMode::Tick(float _DeltaTime)
@@ -103,21 +103,21 @@ void ABossGameMode::Tick(float _DeltaTime)
 	{
 		FVector CameraPos = Player->GetActorLocation();
 
-		if (Player->GetActorLocation().X < -400.0f)
+		if (Player->GetActorLocation().X < -700.0f)
 		{
-			CameraPos.X = -400.0f;
+			CameraPos.X = -700.0f;
 		}
-		if (Player->GetActorLocation().X > 400.0f)
+		if (Player->GetActorLocation().X > 700.0f)
 		{
-			CameraPos.X = 400.0f;
+			CameraPos.X = 700.0f;
 		}
-		if (Player->GetActorLocation().Y < -400.0f)
+		if (Player->GetActorLocation().Y < -300.0f)
 		{
-			CameraPos.Y = -400.0f;
+			CameraPos.Y = -300.0f;
 		}
-		if (Player->GetActorLocation().Y > 400.0f)
+		if (Player->GetActorLocation().Y > 300.0f)
 		{
-			CameraPos.Y = 400.0f;
+			CameraPos.Y = 300.0f;
 		}
 
 		CameraPos.Z = MainCamera->GetActorLocation().Z;
@@ -136,6 +136,10 @@ void ABossGameMode::Tick(float _DeltaTime)
 	{
 		Scenes[SceneTakeNum]();
 		SceneTakeNum++;
+	}
+	if (UEngineInput::IsDown(VK_F4))
+	{
+		MainCamera->GetCameraComponent()->SetRelativeLocation({ 0, 0, -500 });
 	}
 }
 

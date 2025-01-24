@@ -119,7 +119,7 @@ void APlayer::Idle(float _DeltaTime)
 {
 	PlayerRenderer->ChangeAnimation("Idle");
 	ArmRenderer->ChangeAnimation("ArmIdle");
-
+	
 	if (UEngineInput::IsPress('A'))
 	{
 		bIsRight = false;
@@ -553,7 +553,6 @@ void APlayer::Grab_Grabbing(float _DeltaTime)
 	GrabRenderer->SetWorldLocation(GrabbedPos);
 	GrabRenderer->ChangeAnimation("Grab_Grabed");
 
-	// 이해는 안가는데 이게 맞음.
 	GrabRenderer->AddWorldLocation(-(PlayerRenderer->GetWorldLocation()));
 
 	float WalkVelocity = 100.0f;
