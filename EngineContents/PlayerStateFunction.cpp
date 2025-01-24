@@ -111,7 +111,6 @@ void APlayer::InitPlayerState()
 	FSM.CreateState(PlayerState::Land2Run, std::bind(&APlayer::Land2Run, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Death, std::bind(&APlayer::Death, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Damaged, std::bind(&APlayer::Damaged, this, std::placeholders::_1), [this]() {});
-	FSM.CreateState(PlayerState::Grab_Flying, std::bind(&APlayer::Grab_Flying, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Grab_Grabbing, std::bind(&APlayer::Grab_Grabbing, this, std::placeholders::_1), [this]() {});
 }
 
@@ -148,11 +147,6 @@ void APlayer::Idle(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
-		return;
-	}	
 }
 
 void APlayer::Walking(float _DeltaTime)
@@ -179,11 +173,6 @@ void APlayer::Walking(float _DeltaTime)
 		true == UEngineInput::IsFree('R'))
 	{
 		FSM.ChangeState(PlayerState::Idle);
-		return;
-	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
 	}
 }
@@ -224,11 +213,6 @@ void APlayer::RunStart(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
-		return;
-	}
 }
 
 void APlayer::Running(float _DeltaTime)
@@ -261,12 +245,7 @@ void APlayer::Running(float _DeltaTime)
 	{
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
-	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
-		return;
-	}
+	}	
 }
 
 void APlayer::RunStop(float _DeltaTime)
@@ -299,11 +278,6 @@ void APlayer::RunStop(float _DeltaTime)
 	if (false == Collision->IsColliding())
 	{
 		FSM.ChangeState(PlayerState::FallStart);
-		return;
-	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
 	}
 }
@@ -344,11 +318,6 @@ void APlayer::Jumping(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
-		return;
-	}
 }
 
 void APlayer::FallStart(float _DeltaTime)
@@ -371,11 +340,6 @@ void APlayer::FallStart(float _DeltaTime)
 		FSM.ChangeState(PlayerState::Falling);
 		return;
 	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
-		return;
-	}
 }
 
 void APlayer::Falling(float _DeltaTime)
@@ -392,11 +356,6 @@ void APlayer::Falling(float _DeltaTime)
 	{
 		bIsRight = true;
 		AddRelativeLocation(FVector{ MoveVelocity * _DeltaTime, 0.0f, 0.0f });
-	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
-		return;
 	}
 
 	if (Collision->IsColliding())
@@ -450,11 +409,6 @@ void APlayer::Landing(float _DeltaTime)
 		FSM.ChangeState(PlayerState::FallStart);
 		return;
 	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
-		return;
-	}
 }
 
 void APlayer::Land2Run(float _DeltaTime)
@@ -503,11 +457,6 @@ void APlayer::Land2Run(float _DeltaTime)
 	if (false == Collision->IsColliding())
 	{
 		FSM.ChangeState(PlayerState::FallStart);
-		return;
-	}
-	if (true == UEngineInput::IsDown(VK_LBUTTON))
-	{
-		FSM.ChangeState(PlayerState::Grab_Flying);
 		return;
 	}
 }
@@ -577,10 +526,7 @@ void APlayer::Damaged(float _DeltaTime)
 }
 
 void APlayer::Grab_Flying(float _DeltaTime)
-{	
-	ArmRenderer->ChangeAnimation("ArmShoot");
-	GrabRenderer->ChangeAnimation("Grab_Flying");
-
+{
 	if (bIsGrabbing == false)
 	{
 		float ZDis = GetActorLocation().Z - GetWorld()->GetMainCamera()->GetActorLocation().Z;
@@ -600,7 +546,16 @@ void APlayer::Grab_Flying(float _DeltaTime)
 	}
 
 	GrabRenderer->SetRotation({ 0.0f, 0.0f, AimRotZ });
-	
+}
+
+void APlayer::Grab_Grabbing(float _DeltaTime)
+{
+	GrabRenderer->SetWorldLocation(GrabbedPos);
+	GrabRenderer->ChangeAnimation("Grab_Grabed");
+
+	// 이해는 안가는데 이게 맞음.
+	GrabRenderer->AddWorldLocation(-(PlayerRenderer->GetWorldLocation()));
+
 	float WalkVelocity = 100.0f;
 
 	if (UEngineInput::IsPress('A'))
@@ -615,28 +570,6 @@ void APlayer::Grab_Flying(float _DeltaTime)
 		PlayerRenderer->ChangeAnimation("Walking");
 		AddRelativeLocation(FVector{ WalkVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
-	if (UEngineInput::IsFree(VK_LBUTTON))
-	{
-		bIsGrabbing = false;
-
-		ArmRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
-		ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
-
-		GrabRenderer->ChangeAnimation("Grab_NoImage");
-		GrabRenderer->SetWorldLocation(PlayerRenderer->GetRelativeLocation());
-
-		FSM.ChangeState(PlayerState::Idle);
-		return;
-	}
-}
-
-void APlayer::Grab_Grabbing(float _DeltaTime)
-{
-	GrabRenderer->SetWorldLocation(GrabbedPos);
-	GrabRenderer->ChangeAnimation("Grab_Grabed");
-
-	// 이해는 안가는데 이게 맞음.
-	GrabRenderer->AddWorldLocation(-(PlayerRenderer->GetWorldLocation()));
 		
 	if (UEngineInput::IsFree(VK_LBUTTON))
 	{

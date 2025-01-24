@@ -17,7 +17,6 @@ enum class PlayerState
 	Land2Run,
 	Death,
 	Damaged,
-	Grab_Flying,
 	Grab_Grabbing,
 };
 

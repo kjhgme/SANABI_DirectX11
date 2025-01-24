@@ -117,7 +117,7 @@ void ABossGameMode::InitScenes()
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
 		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("아저씨는 ㅁㅁㅁ ㅁㅁㅁㅁ에요.");	// blackRect, shack
+		Mari->MakeTextBubble("아저씨는 ■■■ ■■■■에요.");	// blackRect, shack
 	});
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
@@ -127,7 +127,7 @@ void ABossGameMode::InitScenes()
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
 		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("ㅁㅁㅁㅁ라고요. 아저씨.");	// blackRect, shack
+		Mari->MakeTextBubble("■■■■라고요. 아저씨.");	// blackRect, shack
 	});
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();

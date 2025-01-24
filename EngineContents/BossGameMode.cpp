@@ -90,7 +90,7 @@ void ABossGameMode::BeginPlay()
 	InitScenes();
 
 	Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
-	Player->SetSceneMode(false);	
+	Player->SetSceneMode(false);
 }
 
 void ABossGameMode::Tick(float _DeltaTime)

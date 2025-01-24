@@ -87,13 +87,8 @@ void APlayer::BeginPlay()
 	{
 		if ("SNB_GRAB_FLYING" == this->GetGrabRenderer().get()->GetCurSpriteName())
 		{
-			UEngineDebug::OutPutString("Grabbbbb");
-
 			FVector temp = this->GetGrabRenderer()->GetWorldLocation();
-			this->GetGrabRenderer()->SetWorldLocation(temp);
 			this->SetGrabbedPos(temp);
-			UEngineDebug::OutPutString("temp : " + temp.ToString());
-			UEngineDebug::OutPutString("GrabedPos : " + this->GetGrabRenderer().get()->GetWorldLocation().ToString());
 			this->FSM.ChangeState(PlayerState::Grab_Grabbing);
 			return;
 		}
@@ -117,7 +112,9 @@ void APlayer::Tick(float _DeltaTime)
 		
 	if (UEngineInput::IsDown(VK_LBUTTON))
 	{
-		// UEngineDebug::OutPutString(AimPos.ToString());
+		ArmRenderer->ChangeAnimation("ArmShoot");
+		GrabRenderer->ChangeAnimation("Grab_Flying");
+		Grab_Flying(_DeltaTime);
 	}
 	if (UEngineInput::IsDown('G'))
 	{
@@ -241,6 +238,21 @@ void APlayer::GrabLaunchToPosition(const FVector& _TargetPos)
 
 		this->GetGrabRenderer()->SetWorldLocation(NewPosition);
 		this->GetGrabRenderer()->AddWorldLocation({ 0.0f, 30.0f, 0.0f });
+	},
+		false
+	);
+
+	TimeEventComponent->AddEndEvent(0.1f, [this]() {
+		if (false == this->GetGrabCollision().get()->IsColliding())
+		{
+			bIsGrabbing = false;
+
+			ArmRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
+			ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
+
+			GrabRenderer->ChangeAnimation("Grab_NoImage");
+			GrabRenderer->SetWorldLocation(PlayerRenderer->GetRelativeLocation());
+		}
 	},
 		false
 	);
