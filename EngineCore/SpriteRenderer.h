@@ -77,6 +77,11 @@ public:
 		AutoScaleRatio = _Scale;
 	}
 
+	void SetAlpha(float Alpha)
+	{
+		ColorData.MulColor.W = UEngineMath::Clamp(Alpha, 0.0f, 1.0f);
+	}
+
 	// Function
 	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, bool _Loop = true, float Time = 0.3f);
 	ENGINEAPI void CreateAnimation(std::string_view _AnimationName, std::string_view _SpriteName, int _Start, int _End, float Time = 0.1f, bool _Loop = true);

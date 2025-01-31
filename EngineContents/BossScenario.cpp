@@ -2,6 +2,7 @@
 #include "BossGameMode.h"
 
 #include <EngineCore/CameraActor.h>
+#include <EngineCore/TimeEventComponent.h>
 #include "BossPlatform.h"
 #include "Player.h"
 #include "Mari.h"
@@ -10,11 +11,20 @@
 void ABossGameMode::InitScenes()
 {
 	Scenes.push_back([this]() {
-		Player->MakeTextBubble("그만 해라. 언제까지 불 셈이냐?");
+		MainCamera->Zoom(20.0f, 0.1f);
+
+		TimeEventComponent->AddEndEvent(0.2f, [this]() {
+			this->AGetPlayer()->MakeTextBubble("그만 해라. 언제까지 불 셈이냐?");
+			},
+			false);
+
+		TimeEventComponent->AddEndEvent(1.5f, [this]() {
+			this->GetMari()->ChangeToNextAnim();
+			},
+			false);
 	});
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
-		Mari->ChangeToNextAnim();
 	});
 	Scenes.push_back([this]() {
 		Player->MakeTextBubble("금마리.");

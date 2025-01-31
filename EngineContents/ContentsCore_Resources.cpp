@@ -108,6 +108,7 @@ void UContentsCore::InitResources()
 	{
 		LoadFolder("BackGround/PRLG_BG");
 		LoadFolder("BackGround/BOSS_BG");
+		LoadFolder("BackGround/FADE");
 	}
 	// SNB
 	{

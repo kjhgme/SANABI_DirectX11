@@ -52,7 +52,6 @@ public:
 		return GrabCollision;
 	}
 
-
 	int GetHp() const
 	{
 		return HP;
@@ -67,10 +66,20 @@ public:
 
 	void CheckRightDir();
 
-	void MakeTextBubble(std::string_view _Text, float _Size = 24.0f);
+	void MakeTextBubble(std::string_view _Text, float _Y = -2.0f, float _Size = 20.0f);
 	void ClearTextBubble();
 
 	void GrabLaunchToPosition(const FVector& _TargetPos);
+
+	void FadeIn()
+	{
+		bIsFadeIn = true;
+	}
+
+	void FadeOut()
+	{
+		bIsFadeIn = false;
+	}
 
 	// PlayerFunction
 	void ApplyGravity(float _DeltaTime);
@@ -106,6 +115,7 @@ private:
 	std::shared_ptr<class USpriteRenderer> GrabRenderer;
 	std::shared_ptr<class USpriteRenderer> AimRenderer;
 	std::shared_ptr<class USpriteRenderer> HpRenderer;
+	std::shared_ptr<class USpriteRenderer> FadeRenderer;
 
 	std::shared_ptr<class UCollision> Collision;
 	std::shared_ptr<class UCollision> GrabCollision;
@@ -127,6 +137,10 @@ private:
 	float MoveVelocity = 300.0f;
 	float JumpVelocity = 3.0f;
 	const float MaxFallSpeed = -5000.0f;
+
+	// FADE
+	float FadeValue = 1.0f;
+	bool bIsFadeIn = true;
 
 	// HP
 	int HP = 4;

@@ -21,7 +21,7 @@ public:
 	void MufinOn();
 	void MufinOff();
 
-	void MakeTextBubble(std::string_view _Text, float _Size = 24.0f);
+	void MakeTextBubble(std::string_view _Text, float _X = -2.0f, float _Y = -2.0f, float _Size = 24.0f);
 	void ClearTextBubble();
 
 protected:

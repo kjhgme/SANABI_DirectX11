@@ -5,6 +5,7 @@
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/TimeEventComponent.h>
 #include "Player.h"
 #include "Mari.h"
 #include "Boss.h"
@@ -70,7 +71,7 @@ ABossGameMode::ABossGameMode()
 	MainCamera->SetActorLocation({ 0.0f, 20.0f, -300.0f, 1.0f });
 	MainCamera->GetCameraComponent()->SetZSort(0, true);
 
-
+	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 }
 
 ABossGameMode::~ABossGameMode()
@@ -90,8 +91,8 @@ void ABossGameMode::BeginPlay()
 	Player->SetAnimation("SNB_Boss_001_TrainOnLoop");
 	Mari->ChangeToNextAnim();
 
-	Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
-	Player->SetSceneMode(false);
+	//Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
+	//Player->SetSceneMode(false);
 
 	InitScenes();
 }

@@ -11,10 +11,10 @@ ADaughter::~ADaughter()
 {
 }
 
-void ADaughter::MakeTextBubble(std::string_view _Text, float _Size)
+void ADaughter::MakeTextBubble(std::string_view _Text, float _Y, float _Size)
 {
 	DaughterText = GetWorld()->SpawnActor<ATextBubble>();
-	DaughterText->SetText(_Text, _Size);
+	DaughterText->SetText(_Text, _Y, _Size);
 	DaughterText->SetActorLocation(GetActorLocation());
 }
 

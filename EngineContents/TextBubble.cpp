@@ -9,6 +9,7 @@
 #include <EngineCore/FontRenderer.h>
 #include <EngineCore/EngineCore.h>
 #include <EngineCore/FontWidget.h>
+#include <EngineCore/CameraActor.h>
 
 ATextBubble::ATextBubble()
 {
@@ -71,16 +72,17 @@ void ATextBubble::Tick(float _DeltaTime)
 
 }
 
-void ATextBubble::SetText(std::string_view _Text, float _Size)
+void ATextBubble::SetText(std::string_view _Text, float _Y, float _Size, float _X)
 {
-	BubbleLRenderer->AddRelativeLocation({ (- _Size * static_cast<float>(_Text.size()) / 8.0f) / 2.0f - 2.0f, 0.0f, 0.0f});
-	BubbleRRenderer->AddRelativeLocation({ (_Size * static_cast<float>(_Text.size()) / 8.0f) / 2.0f + 3.0f, 0.0f, 0.0f });
-	BubbleMarkerRenderer->AddRelativeLocation({ (_Size * static_cast<float>(_Text.size()) / 8.0f) / 2.0f, -(_Size / 4.0f), 0.0f });
+	BubbleLRenderer->AddRelativeLocation({ (- _Size * _Text.size() / 8.0f) / 2.0f - 2.0f, 0.0f, 0.0f});
+	BubbleRRenderer->AddRelativeLocation({ (_Size * _Text.size() / 8.0f) / 2.0f + 3.0f, 0.0f, 0.0f });
+	BubbleMarkerRenderer->AddRelativeLocation({ (_Size * _Text.size() / 8.0f) / 2.0f, -(_Size / 4.0f), 0.0f });
 	
 	BubbleLRenderer->SetScale3D({ 5.0f, _Size / 2.0f + 2.0f, 1.0f });
-	BubbleMRenderer->SetScale3D({ _Size * static_cast<float>(_Text.size()) / 8.0f + 4.0f, _Size / 2.0f + 2.0f, 1.0f});
+	BubbleMRenderer->SetScale3D({ _Size * _Text.size() / 8.0f + 4.0f, _Size / 2.0f + 2.0f, 1.0f});
 	BubbleRRenderer->SetScale3D({ 5.0f, _Size / 2.0f + 2.0f, 1.0f });
 
 	TextRenderer->SetText(std::string(_Text));
 	TextRenderer->SetSize(_Size);
+	TextRenderer->AddRelativeLocation({ _X, _Y, 0.0f });
 }

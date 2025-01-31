@@ -20,7 +20,8 @@ APlayer::APlayer()
 	PlayerRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	ArmRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	GrabRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	HpRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	HpRenderer = CreateDefaultSubObject<USpriteRenderer>(); 
+	FadeRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	InitPlayerAnimation(); 
 	InitPlayerState();
@@ -29,16 +30,19 @@ APlayer::APlayer()
 	ArmRenderer->ChangeAnimation("ArmIdle");
 	GrabRenderer->ChangeAnimation("Grab_NoImage");
 	HpRenderer->ChangeAnimation("HP4_NoImage");
+	FadeRenderer->SetSprite("FADE", 0);
 
 	PlayerRenderer->SetupAttachment(RootComponent);
 	ArmRenderer->SetupAttachment(RootComponent);
 	GrabRenderer->SetupAttachment(RootComponent);
 	HpRenderer->SetupAttachment(RootComponent);
+	FadeRenderer->SetupAttachment(RootComponent);
 
 	PlayerRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::PLAYER) });
 	ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) });
 	GrabRenderer->AddRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::ARM) - 1 });
 	HpRenderer->AddRelativeLocation({ -30.0f, 40.0f, static_cast<float>(ERenderOrder::UI) + 1 });
+	FadeRenderer->AddRelativeLocation({ 0.0f, -720.0f, static_cast<float>(ERenderOrder::UI) + 2 });
 
 	PlayerCamera = GetWorld()->GetMainCamera();
 
@@ -49,6 +53,8 @@ APlayer::APlayer()
 	AimRenderer->SetAutoScaleRatio(1.0f);
 
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
+
+	FadeValue = 0.0f;
 }
 
 APlayer::~APlayer()
@@ -104,18 +110,22 @@ void APlayer::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	if (bIsFadeIn == true)
+	{
+		FadeValue -= _DeltaTime * 0.2f;
+	}
+	else {
+		FadeValue += _DeltaTime * 0.2f;
+	}
+	FadeValue = UEngineMath::Clamp(FadeValue, 0.0f, 1.0f);
+	FadeRenderer->SetAlpha(FadeValue);
+
 	float ZDis = GetActorLocation().Z - PlayerCamera->GetActorLocation().Z;
 	AimPos = PlayerCamera->ScreenMousePosToWorldPosPerspective(ZDis);
 	AimPos += {PlayerCamera->GetActorLocation().X, PlayerCamera->GetActorLocation().Y, 0.0f };
 	AimPos.Y -= 30.0f;
 	AimRenderer->SetWorldLocation(AimPos);
 		
-	if (UEngineInput::IsDown(VK_LBUTTON))
-	{
-		ArmRenderer->ChangeAnimation("ArmShoot");
-		GrabRenderer->ChangeAnimation("Grab_Flying");
-		Grab_Flying(_DeltaTime);
-	}
 	if (UEngineInput::IsDown('G'))
 	{
 		FSM.ChangeState(PlayerState::Death);
@@ -134,6 +144,13 @@ void APlayer::Tick(float _DeltaTime)
 
 	if (false == SceneMode)
 	{
+		if (UEngineInput::IsDown(VK_LBUTTON))
+		{
+			ArmRenderer->ChangeAnimation("ArmShoot");
+			GrabRenderer->ChangeAnimation("Grab_Flying");
+			Grab_Flying(_DeltaTime);
+		}
+
 		FSM.Update(_DeltaTime);
 		ApplyGravity(_DeltaTime);
 		CheckRightDir();
@@ -177,7 +194,6 @@ void APlayer::SetAnimation(std::string_view _Anim)
 	if (false == ArmRenderer->ChangeAnimation("Arm" + std::string(_Anim)))
 	{
 		ArmRenderer->ChangeAnimation("SNB_Arm_NoImage");
-
 	}
 	
 	PlayerRenderer->ChangeAnimation(_Anim);
@@ -206,10 +222,10 @@ void APlayer::CheckRightDir()
 	}
 }
 
-void APlayer::MakeTextBubble(std::string_view _Text, float _Size)
+void APlayer::MakeTextBubble(std::string_view _Text, float _Y, float _Size)
 {
 	PlayerText = GetWorld()->SpawnActor<ATextBubble>();
-	PlayerText->SetText(_Text, _Size);
+	PlayerText->SetText(_Text, _Y, _Size);
 	PlayerText->SetActorLocation(GetActorLocation() + FVector(0.0f, 5.0f, 0.0f));
 }
 

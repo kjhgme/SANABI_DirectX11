@@ -18,6 +18,16 @@ public:
 
 	void InitScenes();
 
+	std::shared_ptr<class AMari> GetMari()
+	{
+		return Mari;
+	}
+
+	class APlayer* AGetPlayer()
+	{
+		return Player;
+	}
+
 protected:
 	void LevelChangeStart() override;
 
@@ -30,6 +40,8 @@ private:
 	std::shared_ptr<class ACameraActor> MainCamera;
 
 	std::vector<std::function<void()>> Scenes;
+
+	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 
 	int SceneTakeNum = 0;
 	bool bPlayNextAnimation = false;
