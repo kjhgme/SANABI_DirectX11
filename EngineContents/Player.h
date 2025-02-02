@@ -136,7 +136,7 @@ private:
 
 	float MoveVelocity = 300.0f;
 	float JumpVelocity = 3.0f;
-	const float MaxFallSpeed = -5000.0f;
+	const float MaxFallSpeed = -1000.0f;
 
 	// FADE
 	float FadeValue = 1.0f;

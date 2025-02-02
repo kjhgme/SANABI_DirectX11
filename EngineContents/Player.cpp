@@ -281,14 +281,19 @@ void APlayer::ApplyGravity(float _DeltaTime)
 	{
 		if (Collision->IsColliding())
 		{
-			GravityVelocity = 0;
-			Gravity = 0;
+			GravityVelocity = 0.0f;
+			Gravity = 0.0f;
 		}
 		else {
-			Gravity = -98.0f * 2.0f;
+			Gravity = -98.0f * 2.0f;			
+
 			GravityVelocity += Gravity * _DeltaTime;
 			GravityVelocity = UEngineMath::Clamp(GravityVelocity, MaxFallSpeed, 0.0f);
 		}
+	}	
+	if (true == bIsGrabbing)
+	{
+		GravityVelocity -= Gravity * _DeltaTime;
 	}
 
 	this->AddActorLocation({ 0.0f, _DeltaTime * GravityVelocity, 0.0f });

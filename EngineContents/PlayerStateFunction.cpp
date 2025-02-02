@@ -551,10 +551,41 @@ void APlayer::Grab_Flying(float _DeltaTime)
 
 void APlayer::Grab_Grabbing(float _DeltaTime)
 {
+	// GrabRenderer 위치
 	FVector WhyThisPos = GrabbedPos - (PlayerRenderer->GetWorldLocation());
 	GrabRenderer->SetWorldLocation(WhyThisPos);
 	GrabRenderer->ChangeAnimation("Grab_Grabed");
 		
+	// 플레이어와 GrabbedPos 사이 거리
+	FVector PlayerPos = GetActorLocation();
+	FVector ToGrabbedDir = GrabbedPos - PlayerPos;
+	float Distance = ToGrabbedDir.Length();
+
+	// 최대 거리 제한 (300.0f)
+	if (Distance > 300.0f)
+	{
+		FVector ClampedPos = GrabbedPos - ToGrabbedDir.NormalizeReturn() * 300.0f;
+		SetActorLocation(ClampedPos);
+		PlayerPos = ClampedPos;
+	}
+
+	// 진자 느낌. (조건 수정필요)
+	if (GrabbedPos.Y > PlayerPos.Y)
+	{
+		// 진자 운동 계산
+		FVector ToGrabbedDir = (GrabbedPos - PlayerPos).NormalizeReturn();
+		FVector SwingDir = FVector(-ToGrabbedDir.Y, ToGrabbedDir.X, 0.0f); // 수직 방향
+
+		float SwingForce = 0.0f;
+		if (UEngineInput::IsPress('A')) SwingForce = 500.0f;
+		else if (UEngineInput::IsPress('D')) SwingForce = -500.0f;
+
+		PlayerPos += SwingDir * SwingForce * _DeltaTime;
+
+		// 플레이어 위치 업데이트
+		SetActorLocation(PlayerPos);
+	}
+
 	float WalkVelocity = 100.0f;
 
 	if (UEngineInput::IsPress('A'))
@@ -573,6 +604,7 @@ void APlayer::Grab_Grabbing(float _DeltaTime)
 	if (UEngineInput::IsFree(VK_LBUTTON))
 	{
 		bIsGrabbing = false;
+		GravityVelocity = 0.0f;
 	
 		ArmRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
 		ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
