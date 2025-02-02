@@ -131,7 +131,7 @@ private:
 	bool bHasSpawnedVfx = false;
 	bool bIsGrabbing = false;
 
-	float Gravity = -98.0f;
+	float Gravity = -98.0f * 2.0f;
 	float GravityVelocity = 0.0f;
 
 	float MoveVelocity = 300.0f;
@@ -152,6 +152,10 @@ private:
 	FVector GrabbedPos;
 	FVector AimPos{};
 	float AimRotZ = 0.0f;
+
+	// PendulumMove
+	float SwingVelocity = 0.0f;
+	float SwingAngle = 0.0f;
 
 	std::shared_ptr<class AChain>Chain;
 

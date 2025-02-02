@@ -285,7 +285,7 @@ void APlayer::ApplyGravity(float _DeltaTime)
 			Gravity = 0.0f;
 		}
 		else {
-			Gravity = -98.0f * 2.0f;			
+			Gravity = -98.0f * 2.0f;
 
 			GravityVelocity += Gravity * _DeltaTime;
 			GravityVelocity = UEngineMath::Clamp(GravityVelocity, MaxFallSpeed, 0.0f);

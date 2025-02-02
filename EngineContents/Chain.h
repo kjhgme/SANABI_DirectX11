@@ -53,7 +53,7 @@ private:
     float LinkDistance = 1.0f;
 
     // 중력
-    float Gravity = -98.0f;
+    float Gravity = -98.0f * 2.0f;
 
     // 체인의 시작 위치
     FVector StartPosition;
