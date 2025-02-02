@@ -153,6 +153,8 @@ private:
 	FVector AimPos{};
 	float AimRotZ = 0.0f;
 
+	std::shared_ptr<class AChain>Chain;
+
 	UFSMStateManager FSM;
 };
 

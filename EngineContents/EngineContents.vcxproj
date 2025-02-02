@@ -183,6 +183,7 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="Chain.h" />
     <ClInclude Include="ContentsEditorGUI.h" />
     <ClInclude Include="MapMakerMode.h" />
     <ClInclude Include="PlayerVfx.h">
@@ -244,6 +245,7 @@
     <ClInclude Include="TitleLogo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Chain.cpp" />
     <ClCompile Include="BodySlap.cpp">
       <SubType>
       </SubType>

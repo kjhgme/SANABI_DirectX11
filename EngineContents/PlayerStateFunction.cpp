@@ -7,6 +7,7 @@
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/Collision.h>
 #include "PlayerVfx.h"
+#include "Chain.h"
 
 void APlayer::InitPlayerAnimation()
 {
@@ -550,37 +551,53 @@ void APlayer::Grab_Flying(float _DeltaTime)
 
 void APlayer::Grab_Grabbing(float _DeltaTime)
 {
-	GrabRenderer->SetWorldLocation(GrabbedPos);
+	FVector WhyThisPos = GrabbedPos - (PlayerRenderer->GetWorldLocation());
+	GrabRenderer->SetWorldLocation(WhyThisPos);
 	GrabRenderer->ChangeAnimation("Grab_Grabed");
-
-	GrabRenderer->AddWorldLocation(-(PlayerRenderer->GetWorldLocation()));
-
+		
 	float WalkVelocity = 100.0f;
 
 	if (UEngineInput::IsPress('A'))
 	{
 		bIsRight = false;
 		PlayerRenderer->ChangeAnimation("Walking");
-		AddRelativeLocation(FVector{ -WalkVelocity * _DeltaTime, 0.0f, 0.0f });
+		AddActorLocation(FVector{ -WalkVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
 	else if (UEngineInput::IsPress('D'))
 	{
 		bIsRight = true;
 		PlayerRenderer->ChangeAnimation("Walking");
-		AddRelativeLocation(FVector{ WalkVelocity * _DeltaTime, 0.0f, 0.0f });
+		AddActorLocation(FVector{ WalkVelocity * _DeltaTime, 0.0f, 0.0f });
 	}
-		
+	
 	if (UEngineInput::IsFree(VK_LBUTTON))
 	{
 		bIsGrabbing = false;
-
+	
 		ArmRenderer->SetRelativeLocation(PlayerRenderer->GetRelativeLocation());
 		ArmRenderer->AddRelativeLocation({ 0.0f, 0.0f, -1.0f });
-
+	
 		GrabRenderer->ChangeAnimation("Grab_NoImage");
 		GrabRenderer->SetWorldLocation(PlayerRenderer->GetRelativeLocation());
-
+	
+		if (Chain != nullptr)
+		{
+			Chain->Destroy();
+			Chain = nullptr;
+		}
+	
 		FSM.ChangeState(PlayerState::Idle);
 		return;
+	}	
+
+	// Chain 생성 및 연결
+	if (nullptr == Chain)
+	{
+		Chain = GetWorld()->SpawnActor<AChain>();
+		Chain->SetStartPosition(PlayerRenderer->GetWorldLocation());
+		Chain->SetEndPosition(GrabbedPos);
 	}
+
+	// Chain StartPosition 업데이트
+	Chain->SetStartPosition(PlayerRenderer->GetWorldLocation());
 }

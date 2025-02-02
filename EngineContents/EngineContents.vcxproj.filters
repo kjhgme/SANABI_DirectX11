@@ -36,9 +36,6 @@
     <ClInclude Include="BossBackGround.h">
       <Filter>Boss</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Global</Filter>
-    </ClInclude>
     <ClInclude Include="BossPlatform.h">
       <Filter>Boss</Filter>
     </ClInclude>
@@ -46,9 +43,6 @@
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="Daughter.h">
-      <Filter>Global</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerVfx.h">
       <Filter>Global</Filter>
     </ClInclude>
     <ClInclude Include="ContentsEditorGUI.h">
@@ -68,6 +62,15 @@
     </ClInclude>
     <ClInclude Include="BossAttack.h">
       <Filter>Boss\BossAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Chain.h">
+      <Filter>Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerVfx.h">
+      <Filter>Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -103,9 +106,6 @@
     <ClCompile Include="BossBackGround.cpp">
       <Filter>Boss</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
     <ClCompile Include="BossPlatform.cpp">
       <Filter>Boss</Filter>
     </ClCompile>
@@ -113,9 +113,6 @@
       <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="Daughter.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerVfx.cpp">
       <Filter>Global</Filter>
     </ClCompile>
     <ClCompile Include="ContentsEditorGUI.cpp">
@@ -133,9 +130,6 @@
     <ClCompile Include="Boss.cpp">
       <Filter>Boss</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerStateFunction.cpp">
-      <Filter>Global</Filter>
-    </ClCompile>
     <ClCompile Include="BossScenario.cpp">
       <Filter>Scenario</Filter>
     </ClCompile>
@@ -144,6 +138,18 @@
     </ClCompile>
     <ClCompile Include="BossAttack.cpp">
       <Filter>Boss\BossAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Chain.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStateFunction.cpp">
+      <Filter>Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerVfx.cpp">
+      <Filter>Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +185,9 @@
     </Filter>
     <Filter Include="Boss\BossAttack">
       <UniqueIdentifier>{c3548cd7-54a8-4a3a-bdb8-bb2bbbbb724f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Player">
+      <UniqueIdentifier>{2f9b352f-4063-40dc-8291-d269e31993c4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

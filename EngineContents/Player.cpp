@@ -11,6 +11,7 @@
 #include <EngineCore/FontRenderer.h>
 #include "TextBubble.h"
 #include "PlayerVfx.h"
+#include "Chain.h"
 
 APlayer::APlayer()
 {
@@ -93,8 +94,8 @@ void APlayer::BeginPlay()
 	{
 		if ("SNB_GRAB_FLYING" == this->GetGrabRenderer().get()->GetCurSpriteName())
 		{
-			FVector temp = this->GetGrabRenderer()->GetWorldLocation();
-			this->SetGrabbedPos(temp);
+			FVector GrabPos = this->GetGrabRenderer()->GetWorldLocation();
+			this->SetGrabbedPos(GrabPos);
 			this->FSM.ChangeState(PlayerState::Grab_Grabbing);
 			return;
 		}
