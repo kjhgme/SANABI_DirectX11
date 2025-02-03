@@ -46,6 +46,7 @@ private:
 	// Attacks
 	std::shared_ptr<class USpriteRenderer> BossAimRenderer;
 	std::shared_ptr<class USpriteRenderer> BossMachineGunRenderer;
+	std::shared_ptr<class USpriteRenderer> BossBomberRenderer;
 
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 
