@@ -17,7 +17,11 @@ public:
 	void StareAtPlayer();
 	void StartBattle();
 
+	// Attacks
+	void ShootMachineGun();
+	void ShootMissile();
 	void SlapAttack();
+	void DropBomb();
 
 protected:
 	void BeginPlay() override;

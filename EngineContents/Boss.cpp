@@ -76,9 +76,23 @@ void ABoss::Tick(float _DeltaTime)
 		BossWingRenderer->AddRelativeLocation({ -1500.0f * _DeltaTime, 0.0f, 0.0f });
 	}
 
+
+
 	if (UEngineInput::IsDown('1'))
 	{
+		ShootMachineGun();
+	}
+	if (UEngineInput::IsDown('2'))
+	{
+		ShootMissile();
+	}
+	if (UEngineInput::IsDown('3'))
+	{
 		SlapAttack();
+	}
+	if (UEngineInput::IsDown('4'))
+	{
+		DropBomb();
 	}
 }
 
@@ -110,7 +124,7 @@ void ABoss::InitBossAnimation()
 		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down2", "Boss_Wing_Broken_Down2");
 		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down3", "Boss_Wing_Broken_Down3");
 		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down4", "Boss_Wing_Broken_Down4");
-	}	
+	}
 }
 
 void ABoss::StareAtPlayer()
@@ -234,6 +248,11 @@ void ABoss::StartBattle()
 	BossCollision->SetCollisionProfileName("Boss");
 }
 
+void ABoss::ShootMachineGun()
+{
+
+}
+
 void ABoss::SlapAttack()
 {
 	FVector PlayerPos = GetWorld()->GetMainPawn()->GetActorLocation();
@@ -303,4 +322,14 @@ void ABoss::SlapAttack()
 			});
 		});
 	}
+}
+
+void ABoss::ShootMissile()
+{
+
+}
+
+void ABoss::DropBomb()
+{
+
 }

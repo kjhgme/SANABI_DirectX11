@@ -95,8 +95,18 @@ void UContentsCore::InitResources()
 		}
 		// Attack
 		{
+			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun");
 			LoadFolder("BOSS/BossAttack/BossAttack_BodySlap");
 			LoadFolder("BOSS/BossAttack/BossAttack_NoImage");
+		}
+		// Aim
+		{
+			LoadFolder("BOSS/Boss_Aim/Cluster_Aim");
+			LoadFolder("BOSS/Boss_Aim/Cluster_Appear");
+			LoadFolder("BOSS/Boss_Aim/Cluster_Shoot");
+			LoadFolder("BOSS/Boss_Aim/Incendiary_Aim");
+			LoadFolder("BOSS/Boss_Aim/Incendiary_Appear");
+			LoadFolder("BOSS/Boss_Aim/Incendiary_AttackLoop");
 		}
 	}
 
