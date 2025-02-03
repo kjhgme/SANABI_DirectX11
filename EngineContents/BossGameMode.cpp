@@ -51,11 +51,17 @@ ABossGameMode::ABossGameMode()
 	GetWorld()->LinkCollisionProfile("Player", "PlatformWall");
 	GetWorld()->LinkCollisionProfile("Player", "BossAttack");
 	GetWorld()->LinkCollisionProfile("Player", "Boss");
+
 	GetWorld()->LinkCollisionProfile("Grab", "BossPlatform");
 	GetWorld()->LinkCollisionProfile("Grab", "PlatformWall");
 	GetWorld()->LinkCollisionProfile("Grab", "FloatingBomb");
+
+	GetWorld()->LinkCollisionProfile("BossAttack", "Player");
+	GetWorld()->LinkCollisionProfile("BossAttack", "PlatformWall");
+
 	GetWorld()->LinkCollisionProfile("FloatingBomb", "Boss");
 	GetWorld()->LinkCollisionProfile("FloatingBomb", "PlatformWall");
+
 	GetWorld()->LinkCollisionProfile("PlatformWall", "BossAttack");
 
 	BackGround = GetWorld()->SpawnActor<ABossBackGround>();
@@ -95,9 +101,10 @@ void ABossGameMode::BeginPlay()
 	Player->SetAnimation("SNB_Boss_001_TrainOnLoop");
 	Mari->ChangeToNextAnim();
 
+	// Scene 
 	{
-		// Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
-		// Player->SetSceneMode(false);
+		Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
+		Player->SetSceneMode(false);
 	}
 
 	InitScenes();

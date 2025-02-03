@@ -64,6 +64,7 @@ public:
 	
 	void SetGrabbedPos(const FVector& _Pos);
 
+	// Function
 	void CheckRightDir();
 
 	void MakeTextBubble(std::string_view _Text, float _Y = -2.0f, float _Size = 20.0f);
@@ -80,6 +81,8 @@ public:
 	{
 		bIsFadeIn = false;
 	}
+
+	void TakeDamage();
 
 	// PlayerFunction
 	void ApplyGravity(float _DeltaTime);

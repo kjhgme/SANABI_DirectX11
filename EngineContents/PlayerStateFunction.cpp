@@ -473,11 +473,12 @@ void APlayer::Death(float _DeltaTime)
 
 void APlayer::Damaged(float _DeltaTime)
 {
-	PlayerRenderer->ChangeAnimation("Damaged");
-	ArmRenderer->ChangeAnimation("ArmDamaged");
-
 	if (false == bIsInfinity)
 	{
+		PlayerRenderer->ChangeAnimation("Damaged");
+		ArmRenderer->ChangeAnimation("ArmDamaged");
+
+		HP -= 1;
 		if (HP == 3)
 		{
 			HpRenderer->ChangeAnimation("HP4_3_Damaged");

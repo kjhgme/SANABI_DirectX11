@@ -14,9 +14,15 @@ public:
 
 	void InitBossAttackAnimation();
 
-	void SetAnimation(std::string_view _Anim);
+	void SetAttack(std::string_view _Anim);
+
+	std::shared_ptr<class USpriteRenderer> GetBossAttackRenderer()
+	{
+		return BossAttackRenderer;
+	}
 
 protected:
+	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
 
 private:

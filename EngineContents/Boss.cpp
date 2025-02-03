@@ -336,7 +336,7 @@ void ABoss::ShootMachineGun()
 			static float AttackTimer = 0.0f;
 			AttackTimer += _DeltaTime;
 
-			if (AttackTimer >= 0.2f)
+			if (AttackTimer >= 0.3f)
 			{
 				static float Z = 0.0f;
 
@@ -344,11 +344,11 @@ void ABoss::ShootMachineGun()
 				GunAttack->SetActorLocation(AimNewPos);
 				GunAttack->AddActorLocation({ 0.0f, -90.0f, Z });
 
-				GunAttack->SetAnimation("BossAttack_ShootExplode");
+				GunAttack->SetAttack("BossAttack_ShootExplode");
 
 				Z += 0.1f;
 
-				AttackTimer -= 0.2f;
+				AttackTimer -= 0.3f;
 			}
 		}
 	});
@@ -467,5 +467,30 @@ void ABoss::DropBomb()
 		NewPos.X = UEngineMath::Lerp(CurrentPos.X, PlayerPos.X, _DeltaTime);
 
 		SetActorLocation(NewPos);
+
+		if (this->GetBossBomberRenderer().get()->IsCurAnimationEnd() && "BOSS_BOMBER_OPENING" == this->GetBossBomberRenderer().get()->GetCurSpriteName())
+		{
+			this->GetBossBomberRenderer()->ChangeAnimation("Boss_Bomber_OpenedLoop");
+		}
+
+		if (NewPos.Y >= TargetY) 
+		{
+			static float BombTimer = 0.0f;
+			BombTimer += _DeltaTime;
+
+			if (BombTimer >= 1.0f) // 1√ ∏∂¥Ÿ ∆¯≈∫ ≈ı«œ
+			{
+				std::shared_ptr<ABossAttack> BossBomb = GetWorld()->SpawnActor<ABossAttack>();
+				BossBomb->SetActorLocation(GetActorLocation());
+
+				static float Z = 0.0f;
+				BossBomb->AddActorLocation({ 0.0f, -116.0f, Z });
+				Z += 0.1f;
+
+				BossBomb->SetAttack("BossAttack_Bomb_Appear");
+
+				BombTimer -= 1.0f;
+			}
+		}
 	});
 }

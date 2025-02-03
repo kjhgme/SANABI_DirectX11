@@ -22,6 +22,11 @@ public:
 		return BossMachineGunRenderer;
 	}
 
+	std::shared_ptr<class USpriteRenderer> GetBossBomberRenderer()
+	{
+		return BossBomberRenderer;
+	}
+
 	void StareAtPlayer();
 	void StartBattle();
 

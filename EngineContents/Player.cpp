@@ -87,15 +87,12 @@ void APlayer::BeginPlay()
 			}
 			GrabRenderer->ChangeAnimation("Grab_NoImage");
 
-
-			HP -= 1;
  			this->FSM.ChangeState(PlayerState::Damaged);
 			return;
 		}
 
-		if (_Other->GetCollisionProfileName() == "BOSSATTCK")
+		if (_Other->GetCollisionProfileName() == "BOSSATTACK")
 		{
-			HP -= 1;
 			this->FSM.ChangeState(PlayerState::Damaged);
 			return;
 		}
@@ -157,7 +154,6 @@ void APlayer::Tick(float _DeltaTime)
 	}
 	if (UEngineInput::IsDown(VK_F1))
 	{
-		HP -= 1;
 		FSM.ChangeState(PlayerState::Damaged);
 		return;
 	}
@@ -296,6 +292,12 @@ void APlayer::GrabLaunchToPosition(const FVector& _TargetPos)
 	},
 		false
 	);
+}
+
+void APlayer::TakeDamage()
+{
+	FSM.ChangeState(PlayerState::Damaged);
+	return;
 }
 
 void APlayer::ApplyGravity(float _DeltaTime)
