@@ -26,17 +26,22 @@ ABossPlatform::ABossPlatform()
 	PlatformBoxRenderer->SetupAttachment(RootComponent);
 	PlatformBoosterRenderer->SetupAttachment(RootComponent);
 
-	Collision = CreateDefaultSubObject<UCollision>();
-	Collision->SetupAttachment(RootComponent);
-	Collision->SetCollisionProfileName("BossPlatform");
-	Collision->SetRelativeLocation({ { 0.0f, -48.0f, 0.0f } });
-	Collision->SetScale3D({ 255.0f, 116.0f });
+	PlatformCollision = CreateDefaultSubObject<UCollision>();
+	PlatformCollision->SetupAttachment(RootComponent);
+	PlatformCollision->SetCollisionProfileName("BossPlatform");
+	PlatformCollision->SetWorldLocation({ { 0.0f, 8.0f, 0.0f } });
+	PlatformCollision->SetScale3D({ 255.0f, 5.0f });
+	
+	WallCollision = CreateDefaultSubObject<UCollision>();
+	WallCollision->SetupAttachment(RootComponent);
+	WallCollision->SetCollisionProfileName("PlatformWall");
+	WallCollision->SetWorldLocation({ { 0.0f, -44.0f, 0.0f } });
+	WallCollision->SetScale3D({ 255.0f, 110.0f });
 
-	Collision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
-		{
-			_Other->GetActor()->Destroy();
-			// UEngineDebug::OutPutString("Enter");
-		});
+	WallCollision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
+	{
+		// UEngineDebug::OutPutString("Enter");
+	});
 
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 }

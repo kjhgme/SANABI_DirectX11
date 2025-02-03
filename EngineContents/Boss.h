@@ -27,6 +27,7 @@ private:
 	std::shared_ptr<class UDefaultSceneComponent> Default;
 	std::shared_ptr<class USpriteRenderer> BossRenderer;
 	std::shared_ptr<class USpriteRenderer> BossWingRenderer;
+	std::shared_ptr<class UCollision> BossCollision;
 	std::shared_ptr<class ABossAttack> BossAttack;
 
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;

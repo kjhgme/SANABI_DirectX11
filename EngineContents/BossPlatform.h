@@ -22,6 +22,7 @@ private:
 	std::shared_ptr<class USpriteRenderer> PlatformBoxRenderer;
 	std::shared_ptr<class USpriteRenderer> PlatformBoosterRenderer;
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
-	std::shared_ptr<class UCollision> Collision;
+	std::shared_ptr<class UCollision> PlatformCollision;
+	std::shared_ptr<class UCollision> WallCollision;
 };
 

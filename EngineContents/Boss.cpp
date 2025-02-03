@@ -65,17 +65,10 @@ void ABoss::Tick(float _DeltaTime)
 		BossWingRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
 	}
 
-	if (State == 0)
-	{
-	}
-	else if (State == 1)
+	if (State == 1)
 	{
 		BossRenderer->AddRelativeLocation({ -1500.0f * _DeltaTime, 0.0f, 0.0f });
 		BossWingRenderer->AddRelativeLocation({ -1500.0f * _DeltaTime, 0.0f, 0.0f });
-	}
-	else if (State == 2)
-	{
-		int a = 0;
 	}
 
 	if (UEngineInput::IsDown('1'))
@@ -241,31 +234,68 @@ void ABoss::StartBattle()
 void ABoss::SlapAttack()
 {
 	FVector PlayerPos = GetWorld()->GetMainPawn()->GetActorLocation();
-	
-	UEngineDebug::OutPutString(PlayerPos.ToString());
+
+	BossRenderer->ChangeAnimation("Boss_Slap");
+	BossWingRenderer->ChangeAnimation("Boss_Wing_NoImage");
+	BossRenderer->SetAutoScaleRatio(0.7f);
+	BossWingRenderer->SetAutoScaleRatio(0.7f);
 
 	if (true == bIsRight)
 	{
+		// 경고 Renderer
 		for (int i = 0; i < 50; ++i)
 		{
 			TimeEventComponent->AddEndEvent(0.05f * i, [this, i, PlayerPos]() {
 				std::shared_ptr<ABossAttack> BodySlapAlert = GetWorld()->SpawnActor<ABodySlap>();
 				BodySlapAlert->SetActorLocation(PlayerPos);
 				BodySlapAlert->AddActorLocation({ i * 35.0f - (35.0f * 15), -176.0f, 5.0f });
-			}
-			, false);
+			});
 		}
+
+		// Boss Renderer
+		BossRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+		BossWingRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
+
+		BossRenderer->SetRelativeLocation({ -80.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) });
+		BossWingRenderer->SetRelativeLocation({ -80.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
+		
+		SetActorLocation(PlayerPos);
+		AddActorLocation({ -1000.0f, -220.0f, 0.0f });
+
+		TimeEventComponent->AddEndEvent(0.05 * 25, [this]() {
+			TimeEventComponent->AddUpdateEvent(4.0f, [this](float DeltaTime, float CurTime) {
+				AddActorLocation({ 1500.0f * DeltaTime, 0.0f, 0.0f });
+			});
+		});
 	}
 	else if (false == bIsRight)
 	{
+		// 경고 Renderer
 		for (int i = 0; i < 50; ++i)
 		{
 			TimeEventComponent->AddEndEvent(0.05f * i, [this, i, PlayerPos]() {
 				std::shared_ptr<ABossAttack> BodySlapAlert = GetWorld()->SpawnActor<ABodySlap>();
 				BodySlapAlert->SetActorLocation(PlayerPos);
+				BodySlapAlert->SetActorRotation({ 0.0f, 180.0f, 0.0f });
 				BodySlapAlert->AddActorLocation({ -i * 35.0f + (35.0f * 15), -176.0f, 5.0f });
 			}
 			, false);
 		}
+
+		// Boss Renderer
+		BossRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+		BossWingRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+
+		BossRenderer->SetRelativeLocation({ 80.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) });
+		BossWingRenderer->SetRelativeLocation({ 80.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
+
+		SetActorLocation(PlayerPos);
+		AddActorLocation({ 1000.0f, -220.0f, 0.0f });		
+	
+		TimeEventComponent->AddEndEvent(0.05 * 25, [this]() {
+			TimeEventComponent->AddUpdateEvent(4.0f, [this](float DeltaTime, float CurTime) {
+				AddActorLocation({ -1500.0f * DeltaTime, 0.0f, 0.0f });
+			});
+		});
 	}
 }
