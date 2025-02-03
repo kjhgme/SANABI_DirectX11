@@ -12,6 +12,11 @@ public:
 	ABoss& operator=(const ABoss& _Other) = delete;
 	ABoss& operator=(ABoss&& _Other) noexcept = delete;
 
+	std::shared_ptr<class USpriteRenderer> GetBossAimRenderer()
+	{
+		return BossAimRenderer;
+	}
+	
 	std::shared_ptr<class USpriteRenderer> GetMachineGunRenderer()
 	{
 		return BossMachineGunRenderer;
@@ -40,6 +45,7 @@ private:
 	std::shared_ptr<class ABossAttack> BossAttack;
 
 	// Attacks
+	std::shared_ptr<class USpriteRenderer> BossAimRenderer;
 	std::shared_ptr<class USpriteRenderer> BossMachineGunRenderer;
 
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;

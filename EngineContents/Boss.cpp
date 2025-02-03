@@ -20,18 +20,22 @@ ABoss::ABoss()
 	BossWingRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BossRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BossMachineGunRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BossAimRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	InitBossAnimation();
 
 	BossRenderer->ChangeAnimation("Boss_Slap");
 	BossWingRenderer->ChangeAnimation("Boss_Wing_NoImage");
 	BossMachineGunRenderer->ChangeAnimation("BossAttack_NoImage");
+	BossAimRenderer->ChangeAnimation("BossAttack_NoImage");
 
 	BossRenderer->AddRelativeLocation({ 1800.0f, 100.0f, static_cast<float>(ERenderOrder::BOSS) });
 	BossWingRenderer->AddRelativeLocation({ 1800.0f, 100.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
+	BossAimRenderer->AddRelativeLocation({ 0.0f, 0.0f, -2.0f });
 
 	BossRenderer->SetupAttachment(RootComponent);
 	BossWingRenderer->SetupAttachment(RootComponent);
+	BossMachineGunRenderer->SetupAttachment(RootComponent);
 	
 	BossRenderer->SetAutoScaleRatio(0.2f);
 	BossWingRenderer->SetAutoScaleRatio(0.2f);
@@ -127,6 +131,14 @@ void ABoss::InitBossAnimation()
 	}
 	// Attack
 	{
+		BossAimRenderer->CreateAnimation("BossAttack_NoImage", "BossAttack_NoImage", false);
+		BossAimRenderer->CreateAnimation("Incendiary_Appear", "Incendiary_Appear", false);
+		BossAimRenderer->CreateAnimation("Incendiary_Aim", "Incendiary_Aim", false);
+		BossAimRenderer->CreateAnimation("Incendiary_AttackLoop", "Incendiary_AttackLoop");
+		BossAimRenderer->CreateAnimation("Cluster_Appear", "Cluster_Appear", false);
+		BossAimRenderer->CreateAnimation("Cluster_Aim", "Cluster_Aim", false);
+		BossAimRenderer->CreateAnimation("Cluster_Shoot", "Cluster_Shoot", false);
+
 		BossMachineGunRenderer->CreateAnimation("BossAttack_NoImage", "BossAttack_NoImage", false);
 		BossMachineGunRenderer->CreateAnimation("MachineGun_Appear", "MachineGun_Appear", false, 0.15f);
 		BossMachineGunRenderer->CreateAnimation("MachineGun_ShootEnd", "MachineGun_ShootEnd", false, 0.15f);
@@ -258,27 +270,36 @@ void ABoss::StartBattle()
 
 void ABoss::ShootMachineGun()
 {
-	FVector PlayerPos = GetWorld()->GetMainPawn()->GetActorLocation();
-
 	BossRenderer->SetAutoScaleRatio(1.0f);
 	BossWingRenderer->SetAutoScaleRatio(1.0f);
 
 	BossRenderer->ChangeAnimation("Boss_Body_Idle");
 	BossWingRenderer->ChangeAnimation("Boss_Wing_Neu_Idle");
 	BossMachineGunRenderer->ChangeAnimation("MachineGun_Appear");
+	BossAimRenderer->ChangeAnimation("Incendiary_Appear");
 
 	BossRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) });
 	BossWingRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
-	BossMachineGunRenderer->SetRelativeLocation({ 0.0f, -35.0f, static_cast<float>(ERenderOrder::BOSS) - 1 });
+	BossMachineGunRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) - 1 });
+	BossAimRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) - 2 });
 
 	TimeEventComponent->AddUpdateEvent(10.0f, [this](float _DeltaTime, float _CurTime) {
+		FVector PlayerPos = GetWorld()->GetMainPawn()->GetActorLocation();
+		BossAimRenderer->SetWorldLocation(PlayerPos);
+		SetActorLocation(PlayerPos);
+
+		BossAimRenderer->AddRelativeLocation({ 0.0f, 0.0f, -5.0f });
+
 		if (this->GetMachineGunRenderer().get()->IsCurAnimationEnd())
 		{
-			BossMachineGunRenderer->ChangeAnimation("MachineGun_ShootReadyLoop");
+			this->GetMachineGunRenderer()->ChangeAnimation("MachineGun_ShootReadyLoop");
+		}
+
+		if (this->GetBossAimRenderer().get()->IsCurAnimationEnd())
+		{
+			this->GetBossAimRenderer()->ChangeAnimation("Incendiary_Aim");
 		}
 	});
-
-	SetActorLocation(PlayerPos);
 }
 
 void ABoss::SlapAttack()
