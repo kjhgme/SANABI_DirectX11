@@ -92,6 +92,13 @@ void APlayer::BeginPlay()
  			this->FSM.ChangeState(PlayerState::Damaged);
 			return;
 		}
+
+		if (_Other->GetCollisionProfileName() == "BOSSATTCK")
+		{
+			HP -= 1;
+			this->FSM.ChangeState(PlayerState::Damaged);
+			return;
+		}
 	});
 
 	Collision->SetCollisionEnd([this](UCollision* _This, UCollision* _Other)

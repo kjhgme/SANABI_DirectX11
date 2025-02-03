@@ -329,12 +329,9 @@ void ABoss::ShootMachineGun()
 
 				std::shared_ptr<ABossAttack> GunAttack = GetWorld()->SpawnActor<ABossAttack>();
 				GunAttack->SetActorLocation(AimNewPos);
-				GunAttack->AddActorLocation({ 0.0f, 0.0f, Z });
+				GunAttack->AddActorLocation({ 0.0f, -90.0f, Z });
 
 				GunAttack->SetAnimation("BossAttack_ShootExplode");
-
-				UEngineDebug::OutPutString(this->GetBossAimRenderer()->GetWorldLocation().ToString());
-				UEngineDebug::OutPutString(GunAttack->GetActorLocation().ToString());
 
 				Z += 0.1f;
 

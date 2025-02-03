@@ -49,11 +49,11 @@ ABossGameMode::ABossGameMode()
 
 	GetWorld()->LinkCollisionProfile("Player", "BossPlatform");
 	GetWorld()->LinkCollisionProfile("Player", "PlatformWall");
+	GetWorld()->LinkCollisionProfile("Player", "BossAttack");
 	GetWorld()->LinkCollisionProfile("Player", "Boss");
 	GetWorld()->LinkCollisionProfile("Grab", "BossPlatform");
 	GetWorld()->LinkCollisionProfile("Grab", "PlatformWall");
 	GetWorld()->LinkCollisionProfile("Grab", "FloatingBomb");
-	GetWorld()->LinkCollisionProfile("BossAttack", "Player");
 	GetWorld()->LinkCollisionProfile("FloatingBomb", "Boss");
 	GetWorld()->LinkCollisionProfile("PlatformWall", "BossAttack");
 	GetWorld()->LinkCollisionProfile("PlatformWall", "FloatingBomb");

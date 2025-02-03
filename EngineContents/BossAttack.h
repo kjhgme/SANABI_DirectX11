@@ -21,5 +21,6 @@ protected:
 
 private:
 	std::shared_ptr<class USpriteRenderer> BossAttackRenderer;
+	std::shared_ptr<class UCollision> BossAttackCollision;
 };
 

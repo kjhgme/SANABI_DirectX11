@@ -3,6 +3,7 @@
 
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/SpriteRenderer.h>
+#include <EngineCore/Collision.h>
 
 ABossAttack::ABossAttack()
 {
@@ -15,6 +16,10 @@ ABossAttack::ABossAttack()
 	BossAttackRenderer->ChangeAnimation("BossAttack_NoImage");
 
 	BossAttackRenderer->SetupAttachment(RootComponent);
+
+	BossAttackCollision = CreateDefaultSubObject<UCollision>();
+	BossAttackCollision->SetupAttachment(RootComponent);
+	BossAttackCollision->SetCollisionProfileName("BossAttack");
 }
 
 ABossAttack::~ABossAttack()
@@ -38,6 +43,9 @@ void ABossAttack::InitBossAttackAnimation()
 void ABossAttack::SetAnimation(std::string_view _Anim)
 {
 	BossAttackRenderer->ChangeAnimation(_Anim);
+
+	if("BossAttack_ShootExplode" ==_Anim)
+		BossAttackCollision->SetScale3D({ 50.0f, 50.0f });
 }
 
 void ABossAttack::Tick(float _DeltaTime)
@@ -46,6 +54,6 @@ void ABossAttack::Tick(float _DeltaTime)
 
 	if (BossAttackRenderer->IsCurAnimationEnd())
 	{
-		Destroy();
+		// Destroy();
 	}
 }
