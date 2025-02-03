@@ -12,7 +12,10 @@ public:
 	ABoss& operator=(const ABoss& _Other) = delete;
 	ABoss& operator=(ABoss&& _Other) noexcept = delete;
 
-	int State = 0;
+	std::shared_ptr<class USpriteRenderer> GetMachineGunRenderer()
+	{
+		return BossMachineGunRenderer;
+	}
 
 	void StareAtPlayer();
 	void StartBattle();
@@ -22,6 +25,8 @@ public:
 	void ShootMissile();
 	void SlapAttack();
 	void DropBomb();
+
+	int State = 0;
 
 protected:
 	void BeginPlay() override;
@@ -33,6 +38,9 @@ private:
 	std::shared_ptr<class USpriteRenderer> BossWingRenderer;
 	std::shared_ptr<class UCollision> BossCollision;
 	std::shared_ptr<class ABossAttack> BossAttack;
+
+	// Attacks
+	std::shared_ptr<class USpriteRenderer> BossMachineGunRenderer;
 
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 

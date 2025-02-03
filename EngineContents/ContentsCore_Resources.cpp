@@ -95,7 +95,11 @@ void UContentsCore::InitResources()
 		}
 		// Attack
 		{
-			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun");
+			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_Appear");
+			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_ShootEnd");
+			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_ShootLoop");
+			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_ShootReadyLoop");
+
 			LoadFolder("BOSS/BossAttack/BossAttack_BodySlap");
 			LoadFolder("BOSS/BossAttack/BossAttack_NoImage");
 		}

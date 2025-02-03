@@ -19,11 +19,13 @@ ABoss::ABoss()
 
 	BossWingRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	BossRenderer = CreateDefaultSubObject<USpriteRenderer>();
+	BossMachineGunRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
 	InitBossAnimation();
 
 	BossRenderer->ChangeAnimation("Boss_Slap");
 	BossWingRenderer->ChangeAnimation("Boss_Wing_NoImage");
+	BossMachineGunRenderer->ChangeAnimation("BossAttack_NoImage");
 
 	BossRenderer->AddRelativeLocation({ 1800.0f, 100.0f, static_cast<float>(ERenderOrder::BOSS) });
 	BossWingRenderer->AddRelativeLocation({ 1800.0f, 100.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
@@ -76,8 +78,6 @@ void ABoss::Tick(float _DeltaTime)
 		BossWingRenderer->AddRelativeLocation({ -1500.0f * _DeltaTime, 0.0f, 0.0f });
 	}
 
-
-
 	if (UEngineInput::IsDown('1'))
 	{
 		ShootMachineGun();
@@ -124,6 +124,14 @@ void ABoss::InitBossAnimation()
 		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down2", "Boss_Wing_Broken_Down2");
 		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down3", "Boss_Wing_Broken_Down3");
 		BossWingRenderer->CreateAnimation("Boss_Wing_Broken_Down4", "Boss_Wing_Broken_Down4");
+	}
+	// Attack
+	{
+		BossMachineGunRenderer->CreateAnimation("BossAttack_NoImage", "BossAttack_NoImage", false);
+		BossMachineGunRenderer->CreateAnimation("MachineGun_Appear", "MachineGun_Appear", false, 0.15f);
+		BossMachineGunRenderer->CreateAnimation("MachineGun_ShootEnd", "MachineGun_ShootEnd", false, 0.15f);
+		BossMachineGunRenderer->CreateAnimation("MachineGun_ShootLoop", "MachineGun_ShootLoop", 0.15f);
+		BossMachineGunRenderer->CreateAnimation("MachineGun_ShootReadyLoop", "MachineGun_ShootReadyLoop", 0.15f);
 	}
 }
 
@@ -250,7 +258,27 @@ void ABoss::StartBattle()
 
 void ABoss::ShootMachineGun()
 {
+	FVector PlayerPos = GetWorld()->GetMainPawn()->GetActorLocation();
 
+	BossRenderer->SetAutoScaleRatio(1.0f);
+	BossWingRenderer->SetAutoScaleRatio(1.0f);
+
+	BossRenderer->ChangeAnimation("Boss_Body_Idle");
+	BossWingRenderer->ChangeAnimation("Boss_Wing_Neu_Idle");
+	BossMachineGunRenderer->ChangeAnimation("MachineGun_Appear");
+
+	BossRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) });
+	BossWingRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
+	BossMachineGunRenderer->SetRelativeLocation({ 0.0f, -35.0f, static_cast<float>(ERenderOrder::BOSS) - 1 });
+
+	TimeEventComponent->AddUpdateEvent(10.0f, [this](float _DeltaTime, float _CurTime) {
+		if (this->GetMachineGunRenderer().get()->IsCurAnimationEnd())
+		{
+			BossMachineGunRenderer->ChangeAnimation("MachineGun_ShootReadyLoop");
+		}
+	});
+
+	SetActorLocation(PlayerPos);
 }
 
 void ABoss::SlapAttack()
