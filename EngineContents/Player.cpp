@@ -79,6 +79,15 @@ void APlayer::BeginPlay()
 
 		if (_Other->GetCollisionProfileName() == "BOSS")
 		{
+			// Grabbing ÇØÁ¦
+			if (nullptr != Chain)
+			{
+				Chain->Destroy();
+				Chain = nullptr;
+			}
+			GrabRenderer->ChangeAnimation("Grab_NoImage");
+
+
 			HP -= 1;
  			this->FSM.ChangeState(PlayerState::Damaged);
 			return;
