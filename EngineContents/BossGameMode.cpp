@@ -49,6 +49,7 @@ ABossGameMode::ABossGameMode()
 
 	GetWorld()->LinkCollisionProfile("Player", "BossPlatform");
 	GetWorld()->LinkCollisionProfile("Player", "PlatformWall");
+	GetWorld()->LinkCollisionProfile("Player", "Boss");
 	GetWorld()->LinkCollisionProfile("Grab", "BossPlatform");
 	GetWorld()->LinkCollisionProfile("Grab", "PlatformWall");
 	GetWorld()->LinkCollisionProfile("Grab", "FloatingBomb");

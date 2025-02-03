@@ -38,6 +38,11 @@ ABoss::ABoss()
 	BossRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
 	BossWingRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
 
+	BossCollision = CreateDefaultSubObject<UCollision>();
+	BossCollision->SetupAttachment(RootComponent);
+	BossCollision->SetRelativeLocation({ { 30.0f, 180.0f, static_cast<float>(ERenderOrder::BOSS) } });
+	BossCollision->SetScale3D({ 320.0f, 220.0f });
+
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 }
 
@@ -189,8 +194,8 @@ void ABoss::StartBattle()
 	BossRenderer->SetAutoScaleRatio(1.2f);
 	BossWingRenderer->SetAutoScaleRatio(1.2f);
 
-	BossRenderer->SetRelativeLocation({ 20.0f, -800.0f, 100.0f });
-	BossWingRenderer->SetRelativeLocation({ 20.0f, -800.0f, 101.0f });
+	BossRenderer->SetRelativeLocation({ 20.0f, -800.0f, static_cast<float>(ERenderOrder::BOSS) });
+	BossWingRenderer->SetRelativeLocation({ 20.0f, -800.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
 
 	FVector TargetPosition1 = { 0.0f, 720.0f, 0.0f };
 	FVector TargetPosition2 = { 0.0f, -1000.0f, 0.0f };
@@ -223,12 +228,10 @@ void ABoss::StartBattle()
 			FVector NewPosition = Lerp(FVector::ZERO, TargetPosition2, Alpha);
 
 			AddActorLocation(NewPosition);
-		},
-			false
-		);
-	},
-		false
-	);
+		});
+	});
+	
+	BossCollision->SetCollisionProfileName("Boss");
 }
 
 void ABoss::SlapAttack()
@@ -237,8 +240,11 @@ void ABoss::SlapAttack()
 
 	BossRenderer->ChangeAnimation("Boss_Slap");
 	BossWingRenderer->ChangeAnimation("Boss_Wing_NoImage");
+
 	BossRenderer->SetAutoScaleRatio(0.7f);
 	BossWingRenderer->SetAutoScaleRatio(0.7f);
+
+	BossCollision->SetActive(true);
 
 	if (true == bIsRight)
 	{
@@ -252,13 +258,13 @@ void ABoss::SlapAttack()
 			});
 		}
 
-		// Boss Renderer
+		// Boss 위치.
 		BossRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
 		BossWingRenderer->SetRotation({ 0.0f, 0.0f, 0.0f });
 
-		BossRenderer->SetRelativeLocation({ -80.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) });
-		BossWingRenderer->SetRelativeLocation({ -80.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
-		
+		BossRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) });
+		BossWingRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
+
 		SetActorLocation(PlayerPos);
 		AddActorLocation({ -1000.0f, -220.0f, 0.0f });
 
@@ -278,19 +284,18 @@ void ABoss::SlapAttack()
 				BodySlapAlert->SetActorLocation(PlayerPos);
 				BodySlapAlert->SetActorRotation({ 0.0f, 180.0f, 0.0f });
 				BodySlapAlert->AddActorLocation({ -i * 35.0f + (35.0f * 15), -176.0f, 5.0f });
-			}
-			, false);
+			});
 		}
 
-		// Boss Renderer
+		// Boss 위치
 		BossRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
-		BossWingRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });
+		BossWingRenderer->SetRotation({ 0.0f, 180.0f, 0.0f });	
 
-		BossRenderer->SetRelativeLocation({ 80.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) });
-		BossWingRenderer->SetRelativeLocation({ 80.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
-
+		BossRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) });
+		BossWingRenderer->SetRelativeLocation({ 0.0f, 0.0f, static_cast<float>(ERenderOrder::BOSS) + 1 });
+		
 		SetActorLocation(PlayerPos);
-		AddActorLocation({ 1000.0f, -220.0f, 0.0f });		
+		AddActorLocation({ 1000.0f, -220.0f, 0.0f });
 	
 		TimeEventComponent->AddEndEvent(0.05 * 25, [this]() {
 			TimeEventComponent->AddUpdateEvent(4.0f, [this](float DeltaTime, float CurTime) {

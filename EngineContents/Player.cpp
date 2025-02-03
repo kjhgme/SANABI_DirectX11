@@ -75,7 +75,14 @@ void APlayer::BeginPlay()
 
 	Collision->SetCollisionEnter([this](UCollision* _This, UCollision* _Other)
 	{
-		// UEngineDebug::OutPutString("Enter : " + _Other->GetCollisionProfileName());
+		UEngineDebug::OutPutString("Enter : " + _Other->GetCollisionProfileName());
+
+		if (_Other->GetCollisionProfileName() == "BOSS")
+		{
+			HP -= 1;
+ 			this->FSM.ChangeState(PlayerState::Damaged);
+			return;
+		}
 	});
 
 	Collision->SetCollisionEnd([this](UCollision* _This, UCollision* _Other)
