@@ -95,10 +95,25 @@ void UContentsCore::InitResources()
 		}
 		// Attack
 		{
-			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_Appear");
-			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_ShootEnd");
-			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_ShootLoop");
-			LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_ShootReadyLoop");
+			LoadFolder("BOSS/BossAttack/BossAttack_Bomb_Appear");
+			LoadFolder("BOSS/BossAttack/BossAttack_Bomb_Explode");
+			LoadFolder("BOSS/BossAttack/BossAttack_Bomb_Falling");
+			LoadFolder("BOSS/BossAttack/BossAttack_ClusterBomb_Appear");
+			LoadFolder("BOSS/BossAttack/BossAttack_ClusterBomb_Explode");
+			LoadFolder("BOSS/BossAttack/BossAttack_ClusterBomblet_Explode");
+			LoadFolder("BOSS/BossAttack/BossAttack_ClusterBomblet_Idle");
+			LoadFolder("BOSS/BossAttack/BossAttack_ShootExplode");
+
+			{
+				LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_Appear");
+				LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_ShootEnd");
+				LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_ShootLoop");
+				LoadFolder("BOSS/BossAttack/BossAttack_MachineGun/MachineGun_ShootReadyLoop");
+			}
+
+			LoadFolder("BOSS/Boss_Bomber/Boss_Bomber_OpenedLoop");
+			LoadFolder("BOSS/Boss_Bomber/Boss_Bomber_Opening");
+			LoadFolder("BOSS/Boss_Bomber/Boss_Bomber_Closing");
 
 			LoadFolder("BOSS/BossAttack/BossAttack_BodySlap");
 			LoadFolder("BOSS/BossAttack/BossAttack_NoImage");

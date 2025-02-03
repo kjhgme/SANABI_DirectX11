@@ -42,7 +42,6 @@ private:
 	std::shared_ptr<class USpriteRenderer> BossRenderer;
 	std::shared_ptr<class USpriteRenderer> BossWingRenderer;
 	std::shared_ptr<class UCollision> BossCollision;
-	std::shared_ptr<class ABossAttack> BossAttack;
 
 	// Attacks
 	std::shared_ptr<class USpriteRenderer> BossAimRenderer;

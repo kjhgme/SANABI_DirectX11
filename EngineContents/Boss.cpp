@@ -131,13 +131,13 @@ void ABoss::InitBossAnimation()
 	}
 	// Attack
 	{
-		BossAimRenderer->CreateAnimation("BossAttack_NoImage", "BossAttack_NoImage", false);
-		BossAimRenderer->CreateAnimation("Incendiary_Appear", "Incendiary_Appear", false);
-		BossAimRenderer->CreateAnimation("Incendiary_Aim", "Incendiary_Aim", false);
-		BossAimRenderer->CreateAnimation("Incendiary_AttackLoop", "Incendiary_AttackLoop");
-		BossAimRenderer->CreateAnimation("Cluster_Appear", "Cluster_Appear", false);
-		BossAimRenderer->CreateAnimation("Cluster_Aim", "Cluster_Aim", false);
-		BossAimRenderer->CreateAnimation("Cluster_Shoot", "Cluster_Shoot", false);
+		BossAimRenderer->CreateAnimation("BossAttack_NoImage", "BossAttack_NoImage", false, 0.15f);
+		BossAimRenderer->CreateAnimation("Incendiary_Appear", "Incendiary_Appear", false, 0.15f);
+		BossAimRenderer->CreateAnimation("Incendiary_Aim", "Incendiary_Aim", false, 0.15f);
+		BossAimRenderer->CreateAnimation("Incendiary_AttackLoop", "Incendiary_AttackLoop", 0.15f);
+		BossAimRenderer->CreateAnimation("Cluster_Appear", "Cluster_Appear", false, 0.15f);
+		BossAimRenderer->CreateAnimation("Cluster_Aim", "Cluster_Aim", false, 0.15f);
+		BossAimRenderer->CreateAnimation("Cluster_Shoot", "Cluster_Shoot", false, 0.15f);
 
 		BossMachineGunRenderer->CreateAnimation("BossAttack_NoImage", "BossAttack_NoImage", false);
 		BossMachineGunRenderer->CreateAnimation("MachineGun_Appear", "MachineGun_Appear", false, 0.15f);
@@ -285,20 +285,67 @@ void ABoss::ShootMachineGun()
 
 	TimeEventComponent->AddUpdateEvent(10.0f, [this](float _DeltaTime, float _CurTime) {
 		FVector PlayerPos = GetWorld()->GetMainPawn()->GetActorLocation();
-		BossAimRenderer->SetWorldLocation(PlayerPos);
-		SetActorLocation(PlayerPos);
+
+		FVector AimTargetPos = PlayerPos;
+		FVector AimCurrentPos = BossAimRenderer->GetWorldLocation();
+		FVector AimNewPos = FVector::Lerp(AimCurrentPos, AimTargetPos, _DeltaTime);
+		BossAimRenderer->SetWorldLocation(AimNewPos); 
+		
+		FVector BossTargetPos = AimNewPos;
+		FVector BossCurrentPos = GetActorLocation();
+		FVector BossNewPos = FVector::Lerp(BossCurrentPos, BossTargetPos, 0.5f * _DeltaTime);
+		SetActorLocation(BossNewPos);
 
 		BossAimRenderer->AddRelativeLocation({ 0.0f, 0.0f, -5.0f });
 
-		if (this->GetMachineGunRenderer().get()->IsCurAnimationEnd())
+		if (this->GetMachineGunRenderer().get()->IsCurAnimationEnd() && "MACHINEGUN_APPEAR" == this->GetMachineGunRenderer().get()->GetCurSpriteName())
 		{
 			this->GetMachineGunRenderer()->ChangeAnimation("MachineGun_ShootReadyLoop");
 		}
 
+		// ¾Ö´Ï¸ÞÀÌ¼Ç.
 		if (this->GetBossAimRenderer().get()->IsCurAnimationEnd())
 		{
-			this->GetBossAimRenderer()->ChangeAnimation("Incendiary_Aim");
+			if ("INCENDIARY_APPEAR" == this->GetBossAimRenderer().get()->GetCurSpriteName())
+			{
+				this->GetBossAimRenderer()->ChangeAnimation("Incendiary_Aim");
+			}
+			else if ("INCENDIARY_AIM" == this->GetBossAimRenderer().get()->GetCurSpriteName())
+			{
+				this->GetBossAimRenderer()->ChangeAnimation("Incendiary_AttackLoop");
+				this->GetMachineGunRenderer()->ChangeAnimation("MachineGun_ShootLoop");
+			}
 		}
+
+		// ÃÑ½î±â.
+		if ("INCENDIARY_ATTACKLOOP" == this->GetBossAimRenderer().get()->GetCurSpriteName())
+		{
+			static float AttackTimer = 0.0f;
+			AttackTimer += _DeltaTime;
+
+			if (AttackTimer >= 0.2f)
+			{
+				static float Z = 0.0f;
+
+				std::shared_ptr<ABossAttack> GunAttack = GetWorld()->SpawnActor<ABossAttack>();
+				GunAttack->SetActorLocation(AimNewPos);
+				GunAttack->AddActorLocation({ 0.0f, 0.0f, Z });
+
+				GunAttack->SetAnimation("BossAttack_ShootExplode");
+
+				UEngineDebug::OutPutString(this->GetBossAimRenderer()->GetWorldLocation().ToString());
+				UEngineDebug::OutPutString(GunAttack->GetActorLocation().ToString());
+
+				Z += 0.1f;
+
+				AttackTimer -= 0.2f;
+			}
+		}
+	});
+
+	TimeEventComponent->AddEndEvent(10.0f, [this]() {
+		this->GetBossAimRenderer()->ChangeAnimation("BossAttack_NoImage");
+		this->GetMachineGunRenderer()->ChangeAnimation("MachineGun_ShootReadyLoop");
 	});
 }
 
