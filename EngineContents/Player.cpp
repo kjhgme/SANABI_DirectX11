@@ -117,22 +117,22 @@ void APlayer::BeginPlay()
 
 	GrabCollision->SetCollisionEnter([this](UCollision* _This, UCollision* _Other)
 	{
+		if ("FLOATINGBOMB" == _Other->GetCollisionProfileName())
+		{
+			Bomb = static_cast<ABossFloatingBomb*>(_Other->GetActor());
+
+			Bomb->bControlled = true;
+			bIsGrabbing = true;
+
+			this->FSM.ChangeState(PlayerState::Grab_Bomb);
+			return;
+		}
+
 		if ("SNB_GRAB_FLYING" == this->GetGrabRenderer().get()->GetCurSpriteName())
 		{
 			FVector GrabPos = this->GetGrabRenderer()->GetWorldLocation();
 			this->SetGrabbedPos(GrabPos);
 			this->FSM.ChangeState(PlayerState::Grab_Grabbing);
-			return;
-		}
-
-		if ("FLOATINGBOMB" == _Other->GetCollisionProfileName())
-		{
-			Bomb = static_cast<ABossFloatingBomb *>(_Other->GetActor());
-		
-			Bomb->bControlled = true;
-			bIsGrabbing = true;
-
-			this->FSM.ChangeState(PlayerState::Grab_Bomb);
 			return;
 		}
 	});

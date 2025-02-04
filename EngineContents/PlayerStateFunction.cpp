@@ -659,4 +659,26 @@ void APlayer::Grab_Bomb(float _DeltaTime)
 	BombPos.Y -= 17.0f;
 
 	SetActorLocation(BombPos);
+
+	if (UEngineInput::IsPress('W'))
+	{
+		Bomb->AddActorLocation({ 0.0f, 50.0f * _DeltaTime, 0.0f });
+	}
+	if (UEngineInput::IsPress('A'))
+	{
+		Bomb->AddActorLocation({ -50.0f * _DeltaTime, 0.0f, 0.0f });
+	}
+	if (UEngineInput::IsPress('S'))
+	{
+		Bomb->AddActorLocation({ 0.0f, -50.0f * _DeltaTime, 0.0f });
+	}
+	if (UEngineInput::IsPress('D'))
+	{
+		Bomb->AddActorLocation({ 50.0f * _DeltaTime, 0.0f, 0.0f });
+	}
+
+	if (UEngineInput::IsFree(VK_LBUTTON))
+	{
+		// ³¯¸®±â
+	}
 }
