@@ -12,11 +12,10 @@ ATitleBG::ATitleBG()
 	RootComponent = Default;
 
 	BGRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	BGRenderer->SetSprite("Title", 2);
-	BGRenderer->SetOrder(static_cast<int>(ERenderOrder::BACKGROUND));
+	BGRenderer->SetSprite("Title", 3);
 
-	BGRenderer->SetScale3D({ 1280.0f, 720.0f, 1.0f });
-	BGRenderer->AddRelativeLocation({ 0.0f, -360.0f, 1.0f });
+	BGRenderer->SetAutoScaleRatio(0.42f);
+	BGRenderer->AddRelativeLocation({ 0.0f, -300.0f, 0.0f });
 
 	BGRenderer->SetupAttachment(RootComponent);
 }
