@@ -167,6 +167,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BossFloatingBomb.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="BodySlap.h">
       <SubType>
       </SubType>
@@ -249,6 +253,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BossFloatingBomb.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="BodySlap.cpp">
       <SubType>

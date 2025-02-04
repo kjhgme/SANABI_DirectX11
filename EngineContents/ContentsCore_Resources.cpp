@@ -133,6 +133,17 @@ void UContentsCore::InitResources()
 			LoadFolder("BOSS/Boss_Aim/Incendiary_Appear");
 			LoadFolder("BOSS/Boss_Aim/Incendiary_AttackLoop");
 		}
+		// FloatingBomb
+		{
+			LoadFolder("BOSS/Boss_FloatingBomb/FloatingBomb_Deadparts");
+			LoadFolder("BOSS/Boss_FloatingBomb/FloatingBomb_Excholded_Back");
+			LoadFolder("BOSS/Boss_FloatingBomb/FloatingBomb_Excholded_Front");
+			LoadFolder("BOSS/Boss_FloatingBomb/FloatingBomb_Excholded_Neu");
+			LoadFolder("BOSS/Boss_FloatingBomb/FloatingBomb_ExcholdedStart");
+			LoadFolder("BOSS/Boss_FloatingBomb/FloatingBomb_Idle");
+			LoadFolder("BOSS/Boss_FloatingBomb/FloatingBomb_Knockback");
+			LoadFolder("BOSS/Boss_FloatingBomb/FloatingBomb_Stunned");
+		}
 	}
 
 	// Ending

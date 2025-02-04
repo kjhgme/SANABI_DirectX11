@@ -6,6 +6,8 @@
 #include <EngineCore/TimeEventComponent.h>
 #include <EngineCore/Collision.h>
 
+#include "BossFloatingBomb.h"
+
 ABossPlatform::ABossPlatform()
 {
 	std::shared_ptr<UDefaultSceneComponent> Default = CreateDefaultSubObject<UDefaultSceneComponent>();
@@ -83,6 +85,9 @@ void ABossPlatform::TakeDamage()
 		else if (HP == 0)
 		{
 			PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_Deadparts");
+
+			std::shared_ptr<ABossFloatingBomb> FloatingBomb = GetWorld()->SpawnActor<ABossFloatingBomb>();
+			FloatingBomb->SetActorLocation(GetActorLocation());
 		}
 
 		bIsInfinity = true;
@@ -132,5 +137,10 @@ void ABossPlatform::Tick(float _DeltaTime)
 		{
 			PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_IdleDoubleWarning");			
 		}
+	}
+
+	if (HP <= 0)
+	{
+		AddActorLocation({ 0.0f, -100.0f * _DeltaTime, 0.0f });
 	}
 }

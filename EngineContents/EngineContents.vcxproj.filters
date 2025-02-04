@@ -75,6 +75,9 @@
     <ClInclude Include="TitlePlayer.h">
       <Filter>Title</Filter>
     </ClInclude>
+    <ClInclude Include="BossFloatingBomb.h">
+      <Filter>Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PreCompile.cpp" />
@@ -156,6 +159,9 @@
     </ClCompile>
     <ClCompile Include="TitlePlayer.cpp">
       <Filter>Title</Filter>
+    </ClCompile>
+    <ClCompile Include="BossFloatingBomb.cpp">
+      <Filter>Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -29,11 +29,6 @@ public:
 		{
 			GetWorld()->GetMainCamera()->FreeCameraSwitch();
 		}
-		if (true == ImGui::Button("StartBoss"))
-		{
-			// Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
-			// Player->SetSceneMode(false);	
-		}
 	}
 };
 
@@ -101,8 +96,8 @@ void ABossGameMode::BeginPlay()
 
 	// Scene 
 	{
-		Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
-		Player->SetSceneMode(false);
+		//Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
+		//Player->SetSceneMode(false);
 	}
 
 	InitScenes();
