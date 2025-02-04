@@ -62,8 +62,6 @@ ABossGameMode::ABossGameMode()
 	GetWorld()->LinkCollisionProfile("FloatingBomb", "Boss");
 	GetWorld()->LinkCollisionProfile("FloatingBomb", "PlatformWall");
 
-	GetWorld()->LinkCollisionProfile("PlatformWall", "BossAttack");
-
 	BackGround = GetWorld()->SpawnActor<ABossBackGround>();
 	
 	Platforms.resize(7);

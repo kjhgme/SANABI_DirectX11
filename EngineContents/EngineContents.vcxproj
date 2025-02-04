@@ -243,6 +243,10 @@
     </ClInclude>
     <ClInclude Include="TitleGameMode.h" />
     <ClInclude Include="TitleLogo.h" />
+    <ClInclude Include="TitlePlayer.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chain.cpp" />
@@ -327,6 +331,10 @@
     </ClCompile>
     <ClCompile Include="TitleGameMode.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
+    <ClCompile Include="TitlePlayer.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

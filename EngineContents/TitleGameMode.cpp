@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "TitleGameMode.h"
 
+#include <EnginePlatform/EngineInput.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/SpriteRenderer.h>
 #include "TitleBG.h"
@@ -25,4 +26,8 @@ void ATitleGameMode::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	if (UEngineInput::IsDown(VK_SPACE))
+	{
+		UEngineCore::OpenLevel("BossGameLevel");
+	}
 }

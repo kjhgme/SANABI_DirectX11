@@ -16,6 +16,7 @@
 #include "EndingGameMode.h"
 #include "ContentsEditorGUI.h"
 #include "BossGameHUD.h"
+#include "TitlePlayer.h"
 #include "Player.h"
 
 CreateContentsCoreDefine(UContentsCore);
@@ -43,14 +44,14 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	InitResources();
 
-	UEngineCore::CreateLevel<ATitleGameMode, APawn, AHUD>("TitleLevel");
+	UEngineCore::CreateLevel<ATitleGameMode, ATitlePlayer, AHUD>("TitleLevel");
 	UEngineCore::CreateLevel<AInGameMode, APawn, AHUD>("InGameLevel");
 	UEngineCore::CreateLevel<ABossGameMode, APlayer, ABossGameHUD>("BossGameLevel");
 	UEngineCore::CreateLevel<AEndingGameMode, APawn, AHUD>("EndingGameLevel");
 
 	UEngineCore::CreateLevel<AMapMakerMode, APawn, AHUD>("MapMakerEditor");
 
-	UEngineCore::OpenLevel("BossGameLevel");
+	UEngineCore::OpenLevel("TitleLevel");
 
 	// UEngineGUI::AllWindowOff();
 }

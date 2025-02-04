@@ -5,6 +5,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/Collision.h>
 #include "Player.h"
+#include "BossPlatform.h"
 
 ABossAttack::ABossAttack()
 {
@@ -30,13 +31,13 @@ void ABossAttack::InitBossAttackAnimation()
 {
 	BossAttackRenderer->CreateAnimation("BossAttack_NoImage", "BossAttack_NoImage");
 
-	BossAttackRenderer->CreateAnimation("BossAttack_Bomb_Appear", "BossAttack_Bomb_Appear", false);
-	BossAttackRenderer->CreateAnimation("BossAttack_Bomb_Explode", "BossAttack_Bomb_Explode", false);
-	BossAttackRenderer->CreateAnimation("BossAttack_Bomb_Falling", "BossAttack_Bomb_Falling", true);
-	BossAttackRenderer->CreateAnimation("BossAttack_ClusterBomb_Appear", "BossAttack_ClusterBomb_Appear", false);
-	BossAttackRenderer->CreateAnimation("BossAttack_ClusterBomb_Explode", "BossAttack_ClusterBomb_Explode", false);
-	BossAttackRenderer->CreateAnimation("BossAttack_ClusterBomblet_Explode", "BossAttack_ClusterBomblet_Explode", false);
-	BossAttackRenderer->CreateAnimation("BossAttack_ClusterBomblet_Idle", "BossAttack_ClusterBomblet_Idle", true);
+	BossAttackRenderer->CreateAnimation("BossAttack_Bomb_Appear", "BossAttack_Bomb_Appear", false, 0.15f);
+	BossAttackRenderer->CreateAnimation("BossAttack_Bomb_Explode", "BossAttack_Bomb_Explode", false, 0.15f);
+	BossAttackRenderer->CreateAnimation("BossAttack_Bomb_Falling", "BossAttack_Bomb_Falling", true, 0.15f);
+	BossAttackRenderer->CreateAnimation("BossAttack_ClusterBomb_Appear", "BossAttack_ClusterBomb_Appear", false, 0.15f);
+	BossAttackRenderer->CreateAnimation("BossAttack_ClusterBomb_Explode", "BossAttack_ClusterBomb_Explode", false, 0.15f);
+	BossAttackRenderer->CreateAnimation("BossAttack_ClusterBomblet_Explode", "BossAttack_ClusterBomblet_Explode", false, 0.15f);
+	BossAttackRenderer->CreateAnimation("BossAttack_ClusterBomblet_Idle", "BossAttack_ClusterBomblet_Idle", true, 0.15f);
 	BossAttackRenderer->CreateAnimation("BossAttack_ShootExplode", "BossAttack_ShootExplode", false, 0.15f);
 }
 
@@ -72,6 +73,12 @@ void ABossAttack::BeginPlay()
 				APlayer* Player = static_cast<APlayer*>(GetWorld()->GetMainPawn());
 				Player->TakeDamage();
 			}
+		}
+
+		if (_Other->GetCollisionProfileName() == "PLATFORMWALL")
+		{
+			ABossPlatform* a = static_cast<ABossPlatform*>(_Other->GetActor());
+			a->TakeDamage();
 		}
 		});
 }

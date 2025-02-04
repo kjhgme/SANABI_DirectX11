@@ -53,6 +53,12 @@ public:
 	{
 		return A * (1 - Alpha) + B * Alpha;
 	}
+
+	template <typename DataType>
+	static DataType Abs(DataType value)
+	{
+		return (value < 0) ? -value : value;
+	}
 };
 
 template<typename ValueType>

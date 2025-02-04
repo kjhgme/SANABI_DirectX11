@@ -51,7 +51,7 @@ APlayer::APlayer()
 
 	AimRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	AimRenderer->SetSprite("Aim", 0);
-	AimRenderer->SetAutoScaleRatio(1.0f);
+	AimRenderer->SetAutoScaleRatio(0.5f);
 
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 
@@ -96,6 +96,10 @@ void APlayer::BeginPlay()
 			this->FSM.ChangeState(PlayerState::Damaged);
 			return;
 		}
+	});
+
+	Collision->SetCollisionStay([this](UCollision* _This, UCollision* _Other)
+	{
 	});
 
 	Collision->SetCollisionEnd([this](UCollision* _This, UCollision* _Other)
@@ -144,7 +148,7 @@ void APlayer::Tick(float _DeltaTime)
 	float ZDis = GetActorLocation().Z - PlayerCamera->GetActorLocation().Z;
 	AimPos = PlayerCamera->ScreenMousePosToWorldPosPerspective(ZDis);
 	AimPos += {PlayerCamera->GetActorLocation().X, PlayerCamera->GetActorLocation().Y, 0.0f };
-	AimPos.Y -= 30.0f;
+	AimPos.Y -= 15.0f;
 	AimRenderer->SetWorldLocation(AimPos);
 		
 	if (UEngineInput::IsDown('G'))

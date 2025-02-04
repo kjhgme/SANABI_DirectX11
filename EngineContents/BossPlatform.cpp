@@ -38,11 +38,6 @@ ABossPlatform::ABossPlatform()
 	WallCollision->SetWorldLocation({ { 0.0f, -44.0f, 0.0f } });
 	WallCollision->SetScale3D({ 255.0f, 110.0f });
 
-	WallCollision->SetCollisionEnter([](UCollision* _This, UCollision* _Other)
-	{
-		// UEngineDebug::OutPutString("Enter");
-	});
-
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 }
 
@@ -68,6 +63,11 @@ void ABossPlatform::GoToPlace(FVector _Pos)
 	},	
 		false
 	);
+}
+
+void ABossPlatform::TakeDamage()
+{
+	// Destroy();
 }
 
 void ABossPlatform::BeginPlay()
