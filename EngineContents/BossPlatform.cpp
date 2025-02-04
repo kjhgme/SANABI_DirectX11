@@ -93,6 +93,7 @@ void ABossPlatform::TakeDamage()
 
 			std::shared_ptr<ABossFloatingBomb> FloatingBomb = GetWorld()->SpawnActor<ABossFloatingBomb>();
 			FloatingBomb->SetActorLocation(GetActorLocation());
+			FloatingBomb->AddActorLocation({ 0.0f,0.0f,-5.0f });
 		}
 
 		bIsInfinity = true;

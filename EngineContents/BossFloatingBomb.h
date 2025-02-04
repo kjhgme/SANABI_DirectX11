@@ -17,6 +17,8 @@ public:
 	FVector GetVelocity() const { return Velocity; }
 	void SetVelocity(const FVector& NewVelocity) { Velocity = NewVelocity; }
 
+	bool bControlled = false;
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;

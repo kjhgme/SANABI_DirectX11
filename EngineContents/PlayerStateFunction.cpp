@@ -644,6 +644,8 @@ void APlayer::Grab_Bomb(float _DeltaTime)
 	ArmRenderer->ChangeAnimation("SNB_Arm_NoImage"); 
 	GrabRenderer->ChangeAnimation("Grab_NoImage");
 
+	Gravity = 0.0f;
+	GravityVelocity = 0.0f;
 
 	if (Chain != nullptr)
 	{
@@ -653,6 +655,8 @@ void APlayer::Grab_Bomb(float _DeltaTime)
 
 	BombPos = Bomb->GetActorLocation();
 	BombPos.Z = 0.0f;
-	
+
+	BombPos.Y -= 17.0f;
+
 	SetActorLocation(BombPos);
 }

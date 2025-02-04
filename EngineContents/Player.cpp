@@ -127,9 +127,10 @@ void APlayer::BeginPlay()
 
 		if ("FLOATINGBOMB" == _Other->GetCollisionProfileName())
 		{
-			BombPos = _Other->GetActor()->GetActorLocation();
-
 			Bomb = static_cast<ABossFloatingBomb *>(_Other->GetActor());
+		
+			Bomb->bControlled = true;
+			bIsGrabbing = true;
 
 			this->FSM.ChangeState(PlayerState::Grab_Bomb);
 			return;

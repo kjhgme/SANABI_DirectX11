@@ -72,6 +72,11 @@ void ABossFloatingBomb::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
 
+	if (bControlled == true)
+	{
+		Velocity /= 100.0f;
+	}
+
 	if (GetActorLocation().X < -1100.0f || GetActorLocation().X > 1100.0f)
 	{
 		Velocity.X *= -1;
@@ -85,4 +90,6 @@ void ABossFloatingBomb::Tick(float _DeltaTime)
 
 	// 위치 업데이트
 	AddActorLocation(Velocity * _DeltaTime);
+
+	UEngineDebug::OutPutString(GetActorLocation().ToString());
 }
