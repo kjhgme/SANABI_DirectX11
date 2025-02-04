@@ -90,8 +90,14 @@ void UContentsCore::InitResources()
 		}
 		// Platform
 		{
-			LoadFolder("BOSS/BossPlatform/BossPlatform_A_Idle");
 			LoadFolder("BOSS/BossPlatform/BossPlatform_A_BoosterLoop");
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_Damaged");
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_DamagedWarning");
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_Deadparts");
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_Destroy");
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_Idle");
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_IdleDoubleWarning");
+			LoadFolder("BOSS/BossPlatform/BossPlatform_A_IdleWarning");
 		}
 		// Attack
 		{

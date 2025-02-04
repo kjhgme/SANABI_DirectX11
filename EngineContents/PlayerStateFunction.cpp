@@ -115,7 +115,6 @@ void APlayer::InitPlayerState()
 	FSM.CreateState(PlayerState::Grab_Grabbing, std::bind(&APlayer::Grab_Grabbing, this, std::placeholders::_1), [this]() {});
 }
 
-
 void APlayer::Idle(float _DeltaTime)
 {
 	PlayerRenderer->ChangeAnimation("Idle");

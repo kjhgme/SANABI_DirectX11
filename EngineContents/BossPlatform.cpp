@@ -14,9 +14,8 @@ ABossPlatform::ABossPlatform()
 	PlatformBoxRenderer = CreateDefaultSubObject< USpriteRenderer>();
 	PlatformBoosterRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	
-	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_Idle", "BossPlatform_A_Idle", true, 0.15f);
-	PlatformBoosterRenderer->CreateAnimation("BossPlatform_A_BoosterLoop", "BossPlatform_A_BoosterLoop", true, 0.1f);
-		
+	InitAnimation();
+
 	PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_Idle");
 	PlatformBoosterRenderer->ChangeAnimation("BossPlatform_A_BoosterLoop");
 
@@ -68,6 +67,43 @@ void ABossPlatform::GoToPlace(FVector _Pos)
 void ABossPlatform::TakeDamage()
 {
 	// Destroy();
+
+	if (false == bIsInfinity)
+	{
+		HP -= 1;
+
+		if (HP == 3 || HP == 2)
+		{
+			PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_Damaged");
+		}
+		else if (HP == 1)
+		{
+			PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_DamagedWarning");
+		}
+		else if (HP == 0)
+		{
+			PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_Deadparts");
+		}
+
+		bIsInfinity = true;
+	}
+
+	TimeEventComponent->AddEndEvent(2.0f, [this]() {
+		bIsInfinity = false;
+	});
+}
+
+void ABossPlatform::InitAnimation()
+{
+	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_Idle", "BossPlatform_A_Idle", true, 0.15f);
+	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_Damaged", "BossPlatform_A_Damaged", false, 0.15f);
+	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_DamagedWarning", "BossPlatform_A_DamagedWarning", false, 0.15f);
+	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_Deadparts", "BossPlatform_A_Deadparts", false, 0.15f);
+	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_Destroy", "BossPlatform_A_Destroy", false, 0.15f);
+	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_IdleDoubleWarning", "BossPlatform_A_IdleDoubleWarning", true, 0.15f);
+	PlatformBoxRenderer->CreateAnimation("BossPlatform_A_IdleWarning", "BossPlatform_A_IdleWarning", true, 0.15f);
+
+	PlatformBoosterRenderer->CreateAnimation("BossPlatform_A_BoosterLoop", "BossPlatform_A_BoosterLoop", true, 0.1f);
 }
 
 void ABossPlatform::BeginPlay()
@@ -78,4 +114,23 @@ void ABossPlatform::BeginPlay()
 void ABossPlatform::Tick(float _DeltaTime)
 {
 	AActor::Tick(_DeltaTime);
+
+	if (PlatformBoxRenderer->IsCurAnimationEnd())
+	{
+		if (PlatformBoxRenderer->GetCurSpriteName() == "BOSSPLATFORM_A_DAMAGED")
+		{
+			if (HP == 3)
+			{
+				PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_Idle");
+			}
+			else if (HP == 2)
+			{
+				PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_IdleWarning");
+			}
+		}
+		else if (PlatformBoxRenderer->GetCurSpriteName() == "BOSSPLATFORM_A_DAMAGEDWARNING")
+		{
+			PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_IdleDoubleWarning");			
+		}
+	}
 }

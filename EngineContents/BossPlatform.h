@@ -16,6 +16,8 @@ public:
 
 	void TakeDamage();
 
+	void InitAnimation();
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;
@@ -26,5 +28,8 @@ private:
 	std::shared_ptr<class UTimeEventComponent> TimeEventComponent;
 	std::shared_ptr<class UCollision> PlatformCollision;
 	std::shared_ptr<class UCollision> WallCollision;
+
+	int HP = 4;
+	bool bIsInfinity = false;
 };
 

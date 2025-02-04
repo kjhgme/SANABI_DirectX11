@@ -77,8 +77,8 @@ void ABossAttack::BeginPlay()
 
 		if (_Other->GetCollisionProfileName() == "PLATFORMWALL")
 		{
-			ABossPlatform* a = static_cast<ABossPlatform*>(_Other->GetActor());
-			a->TakeDamage();
+			ABossPlatform* BossPlatform = static_cast<ABossPlatform*>(_Other->GetActor());
+			BossPlatform->TakeDamage();
 		}
 		});
 }
