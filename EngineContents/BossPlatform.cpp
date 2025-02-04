@@ -86,6 +86,11 @@ void ABossPlatform::TakeDamage()
 		{
 			PlatformBoxRenderer->ChangeAnimation("BossPlatform_A_Deadparts");
 
+			TimeEventComponent->AddUpdateEvent(0.2f, [this](float DeltaTime, float CurTime) {
+				this->AddActorRotation({ 0.0f, 0.0f, 40.0f * DeltaTime });
+				this->AddActorLocation({ 0.0f, 100.0f * DeltaTime, 0.0f });
+			});
+
 			std::shared_ptr<ABossFloatingBomb> FloatingBomb = GetWorld()->SpawnActor<ABossFloatingBomb>();
 			FloatingBomb->SetActorLocation(GetActorLocation());
 		}
@@ -141,6 +146,6 @@ void ABossPlatform::Tick(float _DeltaTime)
 
 	if (HP <= 0)
 	{
-		AddActorLocation({ 0.0f, -100.0f * _DeltaTime, 0.0f });
+		AddActorLocation({ -100.0f * _DeltaTime, -300.0f * _DeltaTime, 0.0f });
 	}
 }

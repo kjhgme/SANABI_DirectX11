@@ -62,7 +62,7 @@ void ABossFloatingBomb::BeginPlay()
 
 	UEngineRandom ran;
 
-	float Speed = 500.0f;
+	float Speed = 100.0f;
 
 	FVector RandomDir = FVector(ran.Randomfloat(-1.0f, 1.0f), ran.Randomfloat(-1.0f, 1.0f), 0.0f).NormalizeReturn();
 	SetVelocity(RandomDir * Speed);

@@ -18,6 +18,7 @@ enum class PlayerState
 	Death,
 	Damaged,
 	Grab_Grabbing,
+	Grab_Bomb,
 };
 
 class APlayer : public APawn
@@ -107,6 +108,7 @@ public:
 	void Damaged(float _DeltaTime);
 	void Grab_Flying(float _DeltaTime);
 	void Grab_Grabbing(float _DeltaTime);
+	void Grab_Bomb(float _DeltaTime);
 
 protected:
 	void BeginPlay() override;

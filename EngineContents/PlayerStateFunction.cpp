@@ -113,6 +113,7 @@ void APlayer::InitPlayerState()
 	FSM.CreateState(PlayerState::Death, std::bind(&APlayer::Death, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Damaged, std::bind(&APlayer::Damaged, this, std::placeholders::_1), [this]() {});
 	FSM.CreateState(PlayerState::Grab_Grabbing, std::bind(&APlayer::Grab_Grabbing, this, std::placeholders::_1), [this]() {});
+	FSM.CreateState(PlayerState::Grab_Bomb, std::bind(&APlayer::Grab_Bomb, this, std::placeholders::_1), [this]() {});
 }
 
 void APlayer::Idle(float _DeltaTime)
@@ -632,4 +633,9 @@ void APlayer::Grab_Grabbing(float _DeltaTime)
 
 	// Chain StartPosition 업데이트
 	Chain->SetStartPosition(PlayerRenderer->GetWorldLocation());
+}
+
+void APlayer::Grab_Bomb(float _DeltaTime)
+{
+	//SetActorLocation
 }

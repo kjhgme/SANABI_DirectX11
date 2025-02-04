@@ -21,10 +21,10 @@ APlayer::APlayer()
 	PlayerRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	ArmRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	GrabRenderer = CreateDefaultSubObject<USpriteRenderer>();
-	HpRenderer = CreateDefaultSubObject<USpriteRenderer>(); 
+	HpRenderer = CreateDefaultSubObject<USpriteRenderer>();
 	FadeRenderer = CreateDefaultSubObject<USpriteRenderer>();
 
-	InitPlayerAnimation(); 
+	InitPlayerAnimation();
 	InitPlayerState();
 
 	PlayerRenderer->ChangeAnimation("Idle");
@@ -123,11 +123,12 @@ void APlayer::BeginPlay()
 			this->FSM.ChangeState(PlayerState::Grab_Grabbing);
 			return;
 		}
-	});
 
-	GrabCollision->SetCollisionEnd([this](UCollision* _This, UCollision* _Other)
-	{
-
+		if ("FLOATINGBOMB" == _Other->GetCollisionProfileName())
+		{
+			this->FSM.ChangeState(PlayerState::Grab_Bomb);
+			return;
+		}
 	});
 }
 
