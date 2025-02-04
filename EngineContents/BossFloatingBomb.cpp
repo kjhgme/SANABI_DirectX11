@@ -85,6 +85,4 @@ void ABossFloatingBomb::Tick(float _DeltaTime)
 
 	// 위치 업데이트
 	AddActorLocation(Velocity * _DeltaTime);
-
-	UEngineDebug::OutPutString(Velocity.ToString());
 }

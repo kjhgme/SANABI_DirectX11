@@ -162,6 +162,10 @@ private:
 	float SwingVelocity = 0.0f;
 	float SwingAngle = 0.0f;
 
+	// GrabBomb
+	FVector BombPos{};
+	class ABossFloatingBomb* Bomb;
+
 	std::shared_ptr<class AChain>Chain;
 
 	UFSMStateManager FSM;

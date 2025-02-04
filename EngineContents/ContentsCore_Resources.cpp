@@ -218,6 +218,10 @@ void UContentsCore::InitResources()
 			LoadFolder("SNB/BossStage/SNB_Boss_005_LookBackgroundLoop");
 			LoadFolder("SNB/BossStage/SNB_Boss_006_LookBackgroundEnd");
 		}
+		{
+			LoadFolder("SNB/SNB_ExcHolding_Back");
+			
+		}
 	}
 	// Mari
 	{

@@ -9,6 +9,7 @@
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/Collision.h>
 #include <EngineCore/FontRenderer.h>
+#include "BossFloatingBomb.h"
 #include "TextBubble.h"
 #include "PlayerVfx.h"
 #include "Chain.h"
@@ -126,6 +127,10 @@ void APlayer::BeginPlay()
 
 		if ("FLOATINGBOMB" == _Other->GetCollisionProfileName())
 		{
+			BombPos = _Other->GetActor()->GetActorLocation();
+
+			Bomb = static_cast<ABossFloatingBomb *>(_Other->GetActor());
+
 			this->FSM.ChangeState(PlayerState::Grab_Bomb);
 			return;
 		}

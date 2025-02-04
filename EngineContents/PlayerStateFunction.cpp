@@ -6,6 +6,7 @@
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/Collision.h>
+#include "BossFloatingBomb.h"
 #include "PlayerVfx.h"
 #include "Chain.h"
 
@@ -95,6 +96,8 @@ void APlayer::InitPlayerAnimation()
 		PlayerRenderer->CreateAnimation("SNB_Boss_006_LookBackgroundEnd", "SNB_Boss_006_LookBackgroundEnd", false);
 
 		ArmRenderer->CreateAnimation("SNB_Arm_NoImage", "SNB_Arm_NoImage", false);
+
+		PlayerRenderer->CreateAnimation("SNB_ExcHolding_Back", "SNB_ExcHolding_Back", false);
 	}
 }
 
@@ -637,5 +640,19 @@ void APlayer::Grab_Grabbing(float _DeltaTime)
 
 void APlayer::Grab_Bomb(float _DeltaTime)
 {
-	//SetActorLocation
+	PlayerRenderer->ChangeAnimation("SNB_ExcHolding_Back");
+	ArmRenderer->ChangeAnimation("SNB_Arm_NoImage"); 
+	GrabRenderer->ChangeAnimation("Grab_NoImage");
+
+
+	if (Chain != nullptr)
+	{
+		Chain->Destroy();
+		Chain = nullptr;
+	}
+
+	BombPos = Bomb->GetActorLocation();
+	BombPos.Z = 0.0f;
+	
+	SetActorLocation(BombPos);
 }
