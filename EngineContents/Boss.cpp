@@ -2,6 +2,7 @@
 #include "Boss.h"
 #include "ContentsEnum.h"
 
+#include <EngineBase/EngineRandom.h>
 #include <EngineCore/DefaultSceneComponent.h>
 #include <EngineCore/TimeEventComponent.h>
 #include <EngineCore/SpriteRenderer.h>
@@ -11,6 +12,8 @@
 #include <EnginePlatform/EngineInput.h>
 #include "BossAttack.h"
 #include "BodySlap.h"
+
+UEngineRandom ER;
 
 ABoss::ABoss()
 {
@@ -102,6 +105,35 @@ void ABoss::Tick(float _DeltaTime)
 	if (UEngineInput::IsDown('4'))
 	{
 		DropBomb();
+	}
+
+	if (bIsFight == true)
+	{
+		ChangeAttackTime -= _DeltaTime;
+
+		if (ChangeAttackTime <= 0.0f)
+		{
+			int RInt = ER.RandomInt(0, 3);
+
+			if (RInt == 0)
+			{
+				ShootMachineGun();
+
+				ChangeAttackTime += 12.0f;
+			}
+			else if (RInt == 1)
+			{
+				SlapAttack();
+
+				ChangeAttackTime += 6.0f;
+			}
+			else if (RInt == 2)
+			{
+				DropBomb();
+
+				ChangeAttackTime += 12.0f;
+			}
+		}
 	}
 }
 
@@ -274,8 +306,12 @@ void ABoss::StartBattle()
 			AddActorLocation(NewPosition);
 		});
 	});
-	
-	BossCollision->SetCollisionProfileName("Boss");
+
+	TimeEventComponent->AddEndEvent(5.0f, [this]()
+	{
+		this->BossCollision->SetCollisionProfileName("Boss");
+		this->bIsFight = true;
+	});
 }
 
 void ABoss::ShootMachineGun()

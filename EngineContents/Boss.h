@@ -58,5 +58,8 @@ private:
 	void InitBossAnimation();
 
 	bool bIsRight = true;
+
+	bool bIsFight = false;
+	float ChangeAttackTime = 5.0f;
 };
 
