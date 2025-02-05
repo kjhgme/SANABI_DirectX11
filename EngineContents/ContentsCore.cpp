@@ -51,7 +51,7 @@ void UContentsCore::EngineStart(UEngineInitData& _Data)
 
 	UEngineCore::CreateLevel<AMapMakerMode, APawn, AHUD>("MapMakerEditor");
 
-	UEngineCore::OpenLevel("BossGameLevel");
+	UEngineCore::OpenLevel("TitleLevel");
 
 	// UEngineGUI::AllWindowOff();
 }

@@ -679,6 +679,6 @@ void APlayer::Grab_Bomb(float _DeltaTime)
 
 	if (UEngineInput::IsFree(VK_LBUTTON))
 	{
-		// ³¯¸®±â
+		Bomb->bExplode = true;
 	}
 }

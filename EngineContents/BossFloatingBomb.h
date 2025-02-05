@@ -18,6 +18,7 @@ public:
 	void SetVelocity(const FVector& NewVelocity) { Velocity = NewVelocity; }
 
 	bool bControlled = false;
+	bool bExplode = false;
 
 protected:
 	void BeginPlay() override;
