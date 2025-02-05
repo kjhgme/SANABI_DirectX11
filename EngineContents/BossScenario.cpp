@@ -322,7 +322,7 @@ void ABossGameMode::InitScenes()
 
 	// Boss fight start.
 	Scenes.push_back([this]() {
-		MainCamera->Zoom(-400.0f, 8.0f);
+		MainCamera->Zoom(-300.0f, 8.0f);
 		Platforms[0].get()->GoToPlace({ -300.0f, 0.0f, 0.0f });
 		Platforms[1].get()->GoToPlace({ -15.0f, 300.0f, 0.0f });
 		Platforms[2].get()->GoToPlace({ -255.0f, -300.0f, 0.0f });
