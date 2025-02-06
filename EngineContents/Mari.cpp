@@ -111,3 +111,13 @@ void AMari::ClearTextBubble()
 		MariText->Destroy();
 	}
 }
+
+void AMari::Tick(float _DeltaTime)
+{
+	AActor::Tick(_DeltaTime);
+
+	if (MariRenderer->IsCurAnimationEnd())
+	{
+		ChangeToNextAnim();
+	}
+}
