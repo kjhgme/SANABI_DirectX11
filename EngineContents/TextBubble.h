@@ -14,6 +14,8 @@ public:
 
 	void SetText(std::string_view _Text, float _Y, float _X = 0.0f, float _BoxSize = 30.0f, float _TextSize = 20.0f);
 
+	void SetColor(UColor _Color);
+
 protected:
 	void BeginPlay() override;
 	void Tick(float _DeltaTime) override;

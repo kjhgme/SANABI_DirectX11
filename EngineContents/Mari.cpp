@@ -58,6 +58,8 @@ void AMari::InitMariAnimation()
 	AnimQueue.push("008_TrainOnLoopLookBack");
 	AnimQueue.push("004_TrainOnLoop");
 	AnimQueue.push("008_TrainOnLoopLookBack");
+	AnimQueue.push("004_TrainOnLoop");
+	AnimQueue.push("008_TrainOnLoopLookBack");
 	AnimQueue.push("005_TrainOnMindBreakStart");
 	AnimQueue.push("006_TrainOnMindBreakLoop");
 	AnimQueue.push("007_TrainOnMindBreakEnd");
@@ -98,12 +100,13 @@ void AMari::MufinOff()
 }
 
 
-void AMari::MakeTextBubble(std::string_view _Text, float _BoxSize, float _TextSize, float _X, float _Y)
+void AMari::MakeTextBubble(std::string_view _Text, float _BoxSize, float _TextSize, float _X, float _Y, UColor _Color)
 {
 	ClearTextBubble();
 
 	MariText = GetWorld()->SpawnActor<ATextBubble>();
 	MariText->SetText(_Text, _Y, _X, _BoxSize, _TextSize);
+	MariText->SetColor(_Color);
 	MariText->SetActorLocation(GetActorLocation() + FVector(0.0f, 0.0f, 0.0f));
 }
 

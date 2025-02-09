@@ -25,6 +25,11 @@ public:
 		Scale = _Size;
 	}
 
+	ENGINEAPI void SetColor(UColor _Color)
+	{
+		Color = _Color;
+	}
+
 	ENGINEAPI void Render(UEngineCamera* _Camera, float _DeltaTime) override;
 
 protected:

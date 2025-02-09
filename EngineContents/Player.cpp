@@ -253,12 +253,12 @@ void APlayer::CheckRightDir()
 	}
 }
 
-void APlayer::MakeTextBubble(std::string_view _Text, float _BoxSize, float _TextSize, float _X, float _Y)
+void APlayer::MakeTextBubble(std::string_view _Text, float _BoxSize, float _TextSize, float _X, float _Y, UColor _Color)
 {
 	ClearTextBubble();
-
 	PlayerText = GetWorld()->SpawnActor<ATextBubble>();
 	PlayerText->SetText(_Text, _Y, _X, _BoxSize, _TextSize);
+	PlayerText->SetColor(_Color);
 	PlayerText->SetActorLocation(GetActorLocation() + FVector(0.0f, 5.0f, 0.0f));
 }
 

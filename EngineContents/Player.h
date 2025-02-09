@@ -69,7 +69,7 @@ public:
 	// Function
 	void CheckRightDir();
 
-	void MakeTextBubble(std::string_view _Text, float _BoxSize = 30.0f, float _TextSize = 20.0f, float _X = 0.0f, float _Y = 0.0f);
+	void MakeTextBubble(std::string_view _Text, float _BoxSize = 30.0f, float _TextSize = 20.0f, float _X = 0.0f, float _Y = 0.0f, UColor _Color = UColor::BLACK);
 	void ClearTextBubble();
 
 	void GrabLaunchToPosition(const FVector& _TargetPos);

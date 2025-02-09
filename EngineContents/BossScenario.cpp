@@ -52,7 +52,7 @@ void ABossGameMode::InitScenes()
 		Player->MakeTextBubble("지금부터 부지런히 날아가면..", 25.0f, 20.0f, 0.0f, -7.0f);		
 		});
 	Scenes.push_back([this]() {
-		Player->MakeTextBubble("도시 밖까지 갈 수 있을 거야.", 28.0f, 24.0f, 0.0f, -6.0f);		
+		Player->MakeTextBubble("도시 밖까지 갈 수 있을 거야.", 28.0f, 24.0f, 0.0f, -5.5f);		
 		});
 	Scenes.push_back([this]() {
 		bCanSkipScene = false;
@@ -90,14 +90,15 @@ void ABossGameMode::InitScenes()
 	});
 	Scenes.push_back([this]() {
 		bCanSkipScene = false;
+		Mari->ClearTextBubble();
 		MainCamera->Zoom(30.0f, 2.0f);
 		TimeEventComponent->AddEndEvent(2.0f, [this]() {
-			Mari->MakeTextBubble("아저씨는..", 25.0f, 20.0f, -2.0f, -6.5f);
+			Mari->MakeTextBubble("아저씨는..", 24.0f, 20.0f, -2.0f, -6.5f);
 			bCanSkipScene = true;
 			});
 	});
 	Scenes.push_back([this]() {
-		Mari->MakeTextBubble("딸을 사랑했나요?", 28.0f, 24.0f, -2.0f, -6.0f);
+		Mari->MakeTextBubble("딸을 사랑했나요?", 27.0f, 24.0f, -2.0f, -6.0f);
 		});
 	Scenes.push_back([this]() {
 		Mari->ClearTextBubble();
@@ -105,83 +106,104 @@ void ABossGameMode::InitScenes()
 	});
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
-		Mari->MakeTextBubble("그냥, 문자 그대로요.");
+		Mari->MakeTextBubble("그냥, 문자 그대로요.", 25.0f, 20.0f, -2.0f, -6.5f);
 	});
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
 		Mari->ClearTextBubble();
-		Player->MakeTextBubble("...그래.");
+		Player->MakeTextBubble("...그래.", 25.0f, 20.0f, 0.0f, -7.0f);
+	});
+	Scenes.push_back([this]() {
+		bCanSkipScene = false;
+		Player->ClearTextBubble();
+		MainCamera->Zoom(20.0f, 2.0f);
+		TimeEventComponent->AddEndEvent(2.0f, [this]() {
+			Mari->ChangeToNextAnim();
+			Mari->MakeTextBubble("그럼 됐어요.", 25.0f, 20.0f, -2.0f, -6.5f);
+			bCanSkipScene = true;
+			});
+	});
+	Scenes.push_back([this]() {
+		bCanSkipScene = false;
+		Player->ClearTextBubble();
+		Mari->ClearTextBubble();
+		TimeEventComponent->AddEndEvent(2.0f, [this]() {
+			Mari->MakeTextBubble("그럼 산나비가 많이 밉겠네요.", 27.0f, 24.0f, -2.0f, -6.0f, UColor::RED);	//Red, size BB
+			bCanSkipScene = true;
+			});		
+	});
+	Scenes.push_back([this]() {
+		bCanSkipScene = false;
+		Player->ClearTextBubble();
+		Mari->ClearTextBubble();
+		MainCamera->Zoom(-20.0f, 1.0f);
+		TimeEventComponent->AddEndEvent(1.0f, [this]() {
+			Player->MakeTextBubble("뭐?", 25.0f, 20.0f, 0.0f, -7.0f);
+			bCanSkipScene = true;
+			});
+		});
+	Scenes.push_back([this]() {
+		Player->ClearTextBubble();
+		Mari->MakeTextBubble("산나비에게 복수하는 거..", 28.0f, 24.0f, -2.0f, -6.0f);	// sizeUp
+		});
+	Scenes.push_back([this]() {
+		Mari->MakeTextBubble("잘 됐으면 좋겠다구요.", 25.0f, 20.0f, -2.0f, -6.5f); // sizeDowm
+		});
+	Scenes.push_back([this]() {
+		Mari->ClearTextBubble();
+		Player->MakeTextBubble("금마리...", 25.0f, 20.0f, 0.0f, -7.0f);	// zoomIn
+	});
+	Scenes.push_back([this]() {
+		Player->MakeTextBubble("내가 산나비에게 딸이 죽었다고 얘기 했던 적이 있던가?", 28.0f, 24.0f, 0.0f, -6.0f, UColor::RED); // red, BB
+		});
+	Scenes.push_back([this]() {
+		Player->ClearTextBubble();
+		Mari->MakeTextBubble("아저씨는 ■■■ ■■■■에요.", 25.0f, 20.0f, -2.0f, -6.5f);	// blackRect, shack
 	});
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
 		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("그럼 됐어요.");
-	});
+		MainCamera->Zoom(-20.0f, 1.0f);
+		TimeEventComponent->AddEndEvent(1.0f, [this]() {
+			Player->MakeTextBubble("뭐라고?", 25.0f, 20.0f, 0.0f, -7.0f);	// zoomOut
+			bCanSkipScene = true;
+			});
+		});
 	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("그럼 산나비가 많이 밉겠네요.");	//Red, sizeUp, zoomIn
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Player->MakeTextBubble("뭐?");	// zoomOut
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("산나비에게 복수하는 거..");	// sizeUp, shake
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("잘 됐으면 좋겠다구요."); // sizeDowm
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Player->MakeTextBubble("금마리...");	// zoomIn
-		Player->ClearTextBubble();
-		Player->MakeTextBubble("내가 산나비에게 딸이 죽었다고 얘기 했던 적이 있던가?"); // red
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("아저씨는 ■■■ ■■■■에요.");	// blackRect, shack
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Player->MakeTextBubble("뭐라고?");	// zoomOut
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("■■■■라고요. 아저씨.");	// blackRect, shack
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Player->MakeTextBubble("무..");
-		Player->ClearTextBubble();
-		Player->MakeTextBubble("무슨?");	// sizeUp
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Player->MakeTextBubble("목소리에 노이즈가..");
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("하하..");
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("이것까지 철저하게 막아놨구나.");	// sizeUp
 		Mari->ChangeToNextAnim();
+		Player->ClearTextBubble();
+		Mari->ClearTextBubble();
+		Mari->MakeTextBubble("■■■■라고요. 아저씨.", 25.0f, 20.0f, -2.0f, -6.5f);	// blackRect, shack
 	});
-	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
-	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
 		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("집요하네 정말..");
+		Player->MakeTextBubble("무..", 25.0f, 20.0f, 0.0f, -7.0f);
+		});
+	Scenes.push_back([this]() {
+		Player->MakeTextBubble("무슨?", 28.0f, 24.0f, 0.0f, -6.0f);	// sizeUp
+		});
+	Scenes.push_back([this]() {
+		Player->MakeTextBubble("목소리에 노이즈가..", 25.0f, 20.0f, 0.0f, -7.0f);
+	});
+	Scenes.push_back([this]() {
+		bCanSkipScene = false;
+		Mari->ChangeToNextAnim();
+		Player->ClearTextBubble();
+		Mari->ChangeToNextAnim(); 
+		MainCamera->Zoom(-20.0f, 2.0f);
+		TimeEventComponent->AddEndEvent(2.0f, [this]() {
+			Mari->MakeTextBubble("하하..", 25.0f, 20.0f, -2.0f, -6.5f);
+			bCanSkipScene = true;
+			});
+		});
+	Scenes.push_back([this]() {
+		Mari->MakeTextBubble("이것까지 철저하게 막아놨구나.", 28.0f, 24.0f, -2.0f, -6.0f);	// sizeUp
+		});
+	Scenes.push_back([this]() {
+		Player->ClearTextBubble();
+		Mari->ClearTextBubble();
+		Mari->MakeTextBubble("집요하네 정말..", 25.0f, 20.0f, -2.0f, -6.5f);
 	});
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
@@ -189,10 +211,16 @@ void ABossGameMode::InitScenes()
 		Player->SetAnimation("SNB_Boss_002_TrainOn2Idle");
 	});
 	Scenes.push_back([this]() {
-		Player->MakeTextBubble("그게 무슨 의미지?!");	// zoomIn
-		Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
-		Player->SetAnimation("Idle");
+		bCanSkipScene = false;
+		MainCamera->Zoom(-20.0f, 2.0f);
+		TimeEventComponent->AddEndEvent(2.0f, [this]() {
+			Player->MakeTextBubble("그게 무슨 의미지?!", 28.0f, 24.0f, 0.0f, -6.0f);
+			Player->AddActorLocation({ 3.0f, 15.0f, 0.0f });
+			Player->SetAnimation("Idle");
+			bCanSkipScene = true;
+			});		
 	});
+	////////////////////////////////////
 	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();

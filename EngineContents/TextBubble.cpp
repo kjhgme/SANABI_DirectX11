@@ -86,3 +86,8 @@ void ATextBubble::SetText(std::string_view _Text, float _Y, float _X, float _Box
 	TextRenderer->SetSize(_TextSize);
 	TextRenderer->AddRelativeLocation({ _X, _Y, 0.0f });
 }
+
+void ATextBubble::SetColor(UColor _Color)
+{
+	TextRenderer->SetColor(_Color);	
+}
