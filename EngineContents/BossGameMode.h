@@ -1,6 +1,8 @@
 #pragma once
 #include <EngineCore/GameMode.h>
 
+#include <EnginePlatform/EngineSound.h>
+
 class ABossGameMode : public AGameMode
 {
 public:
@@ -45,5 +47,7 @@ private:
 
 	int SceneTakeNum = 0;
 	bool bPlayNextAnimation = false;
+
+	USoundPlayer SoundPlayer;
 };
 

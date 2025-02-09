@@ -32,7 +32,7 @@ AMari::~AMari()
 
 void AMari::InitMariAnimation()
 {
-	MariRenderer->CreateAnimation("001_TrainOnHarmonicaPlay", "001_TrainOnHarmonicaPlay", false);
+	MariRenderer->CreateAnimation("001_TrainOnHarmonicaPlay", "001_TrainOnHarmonicaPlay", false, 0.25f);
 	MariRenderer->CreateAnimation("002_TrainOnHarmonicaPlayEndLoop", "002_TrainOnHarmonicaPlayEndLoop");
 	MariRenderer->CreateAnimation("003_TrainOnHarmonicaEnd", "003_TrainOnHarmonicaEnd", false);
 	MariRenderer->CreateAnimation("004_TrainOnLoop", "004_TrainOnLoop");

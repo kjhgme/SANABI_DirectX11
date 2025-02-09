@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "BossGameMode.h"
 
+#include <EnginePlatform/EngineSound.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/CameraActor.h>
 #include <EngineCore/EngineCamera.h>
@@ -101,6 +102,13 @@ void ABossGameMode::BeginPlay()
 	}
 
 	InitScenes();
+
+	SoundPlayer = UEngineSound::Play("SFX_Chap4_MidBoss_Mari_harmonica_80.wav");
+
+	TimeEventComponent->AddEndEvent(11.0f, [this]() {
+		Scenes[SceneTakeNum]();
+		SceneTakeNum++;
+		});
 }
 
 void ABossGameMode::Tick(float _DeltaTime)

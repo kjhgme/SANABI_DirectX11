@@ -56,7 +56,7 @@ APlayer::APlayer()
 
 	TimeEventComponent = CreateDefaultSubObject<UTimeEventComponent>();
 
-	FadeValue = 0.0f;
+	// FadeValue = 0.0f;
 }
 
 APlayer::~APlayer()

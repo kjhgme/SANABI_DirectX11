@@ -1,6 +1,7 @@
 #include "PreCompile.h"
 #include "ContentsCore.h"
 
+#include <EnginePlatform/EngineSound.h>
 #include <EngineCore/EngineTexture.h>
 #include <EngineCore/EngineSprite.h>
 
@@ -264,6 +265,23 @@ void UContentsCore::InitResources()
 	// temp
 	{
 		LoadFolder("temp/Aim");
+	}
+	// Sound
+	{
+		UEngineDirectory Dir;
+		if (false == Dir.MoveParentToDirectory("Resources"))
+		{
+			MSGASSERT("리소스 폴더를 찾지 못했습니다.");
+			return;
+		}
+		Dir.Append("Sound");
+		std::vector<UEngineFile> Files = Dir.GetAllFile(true, { ".wav", ".mp3" });
+
+		for (size_t i = 0; i < Files.size(); i++)
+		{
+			std::string FilePath = Files[i].GetPathToString();
+			UEngineSound::Load(FilePath);
+		}
 	}
 }
 

@@ -17,11 +17,6 @@ void ABossGameMode::InitScenes()
 			this->AGetPlayer()->MakeTextBubble("그만 해라. 언제까지 불 셈이냐?");
 			},
 			false);
-
-		TimeEventComponent->AddEndEvent(1.5f, [this]() {
-			this->GetMari()->ChangeToNextAnim();
-			},
-			false);
 	});
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();
