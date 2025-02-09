@@ -150,7 +150,7 @@ void ABossGameMode::Tick(float _DeltaTime)
 	{
 		MainCamera->AddRelativeLocation({ 0.0f, 0.0f, 100.0f * _DeltaTime, 1.0f });
 	}
-	if (UEngineInput::IsDown(VK_SPACE) && true == Player->GetSceneMode())
+	if (UEngineInput::IsDown(VK_SPACE) && true == Player->GetSceneMode() && true == bCanSkipScene)
 	{
 		Scenes[SceneTakeNum]();
 		SceneTakeNum++;

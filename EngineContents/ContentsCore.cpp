@@ -26,7 +26,14 @@ UContentsCore::UContentsCore()
 	// Font ¼³Ä¡
 	{
 		std::string Font = "PFStardust.ttf";
-
+		InstallFont(Font);
+	}
+	{
+		std::string Font = "PF Stardust Bold.ttf";
+		InstallFont(Font);
+	}
+	{
+		std::string Font = "PF Stardust S.ttf";
 		InstallFont(Font);
 	}
 }
@@ -34,6 +41,8 @@ UContentsCore::UContentsCore()
 UContentsCore::~UContentsCore()
 {
 	RemoveFont("PFStardust.ttf");
+	RemoveFont("PF Stardust Bold.ttf");
+	RemoveFont("PF Stardust S.ttf");
 }
 
 

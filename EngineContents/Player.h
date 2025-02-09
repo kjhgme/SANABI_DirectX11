@@ -1,5 +1,6 @@
 #pragma once
 #include <EngineBase/FSMStateManager.h>
+#include <EnginePlatform/EngineSound.h>
 #include <EngineCore/Actor.h>
 #include <EngineCore/Pawn.h>
 
@@ -68,7 +69,7 @@ public:
 	// Function
 	void CheckRightDir();
 
-	void MakeTextBubble(std::string_view _Text, float _Y = -2.0f, float _Size = 20.0f);
+	void MakeTextBubble(std::string_view _Text, float _BoxSize = 30.0f, float _TextSize = 20.0f, float _X = 0.0f, float _Y = 0.0f);
 	void ClearTextBubble();
 
 	void GrabLaunchToPosition(const FVector& _TargetPos);
@@ -169,5 +170,7 @@ private:
 	std::shared_ptr<class AChain>Chain;
 
 	UFSMStateManager FSM;
+
+	USoundPlayer PlayeSoundPlayer;
 };
 

@@ -30,6 +30,8 @@ public:
 		return Player;
 	}
 
+	bool bCanSkipScene = false;
+
 protected:
 	void LevelChangeStart() override;
 

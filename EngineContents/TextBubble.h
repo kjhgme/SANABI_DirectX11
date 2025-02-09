@@ -12,7 +12,7 @@ public:
 	ATextBubble& operator=(const ATextBubble& _Other) = delete;
 	ATextBubble& operator=(ATextBubble&& _Other) noexcept = delete;
 
-	void SetText(std::string_view _Text, float _Y, float _Size ,float _X = 0.0f);
+	void SetText(std::string_view _Text, float _Y, float _X = 0.0f, float _BoxSize = 30.0f, float _TextSize = 20.0f);
 
 protected:
 	void BeginPlay() override;

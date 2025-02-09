@@ -11,75 +11,97 @@
 void ABossGameMode::InitScenes()
 {
 	Scenes.push_back([this]() {
+		bCanSkipScene = false;
 		MainCamera->Zoom(20.0f, 0.1f);
 
 		TimeEventComponent->AddEndEvent(0.2f, [this]() {
-			this->AGetPlayer()->MakeTextBubble("그만 해라. 언제까지 불 셈이냐?");
-			},
-			false);
-	});
+			this->AGetPlayer()->MakeTextBubble("그만 해라. 언제까지 불 셈이냐?", 26.0f, 20.0f, 0.0f, -6.0f);
+			bCanSkipScene = true;
+			});
+		});
 	Scenes.push_back([this]() {
+		bCanSkipScene = false;
 		Player->ClearTextBubble();
-	});
+		MainCamera->Zoom(20.0f, 2.0f);
+		TimeEventComponent->AddEndEvent(0.5f, [this]() {
+			Mari->ChangeToNextAnim(); 
+			});
+		TimeEventComponent->AddEndEvent(2.0f, [this]() {
+			this->AGetPlayer()->MakeTextBubble("금마리.", 25.0f, 20.0f, 0.0f, -7.0f);
+			bCanSkipScene = true;
+			});
+		});
 	Scenes.push_back([this]() {
-		Player->MakeTextBubble("금마리.");
-	});
-	Scenes.push_back([this]() {
+		bCanSkipScene = false;
 		Player->ClearTextBubble();
-	});
+		TimeEventComponent->AddEndEvent(0.5f, [this]() {
+			Mari->MakeTextBubble("···", 25.0f, 20.0f, -1.0f, -7.0f);
+			bCanSkipScene = true; 
+			});
+		});
+	Scenes.push_back([this]() {
+		bCanSkipScene = false;
+		Mari->ClearTextBubble();
+		Player->ClearTextBubble();
+		TimeEventComponent->AddEndEvent(0.2f, [this]() {
+			Player->MakeTextBubble("돌아갈 거면 지금이 마지막 기회다.", 25.0f, 20.0f, 0.0f, -7.0f);
+			bCanSkipScene = true;
+			});
+		});
+	Scenes.push_back([this]() {
+		Player->MakeTextBubble("지금부터 부지런히 날아가면..", 25.0f, 20.0f, 0.0f, -7.0f);		
+		});
+	Scenes.push_back([this]() {
+		Player->MakeTextBubble("도시 밖까지 갈 수 있을 거야.", 28.0f, 24.0f, 0.0f, -6.0f);		
+		});
+	Scenes.push_back([this]() {
+		bCanSkipScene = false;
+		Player->ClearTextBubble();
+		Mari->ChangeToNextAnim();
+		MainCamera->Zoom(20.0f, 0.2f);
+		TimeEventComponent->AddEndEvent(0.2f, [this]() {
+			Mari->MakeTextBubble("아저씨.", 25.0f, 20.0f, -2.0f, -6.5f);
+			bCanSkipScene = true;
+			});
+		});
+	Scenes.push_back([this]() {
+		Mari->MakeTextBubble("아저씨도 이제 그만 해요.", 28.0f, 24.0f, -2.0f, -6.0f);
+		});
+	Scenes.push_back([this]() {
+		bCanSkipScene = false;
+		Mari->ClearTextBubble();
+		Mari->ChangeToNextAnim();
+		MainCamera->Zoom(-20.0f, 0.2f);
+		TimeEventComponent->AddEndEvent(0.2f, [this]() {
+			Mari->MakeTextBubble("전 아저씨 딸이 아니에요.", 25.0f, 20.0f, -2.0f, -6.5f);
+			bCanSkipScene = true;
+			});
+		});
+	Scenes.push_back([this]() {
+		Mari->MakeTextBubble("그러니까..", 25.0f, 20.0f, -2.0f, -6.5f);
+
+		});
+	Scenes.push_back([this]() {
+		Mari->MakeTextBubble("이제 서로 그만 하기로 해요.", 28.0f, 24.0f, -2.0f, -6.0f);
+		});
 	Scenes.push_back([this]() {
 		Mari->ChangeToNextAnim();
-	});
-	Scenes.push_back([this]() {	Mari->ChangeToNextAnim(); });
-	Scenes.push_back([this]() {
-		Mari->MakeTextBubble("···");
+		Mari->MakeTextBubble("..저 뭐 하나만 물어봐도 돼요?", 25.0f, 20.0f, -2.0f, -6.5f);
 	});
 	Scenes.push_back([this]() {
-		Mari->ClearTextBubble();
+		bCanSkipScene = false;
+		MainCamera->Zoom(30.0f, 2.0f);
+		TimeEventComponent->AddEndEvent(2.0f, [this]() {
+			Mari->MakeTextBubble("아저씨는..", 25.0f, 20.0f, -2.0f, -6.5f);
+			bCanSkipScene = true;
+			});
 	});
 	Scenes.push_back([this]() {
-		Player->MakeTextBubble("돌아갈 거면 지금이 마지막 기회다.");
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Player->MakeTextBubble("지금부터 부지런히 날아가면..");
-		Player->ClearTextBubble();
-		Player->MakeTextBubble(" 도시 밖까지 갈 수 있을 거야.");	// sizeUp
-	});
-	Scenes.push_back([this]() {
-		Player->ClearTextBubble();
-		Mari->MakeTextBubble("아저씨.");
-		Mari->ChangeToNextAnim();
-	});
+		Mari->MakeTextBubble("딸을 사랑했나요?", 28.0f, 24.0f, -2.0f, -6.0f);
+		});
 	Scenes.push_back([this]() {
 		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("아저씨도 이제 그만 해요.");
-	});
-	Scenes.push_back([this]() {
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("전 아저씨 딸이 아니에요.");
-		Mari->ChangeToNextAnim();
-	});
-	Scenes.push_back([this]() {
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("그러니까..");
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("이제 서로 그만 하기로 해요.");	// sizeUp, shake
-	});
-	Scenes.push_back([this]() {
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("..저 뭐 하나만 물어봐도 돼요?");
-		Mari->ChangeToNextAnim();
-	});
-	Scenes.push_back([this]() {
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("아저씨는..");
-		Mari->ClearTextBubble();
-		Mari->MakeTextBubble("딸을 사랑했나요?");	//sizeUp, shake
-	});
-	Scenes.push_back([this]() {
-		Mari->ClearTextBubble();
-		Player->MakeTextBubble("무슨 의미지?");
+		Player->MakeTextBubble("무슨 의미지?", 25.0f, 20.0f, 0.0f, -7.0f);
 	});
 	Scenes.push_back([this]() {
 		Player->ClearTextBubble();

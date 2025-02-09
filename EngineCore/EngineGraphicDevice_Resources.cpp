@@ -24,6 +24,8 @@ void UEngineGraphicDevice::DefaultResourcesInit()
 
 	UEngineFont::Load("±Ã¼­", "±Ã¼­");
 	UEngineFont::Load("PFStardust", "PFStardust");
+	UEngineFont::Load("PF Stardust Bold", "PF Stardust Bold");
+	UEngineFont::Load("PF Stardust S", "PF Stardust S");
 }
 
 void UEngineGraphicDevice::DepthStencilInit()

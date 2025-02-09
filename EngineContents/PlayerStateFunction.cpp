@@ -2,6 +2,7 @@
 #include "Player.h"
 
 #include <EngineCore/TimeEventComponent.h>
+#include <EnginePlatform/EngineSound.h>
 #include <EnginePlatform/EngineInput.h>
 #include <EngineCore/SpriteRenderer.h>
 #include <EngineCore/CameraActor.h>
@@ -472,6 +473,8 @@ void APlayer::Death(float _DeltaTime)
 	PlayerRenderer->ChangeAnimation("Death");
 	ArmRenderer->ChangeAnimation("SNB_Arm_NoImage");
 	HpRenderer->ChangeAnimation("HP4_NoImage");
+
+	PlayeSoundPlayer = UEngineSound::Play("SFX_Player_Death.wav");
 }
 
 void APlayer::Damaged(float _DeltaTime)
