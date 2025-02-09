@@ -31,6 +31,7 @@ public:
 	}
 
 	bool bCanSkipScene = false;
+	bool bAnimeOnce = true;
 
 protected:
 	void LevelChangeStart() override;

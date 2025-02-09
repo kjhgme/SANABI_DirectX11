@@ -13,6 +13,11 @@ public:
 	AMari& operator=(const AMari& _Other) = delete;
 	AMari& operator=(AMari&& _Other) noexcept = delete;
 
+	std::shared_ptr<class USpriteRenderer> GetMariRenderer()
+	{
+		return MariRenderer;
+	}
+
 	void InitMariAnimation();
 
 	void SetAnimation(std::string_view _Anim);
