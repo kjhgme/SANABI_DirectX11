@@ -224,14 +224,14 @@ void ABoss::StareAtPlayer()
 
 	TimeEventComponent->AddEndEvent(4.0f, [this, TargetPosition2]()
 	{
-		TimeEventComponent->AddUpdateEvent(1.0f, [this, TargetPosition2](float DeltaTime, float CurTime)
+		TimeEventComponent->AddUpdateEvent(0.8f, [this, TargetPosition2](float DeltaTime, float CurTime)
 		{
 			auto Lerp = [](FVector A, FVector B, float Alpha)
 			{
 				return A * (1 - Alpha) + B * Alpha;
 			};
 
-			float Alpha = UEngineMath::Clamp(DeltaTime / 1.0f, 0.0f, 1.0f);
+			float Alpha = UEngineMath::Clamp(DeltaTime / 0.8f, 0.0f, 1.0f);
 			FVector NewPosition = Lerp(FVector::ZERO, TargetPosition2, Alpha);
 
 			AddActorLocation(NewPosition);

@@ -69,7 +69,7 @@ ABossGameMode::ABossGameMode()
 
 	
 	Mari = GetWorld()->SpawnActor<AMari>();
-	Mari->AddActorLocation({ { 30.0f, -28.0f, -2.0f } });
+	Mari->AddActorLocation({ { 50.0f, -28.0f, -2.0f } });
 
 	MainCamera = GetWorld()->GetMainCamera();
 	MainCamera->SetActorLocation({ 0.0f, 20.0f, -300.0f, 1.0f });
