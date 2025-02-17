@@ -331,7 +331,7 @@ void ABossGameMode::InitScenes()
 		MainCamera->Zoom(150.0f, 3.0f);
 		MainCamera->MoveCamera({ 0.0f, -60.0f, 0.0f }, 3.0f);
 		TimeEventComponent->AddEndEvent(3.0f, [this]() {
-			Player->MakeTextBubble("Á¨Àå..", 32.0f, 16.0f, 0.0f, -3.3\7f);
+			Player->MakeTextBubble("Á¨Àå..", 32.0f, 16.0f, 0.0f, -3.7f);
 			this->bCanSkipScene = true;
 			});
 		});
@@ -410,9 +410,9 @@ void ABossGameMode::InitScenes()
 			});
 
 		// Boss fight start.
-		TimeEventComponent->AddEndEvent(3.05, [this]() {
+		TimeEventComponent->AddEndEvent(3.0f, [this]() {
 			bCanSkipScene = false;
-			MainCamera->Zoom(-300.0f, 8.0f);
+			MainCamera->Zoom(-160.0f, 6.0f);
 			Platforms[0].get()->GoToPlace({ -300.0f, 0.0f, 0.0f });
 			Platforms[1].get()->GoToPlace({ -15.0f, 300.0f, 0.0f });
 			Platforms[2].get()->GoToPlace({ -255.0f, -300.0f, 0.0f });
